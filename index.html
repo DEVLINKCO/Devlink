@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>DevLink – Roblox Development Agency</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #151515;
+      --bg2: #1c1c1c;
+      --bg3: #222222;
+      --white: #f5f5f5;
+      --muted: #888;
+      --border: #2e2e2e;
+      --accent: #f5f5f5;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--white);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 48px;
+      background: rgba(21,21,21,0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+    }
+
+    .nav-logo img {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+    }
+
+    .nav-logo span {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: var(--white);
+      letter-spacing: -0.02em;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover { color: var(--white); }
+
+    .nav-cta {
+      background: var(--white);
+      color: var(--bg) !important;
+      padding: 9px 20px;
+      border-radius: 8px;
+      font-weight: 600 !important;
+      font-size: 0.88rem !important;
+      transition: opacity 0.2s !important;
+    }
+
+    .nav-cta:hover { opacity: 0.85; }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 120px 24px 80px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -200px; left: 50%;
+      transform: translateX(-50%);
+      width: 700px; height: 700px;
+      background: radial-gradient(circle, rgba(255,255,255,0.04) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      padding: 6px 16px;
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-bottom: 32px;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .hero-badge span {
+      width: 6px; height: 6px;
+      background: #6ee7b7;
+      border-radius: 50%;
+      display: inline-block;
+      box-shadow: 0 0 6px #6ee7b7;
+    }
+
+    .hero h1 {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(2.8rem, 7vw, 5.5rem);
+      font-weight: 800;
+      line-height: 1.05;
+      letter-spacing: -0.03em;
+      max-width: 820px;
+      margin-bottom: 24px;
+    }
+
+    .hero h1 em {
+      font-style: normal;
+      color: var(--muted);
+    }
+
+    .hero p {
+      font-size: 1.1rem;
+      color: var(--muted);
+      max-width: 520px;
+      margin-bottom: 48px;
+      line-height: 1.7;
+    }
+
+    .hero-buttons {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .btn-primary {
+      background: var(--white);
+      color: var(--bg);
+      padding: 14px 28px;
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      text-decoration: none;
+      transition: opacity 0.2s, transform 0.2s;
+    }
+
+    .btn-primary:hover { opacity: 0.88; transform: translateY(-1px); }
+
+    .btn-secondary {
+      background: transparent;
+      color: var(--white);
+      padding: 14px 28px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      font-weight: 500;
+      font-size: 0.95rem;
+      text-decoration: none;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+
+    .btn-secondary:hover { border-color: #555; transform: translateY(-1px); }
+
+    .hero-divider {
+      width: 1px;
+      height: 80px;
+      background: linear-gradient(to bottom, transparent, var(--border), transparent);
+      margin: 64px auto 0;
+    }
+
+    /* ── SECTION SHARED ── */
+    section {
+      padding: 100px 24px;
+    }
+
+    .section-inner {
+      max-width: 1080px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 12px;
+    }
+
+    .section-title {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+      margin-bottom: 16px;
+    }
+
+    .section-sub {
+      color: var(--muted);
+      font-size: 1rem;
+      max-width: 480px;
+      line-height: 1.7;
+    }
+
+    /* ── HOW IT WORKS ── */
+    #how {
+      background: var(--bg2);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 2px;
+      margin-top: 56px;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+    }
+
+    .step {
+      background: var(--bg3);
+      padding: 36px 28px;
+      position: relative;
+      transition: background 0.2s;
+    }
+
+    .step:hover { background: #282828; }
+
+    .step-num {
+      font-family: 'Syne', sans-serif;
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: var(--border);
+      line-height: 1;
+      margin-bottom: 20px;
+    }
+
+    .step h3 {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+      letter-spacing: -0.01em;
+    }
+
+    .step p {
+      font-size: 0.9rem;
+      color: var(--muted);
+      line-height: 1.65;
+    }
+
+    /* ── FEATURES ── */
+    #features {
+      border-bottom: 1px solid var(--border);
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px;
+      margin-top: 56px;
+    }
+
+    .feature-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 32px 28px;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+
+    .feature-card:hover {
+      border-color: #444;
+      transform: translateY(-2px);
+    }
+
+    .feature-icon {
+      font-size: 1.6rem;
+      margin-bottom: 16px;
+    }
+
+    .feature-card h3 {
+      font-family: 'Syne', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+      letter-spacing: -0.01em;
+    }
+
+    .feature-card p {
+      font-size: 0.88rem;
+      color: var(--muted);
+      line-height: 1.65;
+    }
+
+    /* ── AUDIENCE SPLIT ── */
+    #join {
+      background: var(--bg2);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .split {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-top: 56px;
+    }
+
+    .split-card {
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 44px 36px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      transition: border-color 0.2s;
+    }
+
+    .split-card:hover { border-color: #555; }
+
+    .split-card.client { background: var(--bg3); }
+    .split-card.dev { background: #1a1a1a; }
+
+    .split-tag {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+      font-weight: 600;
+    }
+
+    .split-card h3 {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.5rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+    }
+
+    .split-card p {
+      font-size: 0.9rem;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    .split-card a {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 8px;
+      color: var(--white);
+      font-weight: 600;
+      font-size: 0.9rem;
+      text-decoration: none;
+      transition: gap 0.2s;
+    }
+
+    .split-card a:hover { gap: 12px; }
+
+    /* ── FOOTER ── */
+    footer {
+      padding: 48px 24px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+      max-width: 1080px;
+      margin: 0 auto;
+    }
+
+    .footer-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+
+    .footer-logo img {
+      width: 28px;
+      border-radius: 6px;
+    }
+
+    .footer-logo span {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 0.95rem;
+      color: var(--white);
+    }
+
+    footer p {
+      font-size: 0.82rem;
+      color: var(--muted);
+    }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .hero-badge  { animation: fadeUp 0.5s ease both; }
+    .hero h1     { animation: fadeUp 0.5s 0.1s ease both; }
+    .hero p      { animation: fadeUp 0.5s 0.2s ease both; }
+    .hero-buttons{ animation: fadeUp 0.5s 0.3s ease both; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      nav { padding: 16px 20px; }
+      .nav-links { display: none; }
+      section { padding: 72px 20px; }
+      .split { grid-template-columns: 1fr; }
+      footer { flex-direction: column; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="#" class="nav-logo">
+      <img src="DevLinkRBBX.png" alt="DevLink logo" onerror="this.style.display='none'"/>
+      <span>DevLink</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#how">How It Works</a></li>
+      <li><a href="#features">What We Offer</a></li>
+      <li><a href="#join">Get Started</a></li>
+      <li><a href="#join" class="nav-cta">Join Now</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-badge">
+      <span></span> Roblox Development Agency
+    </div>
+    <h1>The dev agency <em>built for</em> Roblox.</h1>
+    <p>We connect clients with talented Roblox developers. Tell us what you need — we'll find the right person, handle the match, and get it built.</p>
+    <div class="hero-buttons">
+      <a href="#join" class="btn-primary">Hire a Developer</a>
+      <a href="#join" class="btn-secondary">Join as a Developer</a>
+    </div>
+    <div class="hero-divider"></div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section id="how">
+    <div class="section-inner">
+      <p class="section-label">The Process</p>
+      <h2 class="section-title">How it works</h2>
+      <p class="section-sub">Simple and transparent from first message to finished project.</p>
+
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">01</div>
+          <h3>You reach out</h3>
+          <p>A client reaches out to us with their project idea — a game, a system, a UI overhaul. Anything Roblox.</p>
+        </div>
+        <div class="step">
+          <div class="step-num">02</div>
+          <h3>We talk it through</h3>
+          <p>We hop on a call or chat to understand exactly what you need, your budget, and your timeline.</p>
+        </div>
+        <div class="step">
+          <div class="step-num">03</div>
+          <h3>We find your dev</h3>
+          <p>We match you with the right developer from our vetted roster — someone suited to your specific project.</p>
+        </div>
+        <div class="step">
+          <div class="step-num">04</div>
+          <h3>It gets built</h3>
+          <p>Your developer gets to work. We take a small 15% commission for the match — that's it.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURES -->
+  <section id="features">
+    <div class="section-inner">
+      <p class="section-label">What We Offer</p>
+      <h2 class="section-title">Why choose DevLink?</h2>
+      <p class="section-sub">We're not a job board. We're a team that does the hard work of finding the right fit.</p>
+
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">🎯</div>
+          <h3>Matched, not random</h3>
+          <p>We hand-pick a developer based on your project needs — not just whoever replies first.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">✅</div>
+          <h3>Vetted developers</h3>
+          <p>Every developer in our agency has been reviewed. You're not rolling the dice on a stranger.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">💬</div>
+          <h3>We handle the intro</h3>
+          <p>No awkward cold messages. We bridge the gap between you and the right developer smoothly.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">💸</div>
+          <h3>Simple 15% commission</h3>
+          <p>Transparent pricing. Developers keep the majority — we only take a small cut for the match.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🚀</div>
+          <h3>Roblox-focused</h3>
+          <p>We know Roblox. Scripting, building, UI, systems design — we have specialists across all disciplines.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🤝</div>
+          <h3>Ongoing support</h3>
+          <p>Need revisions or a follow-up project? We're here to help reconnect you with your developer.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- JOIN / CTA SPLIT -->
+  <section id="join">
+    <div class="section-inner">
+      <p class="section-label">Get Started</p>
+      <h2 class="section-title">Who are you?</h2>
+      <p class="section-sub">Whether you're building something or you build things — DevLink is for you.</p>
+
+      <div class="split">
+        <div class="split-card client">
+          <span class="split-tag">For Clients</span>
+          <h3>I need something built.</h3>
+          <p>Tell us about your project and we'll find you a developer who's the right fit. No hassle, no guesswork.</p>
+          <a href="mailto:hello@devlinkrbx.com">Get in touch →</a>
+        </div>
+        <div class="split-card dev">
+          <span class="split-tag">For Developers</span>
+          <h3>I want more clients.</h3>
+          <p>Join our roster and let us bring the work to you. Focus on building — we'll handle finding the clients.</p>
+          <a href="mailto:join@devlinkrbx.com">Apply to join →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <a href="#" class="footer-logo">
+      <img src="DevLinkRBBX.png" alt="DevLink" onerror="this.style.display='none'"/>
+      <span>DevLink</span>
+    </a>
+    <p>© 2026 DevLink. A Roblox development agency.</p>
+  </footer>
+
+</body>
+</html>
