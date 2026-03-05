@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Hire a Developer – DevLink</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js" defer></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root { --bg: #151515; --bg2: #1c1c1c; --bg3: #222; --white: #f5f5f5; --muted: #888; --border: #2e2e2e; --red: #ef5350; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--white); font-family: 'DM Sans', sans-serif; font-size: 16px; line-height: 1.6; -webkit-font-smoothing: antialiased; }
+
+    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 20px 48px; background: rgba(21,21,21,0.85); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+    .nav-logo { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+    .nav-logo img { width: 32px; height: 32px; border-radius: 7px; }
+    .nav-logo span { font-family: 'Syne', sans-serif; font-size: 1.1rem; font-weight: 800; color: var(--white); letter-spacing: -0.02em; }
+    .nav-back { color: var(--muted); text-decoration: none; font-size: 0.88rem; font-weight: 500; transition: color 0.2s; }
+    .nav-back:hover { color: var(--white); }
+
+    .page { max-width: 680px; margin: 0 auto; padding: 120px 24px 80px; }
+    .page-tag { font-size: 0.75rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin-bottom: 12px; display: block; }
+    .page-header { margin-bottom: 48px; }
+    .page-header h1 { font-family: 'Syne', sans-serif; font-size: clamp(2rem, 5vw, 3rem); font-weight: 800; letter-spacing: -0.03em; line-height: 1.05; margin-bottom: 14px; }
+    .page-header p { color: var(--muted); font-size: 1rem; line-height: 1.7; }
+
+    .form-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 16px; padding: 44px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    .form-group { margin-bottom: 24px; position: relative; }
+    label { display: block; margin-bottom: 8px; color: #aaa; font-size: 0.9rem; font-weight: 500; }
+    .req { color: var(--red); }
+    input, select, textarea { width: 100%; padding: 12px 14px; background: var(--bg3); border: 1px solid var(--border); border-radius: 8px; font-size: 0.95rem; font-family: inherit; color: var(--white); transition: border-color 0.2s, background 0.2s; -webkit-appearance: none; }
+    select { cursor: pointer; }
+    select option { background: var(--bg3); }
+    input::placeholder, textarea::placeholder { color: #555; }
+    input:focus, select:focus, textarea:focus { border-color: #555; outline: none; background: #282828; }
+    textarea { min-height: 120px; resize: vertical; }
+    .form-group.has-error input, .form-group.has-error select, .form-group.has-error textarea { border-color: var(--red); }
+    .err-msg { color: var(--red); font-size: 0.82rem; margin-top: 5px; display: none; }
+    .form-group.has-error .err-msg { display: block; }
+    .char-count { position: absolute; bottom: -18px; right: 0; font-size: 0.75rem; color: #444; }
+    .char-count.warn { color: #fbc02d; }
+    .char-count.over { color: var(--red); }
+
+    .section-divider { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
+    .section-title { font-family: 'Syne', sans-serif; font-size: 0.78rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 20px; }
+
+    .submit-wrap { margin-top: 36px; }
+    .submit-btn { width: 100%; background: var(--white); color: #000; border: none; padding: 15px; border-radius: 10px; font-size: 0.95rem; font-weight: 600; cursor: pointer; font-family: inherit; letter-spacing: 0.02em; transition: opacity 0.2s, transform 0.15s; position: relative; }
+    .submit-btn:hover:not(:disabled) { opacity: 0.88; transform: translateY(-1px); }
+    .submit-btn:disabled { background: #333; color: #666; cursor: not-allowed; transform: none; }
+    .spinner { display: none; width: 16px; height: 16px; border: 2px solid #666; border-top-color: #000; border-radius: 50%; animation: spin 0.7s linear infinite; position: absolute; right: 20px; top: 50%; transform: translateY(-50%); }
+    .submit-btn.loading .spinner { display: block; }
+    @keyframes spin { to { transform: translateY(-50%) rotate(360deg); } }
+    .success-msg { display: none; background: rgba(76,175,80,0.1); border: 1px solid rgba(76,175,80,0.3); border-radius: 10px; padding: 18px 20px; margin-top: 20px; color: #81c784; font-size: 0.92rem; line-height: 1.6; }
+    .success-msg.show { display: block; animation: fadeUp 0.3s ease; }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+    .form-note { text-align: center; font-size: 0.85rem; color: #555; margin-top: 16px; }
+
+    .toast { position: fixed; top: 28px; right: 28px; background: var(--bg2); border: 1px solid var(--border); border-left: 3px solid #4caf50; padding: 14px 18px; border-radius: 8px; font-size: 0.88rem; color: var(--white); opacity: 0; visibility: hidden; transform: translateY(-6px); transition: all 0.25s; z-index: 9999; max-width: 300px; }
+    .toast.err { border-left-color: var(--red); }
+    .toast.show { opacity: 1; visibility: visible; transform: translateY(0); }
+
+    .hp { position: fixed; top: -9999px; left: -9999px; width: 1px; height: 1px; overflow: hidden; pointer-events: none; opacity: 0; }
+
+    @media (max-width: 640px) {
+      nav { padding: 16px 20px; }
+      .page { padding: 100px 16px 60px; }
+      .form-card { padding: 28px 20px; }
+      .form-row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">
+    <img src="DevLinkRBBX.png" alt="DevLink" onerror="this.style.display='none'"/>
+    <span>DevLink</span>
+  </a>
+  <a href="index.html" class="nav-back">← Back to home</a>
+</nav>
+
+<div class="page">
+  <div class="page-header">
+    <span class="page-tag">For Clients</span>
+    <h1>Tell us what you need.</h1>
+    <p>Fill in the brief below and we'll match you with the right developer from our roster. We'll be in touch within 24 hours.</p>
+  </div>
+
+  <form class="form-card" id="hireForm" novalidate>
+    <!-- Honeypot -->
+    <div class="hp" aria-hidden="true"><input type="text" name="website" tabindex="-1" autocomplete="off"/></div>
+    <!-- Hidden fields for EmailJS templates -->
+    <input type="hidden" name="form_type" value="Client Enquiry"/>
+    <input type="hidden" name="sender_name" id="senderName"/>
+    <input type="hidden" name="reply_email" id="replyEmail"/>
+    <input type="hidden" name="form_details" id="formDetails"/>
+
+    <p class="section-title">Your Details</p>
+    <div class="form-row">
+      <div class="form-group" id="g-name">
+        <label for="clientName">Full Name <span class="req">*</span></label>
+        <input type="text" id="clientName" name="client_name" placeholder="Your name" autocomplete="name" maxlength="100"/>
+        <div class="err-msg">Please enter your name</div>
+      </div>
+      <div class="form-group" id="g-email">
+        <label for="clientEmail">Email Address <span class="req">*</span></label>
+        <input type="email" id="clientEmail" name="client_email" placeholder="you@email.com" autocomplete="email"/>
+        <div class="err-msg">Please enter a valid email</div>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="robloxUser">Roblox Username</label>
+      <input type="text" id="robloxUser" name="roblox_username" placeholder="Optional" maxlength="80"/>
+    </div>
+
+    <hr class="section-divider"/>
+    <p class="section-title">Project Details</p>
+
+    <div class="form-group" id="g-projtype">
+      <label for="projectType">What do you need built? <span class="req">*</span></label>
+      <select id="projectType" name="project_type">
+        <option value="">Select a category</option>
+        <option value="Full Game">Full Game</option>
+        <option value="Game System / Feature">Game System / Feature</option>
+        <option value="Map / Environment">Map / Environment</option>
+        <option value="UI / Interface">UI / Interface</option>
+        <option value="Scripting Only">Scripting Only</option>
+        <option value="Building / 3D Only">Building / 3D Only</option>
+        <option value="Animation">Animation</option>
+        <option value="VFX / Particles">VFX / Particles</option>
+        <option value="Audio">Audio</option>
+        <option value="Other">Other</option>
+      </select>
+      <div class="err-msg">Please select a project type</div>
+    </div>
+    <div class="form-group">
+      <label for="gameLink">Roblox Game Link</label>
+      <input type="url" id="gameLink" name="game_link" placeholder="https://www.roblox.com/games/... (if existing game)" maxlength="300"/>
+    </div>
+    <div class="form-group" style="margin-bottom:32px;" id="g-brief">
+      <label for="projectBrief">Project Brief <span class="req">*</span></label>
+      <textarea id="projectBrief" name="project_brief" maxlength="1500" placeholder="Describe your project in as much detail as you can — what it is, what you want, any references or examples..."></textarea>
+      <span class="char-count" id="briefCount">0 / 1500</span>
+      <div class="err-msg">Please describe your project</div>
+    </div>
+    <div class="form-row">
+      <div class="form-group" id="g-budget">
+        <label for="budget">Budget Range <span class="req">*</span></label>
+        <select id="budget" name="budget_range">
+          <option value="">Select budget</option>
+          <option value="Under £100">Under £100</option>
+          <option value="£100 – £250">£100 – £250</option>
+          <option value="£250 – £500">£250 – £500</option>
+          <option value="£500 – £1,000">£500 – £1,000</option>
+          <option value="£1,000+">£1,000+</option>
+          <option value="Open to discuss">Open to discuss</option>
+        </select>
+        <div class="err-msg">Please select a budget</div>
+      </div>
+      <div class="form-group" id="g-timeline">
+        <label for="timeline">Timeline <span class="req">*</span></label>
+        <select id="timeline" name="timeline">
+          <option value="">When do you need it?</option>
+          <option value="ASAP">ASAP</option>
+          <option value="Within 2 weeks">Within 2 weeks</option>
+          <option value="This month">This month</option>
+          <option value="1 – 3 months">1 – 3 months</option>
+          <option value="Flexible">Flexible</option>
+        </select>
+        <div class="err-msg">Please select a timeline</div>
+      </div>
+    </div>
+
+    <div class="submit-wrap">
+      <button type="submit" class="submit-btn" id="submitBtn">
+        <span class="btn-label">Submit Enquiry</span>
+        <span class="spinner"></span>
+      </button>
+      <div class="success-msg" id="successMsg">Your enquiry has been received. We will review your brief and get back to you within 24 hours.</div>
+      <p class="form-note">Your details go directly to the DevLink team</p>
+    </div>
+  </form>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+(function(){
+  'use strict';
+
+  // ── CONFIG: replace these three values ──
+  const PUBLIC_KEY         = 'iCCi3WGf2aQ8yeT1q';
+  const TEMPLATE_TO_YOU    = 'template_2jg1lt4';
+  const TEMPLATE_AUTOREPLY = 'template_5jyjxy9';
+  const SERVICE_ID         = 'service_b2nnw1e';
+  // ────────────────────────────────────────
+
+  function initEJS(){ window.emailjs ? emailjs.init(PUBLIC_KEY) : setTimeout(initEJS, 50); }
+  initEJS();
+
+  const formLoadTime = Date.now();
+  let lastSubmit = 0;
+  const COOLDOWN = 30000;
+
+  const form       = document.getElementById('hireForm');
+  const submitBtn  = document.getElementById('submitBtn');
+  const btnLabel   = submitBtn.querySelector('.btn-label');
+  const successMsg = document.getElementById('successMsg');
+  const toastEl    = document.getElementById('toast');
+  let toastTimer;
+
+  // Char counter
+  const brief = document.getElementById('projectBrief');
+  const briefCount = document.getElementById('briefCount');
+  brief.addEventListener('input', function(){
+    const l = this.value.length, m = +this.maxLength;
+    briefCount.textContent = l + ' / ' + m;
+    briefCount.className = 'char-count' + (l >= m ? ' over' : l > m * 0.9 ? ' warn' : '');
+    if (l) clrErr('g-brief');
+  });
+
+  function toast(msg, type){
+    clearTimeout(toastTimer);
+    toastEl.textContent = msg;
+    toastEl.className = 'toast' + (type === 'error' ? ' err' : '') + ' show';
+    toastTimer = setTimeout(() => toastEl.classList.remove('show'), 5000);
+  }
+
+  const valEmail = v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+  const setErr = id => document.getElementById(id).classList.add('has-error');
+  const clrErr = id => document.getElementById(id).classList.remove('has-error');
+
+  // Live clear on input
+  document.getElementById('clientName').addEventListener('input', function(){ if(this.value.trim()) clrErr('g-name'); });
+  document.getElementById('clientEmail').addEventListener('input', function(){ if(valEmail(this.value.trim())) clrErr('g-email'); });
+  document.getElementById('projectType').addEventListener('change', function(){ if(this.value) clrErr('g-projtype'); });
+  document.getElementById('budget').addEventListener('change', function(){ if(this.value) clrErr('g-budget'); });
+  document.getElementById('timeline').addEventListener('change', function(){ if(this.value) clrErr('g-timeline'); });
+
+  function validate(){
+    let ok = true;
+    form.querySelectorAll('.has-error').forEach(el => el.classList.remove('has-error'));
+    if (!document.getElementById('clientName').value.trim())                      { setErr('g-name'); ok = false; }
+    if (!valEmail(document.getElementById('clientEmail').value.trim()))           { setErr('g-email'); ok = false; }
+    if (!document.getElementById('projectType').value)                            { setErr('g-projtype'); ok = false; }
+    if (!document.getElementById('projectBrief').value.trim())                   { setErr('g-brief'); ok = false; }
+    if (!document.getElementById('budget').value)                                 { setErr('g-budget'); ok = false; }
+    if (!document.getElementById('timeline').value)                               { setErr('g-timeline'); ok = false; }
+    return ok;
+  }
+
+  form.addEventListener('submit', async function(e){
+    e.preventDefault();
+    if (Date.now() - formLoadTime < 3000) { toast('Enquiry submitted successfully.'); return; }
+    if (form.querySelector('[name="website"]').value.trim()) { toast('Enquiry submitted successfully.'); return; }
+    if (Date.now() - lastSubmit < COOLDOWN) { toast('Please wait before submitting again.', 'error'); return; }
+    if (!validate()) {
+      toast('Please fill in all required fields.', 'error');
+      const first = form.querySelector('.has-error');
+      if (first) first.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
+
+    // Populate shared hidden fields for templates
+    const name  = document.getElementById('clientName').value.trim();
+    const email = document.getElementById('clientEmail').value.trim();
+    document.getElementById('senderName').value  = name;
+    document.getElementById('replyEmail').value  = email;
+    document.getElementById('formDetails').value =
+      'Client Enquiry from ' + name + '\n' +
+      'Email: ' + email + '\n' +
+      'Roblox Username: ' + (document.getElementById('robloxUser').value || 'Not provided') + '\n\n' +
+      'Project Type: ' + document.getElementById('projectType').value + '\n' +
+      'Game Link: ' + (document.getElementById('gameLink').value || 'Not provided') + '\n' +
+      'Budget: ' + document.getElementById('budget').value + '\n' +
+      'Timeline: ' + document.getElementById('timeline').value + '\n\n' +
+      'Project Brief:\n' + document.getElementById('projectBrief').value;
+
+    submitBtn.disabled = true;
+    submitBtn.classList.add('loading');
+    btnLabel.textContent = 'Sending...';
+    successMsg.classList.remove('show');
+
+    try {
+      // Send both emails — to you, and auto-reply to the client
+      await emailjs.sendForm(SERVICE_ID, TEMPLATE_TO_YOU, form);
+      await emailjs.sendForm(SERVICE_ID, TEMPLATE_AUTOREPLY, form);
+      lastSubmit = Date.now();
+      successMsg.classList.add('show');
+      successMsg.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      toast('Enquiry received. We will be in touch within 24 hours.');
+      form.reset();
+      briefCount.textContent = '0 / 1500';
+      briefCount.className = 'char-count';
+    } catch(err) {
+      toast('Something went wrong. Please try again.', 'error');
+      console.error('EmailJS:', err);
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.classList.remove('loading');
+      btnLabel.textContent = 'Submit Enquiry';
+    }
+  });
+})();
+</script>
+</body>
+</html>
