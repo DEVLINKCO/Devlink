@@ -222,20 +222,20 @@
   initEJS();
 
   // ── THEME ──
-  const html = document.documentElement;
-  const toggle = document.getElementById('themeToggle');
-  const label  = document.getElementById('themeLabel');
-  const icon   = document.getElementById('themeIcon');
-  const MOON = '<path d="M12 3a9 9 0 1 0 9 9c0-.46-.04-.92-.1-1.36a5.389 5.389 0 0 1-4.4 2.26 5.403 5.403 0 0 1-3.14-9.8c-.44-.06-.9-.1-1.36-.1z"/>';
-  const SUN  = '<path d="M12 7a5 5 0 1 0 0 10A5 5 0 0 0 12 7zm0-5a1 1 0 0 1 1 1v1a1 1 0 0 1-2 0V3a1 1 0 0 1 1-1zm0 17a1 1 0 0 1 1 1v1a1 1 0 0 1-2 0v-1a1 1 0 0 1 1-1zm9-9h1a1 1 0 0 1 0 2h-1a1 1 0 0 1 0-2zM3 11H2a1 1 0 0 0 0 2h1a1 1 0 0 0 0-2zm14.66-6.07.71-.71a1 1 0 0 1 1.41 1.41l-.71.71a1 1 0 0 1-1.41-1.41zM5.64 18.36l-.71.71a1 1 0 0 1-1.41-1.41l.71-.71a1 1 0 0 1 1.41 1.41zm12.02.71-.71-.71a1 1 0 0 1 1.41-1.41l.71.71a1 1 0 0 1-1.41 1.41zM5.64 5.64l-.71-.71A1 1 0 0 1 6.34 3.52l.71.71A1 1 0 0 1 5.64 5.64z"/>';
+  var htmlEl = document.documentElement;
+  var toggleBtn = document.getElementById('themeToggle');
+  var labelEl = document.getElementById('themeLabel');
+  var iconEl = document.getElementById('themeIcon');
+  var MOON = '<path d="M12 3a9 9 0 1 0 9 9c0-.46-.04-.92-.1-1.36a5.389 5.389 0 0 1-4.4 2.26 5.403 5.403 0 0 1-3.14-9.8c-.44-.06-.9-.1-1.36-.1z"/>';
+  var SUN  = '<path d="M12 7a5 5 0 1 0 0 10A5 5 0 0 0 12 7zm0-5a1 1 0 0 1 1 1v1a1 1 0 0 1-2 0V3a1 1 0 0 1 1-1zm0 17a1 1 0 0 1 1 1v1a1 1 0 0 1-2 0v-1a1 1 0 0 1 1-1zm9-9h1a1 1 0 0 1 0 2h-1a1 1 0 0 1 0-2zM3 11H2a1 1 0 0 0 0 2h1a1 1 0 0 0 0-2zm14.66-6.07.71-.71a1 1 0 0 1 1.41 1.41l-.71.71a1 1 0 0 1-1.41-1.41zM5.64 18.36l-.71.71a1 1 0 0 1-1.41-1.41l.71-.71a1 1 0 0 1 1.41 1.41zm12.02.71-.71-.71a1 1 0 0 1 1.41-1.41l.71.71a1 1 0 0 1-1.41 1.41zM5.64 5.64l-.71-.71A1 1 0 0 1 6.34 3.52l.71.71A1 1 0 0 1 5.64 5.64z"/>';
   function applyTheme(t) {
-    html.setAttribute('data-theme', t);
-    label.textContent = t === 'light' ? 'Dark' : 'Light';
-    icon.innerHTML = t === 'light' ? SUN : MOON;
+    htmlEl.setAttribute('data-theme', t);
+    if (labelEl) labelEl.textContent = t === 'light' ? 'Dark' : 'Light';
+    if (iconEl) iconEl.innerHTML = t === 'light' ? SUN : MOON;
     try { localStorage.setItem('devlink-theme', t); } catch(e) {}
   }
-  try { const s = localStorage.getItem('devlink-theme'); if (s) applyTheme(s); } catch(e) {}
-  toggle.addEventListener('click', () => applyTheme(html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark'));
+  try { var s = localStorage.getItem('devlink-theme'); if (s) applyTheme(s); } catch(e) {}
+  if (toggleBtn) { toggleBtn.addEventListener('click', function() { applyTheme(htmlEl.getAttribute('data-theme') === 'dark' ? 'light' : 'dark'); }); }
 
   // ── SECURITY HELPERS ──
   function sanitize(str) {
@@ -354,4 +354,4 @@
       briefCount.textContent = '0 / 1500';
       briefCount.className = 'char-count';
     } catch(err) {
-      toast('Something went wrong. Please try again or email 
+      toast('Something went wrong. Please try again or email
