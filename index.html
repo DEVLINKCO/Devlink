@@ -206,6 +206,14 @@
     .feature-card h3 { font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 700; margin-bottom: 10px; }
     .feature-card p { font-size: 0.88rem; color: var(--muted); line-height: 1.65; }
 
+    /* MARKETPLACE CALLOUT */
+    .mkt-callout { background: var(--bg2); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 64px 24px; }
+    .mkt-callout-inner { max-width: 1080px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 40px; flex-wrap: wrap; }
+    .mkt-text { flex: 1; min-width: 260px; }
+    .mkt-text h2 { font-family: 'Syne', sans-serif; font-size: clamp(1.3rem, 2.5vw, 1.9rem); font-weight: 800; letter-spacing: -0.02em; line-height: 1.2; margin-bottom: 10px; max-width: 560px; }
+    .mkt-text p { color: var(--muted); font-size: 0.92rem; }
+    .mkt-actions { display: flex; gap: 12px; flex-wrap: wrap; flex-shrink: 0; }
+
     /* FAQ */
     #faq { background: var(--bg2); border-bottom: 1px solid var(--border); }
     .faq-list { margin-top: 56px; display: flex; flex-direction: column; gap: 2px; border: 1px solid var(--border); border-radius: 16px; overflow: hidden; }
@@ -279,6 +287,7 @@
     <button class="mobile-close" id="mobileClose" aria-label="Close menu">&#x2715;</button>
     <a href="#how" class="mobile-nav-link">How It Works</a>
     <a href="#features" class="mobile-nav-link">What We Offer</a>
+    <a href="/marketplace" class="mobile-nav-link">Marketplace</a>
     <a href="#faq" class="mobile-nav-link">FAQ</a>
     <a href="#join" class="mobile-nav-link">Get Started</a>
     <a href="/hire" class="mobile-cta mobile-nav-link">Hire a Dev</a>
@@ -294,6 +303,7 @@
     <ul class="nav-links">
       <li><a href="#how">How It Works</a></li>
       <li><a href="#features">What We Offer</a></li>
+      <li><a href="/marketplace">Marketplace</a></li>
       <li><a href="#faq">FAQ</a></li>
       <li><a href="#join">Get Started</a></li>
     </ul>
@@ -510,6 +520,21 @@
       </div>
     </div>
   </section>
+
+  <!-- ── MARKETPLACE CALLOUT ── -->
+  <div class="mkt-callout">
+    <div class="mkt-callout-inner">
+      <div class="mkt-text">
+        <span class="section-label">DevLink Marketplace</span>
+        <h2>Need assets? Browse ready-made Roblox scripts, UI kits, models and game templates.</h2>
+        <p>Built by vetted DevLink developers. Buy instantly — no brief needed.</p>
+      </div>
+      <div class="mkt-actions">
+        <a href="/marketplace/assets" class="btn-primary">Browse Assets</a>
+        <a href="/marketplace" class="btn-secondary">View Marketplace</a>
+      </div>
+    </div>
+  </div>
 
   <section id="faq">
     <div class="section-inner">
