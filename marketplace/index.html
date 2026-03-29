@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta http-equiv="X-Content-Type-Options" content="nosniff"/>
+  <meta http-equiv="X-Frame-Options" content="DENY"/>
+  <link rel="icon" href="/favicon.png" type="image/png"/>
+  <meta name="referrer" content="strict-origin-when-cross-origin"/>
+  <meta name="description" content="Browse ready-made Roblox scripts, UI kits, 3D models, and game templates — built by vetted DevLink developers."/>
+  <meta property="og:title" content="Marketplace – DevLink"/>
+  <meta property="og:description" content="Browse ready-made Roblox scripts, UI kits, 3D models, and game templates — built by vetted DevLink developers."/>
+  <meta property="og:image" content="https://devlinkco.online/DevLinkRBBX.png"/>
+  <meta property="og:url" content="https://devlinkco.online/marketplace"/>
+  <meta property="og:type" content="website"/>
+  <meta name="twitter:card" content="summary"/>
+  <meta name="twitter:title" content="Marketplace – DevLink"/>
+  <meta name="twitter:description" content="Browse ready-made Roblox scripts, UI kits, 3D models, and game templates — built by vetted DevLink developers."/>
+  <meta name="twitter:image" content="https://devlinkco.online/DevLinkRBBX.png"/>
+  <title>Marketplace – DevLink</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="/styles.css"/>
+  <script data-cfasync="false">try{var t=localStorage.getItem('devlink-theme');if(t)document.documentElement.setAttribute('data-theme',t);}catch(e){}</script>
+</head>
+<body>
+
+  <div class="mobile-menu" id="mobileMenu">
+    <button class="mobile-close" id="mobileClose">&#x2715;</button>
+    <a href="/" class="mobile-nav-link">Home</a>
+    <a href="/marketplace/assets" class="mobile-nav-link">Assets</a>
+    <a href="/hire" class="mobile-nav-link">Hire a Dev</a>
+    <a href="/apply" class="mobile-nav-link">Join Roster</a>
+    <a href="/hire" class="mobile-cta mobile-nav-link">Get Started</a>
+  </div>
+
+  <nav>
+    <a href="/" class="nav-logo">
+      <img src="/DevLinkRBBX.png" alt="DevLink logo" onerror="this.style.display='none'"/>
+      <span>DevLink</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/">Home</a></li>
+      <li><a href="/marketplace/assets">Assets</a></li>
+      <li><a href="/hire">Hire a Dev</a></li>
+      <li><a href="/apply">Join Roster</a></li>
+    </ul>
+    <div class="nav-right">
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+        <svg id="themeIcon" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3a9 9 0 1 0 9 9c0-.46-.04-.92-.1-1.36a5.389 5.389 0 0 1-4.4 2.26 5.403 5.403 0 0 1-3.14-9.8c-.44-.06-.9-.1-1.36-.1z"/></svg>
+        <span id="themeLabel">Light</span>
+      </button>
+      <a href="/hire" class="nav-cta" id="navHireCta">Hire a Dev</a>
+      <button class="nav-burger" id="navBurger" aria-label="Open menu">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
+        </svg>
+      </button>
+    </div>
+  </nav>
+
+  <div class="mkt-page-header">
+    <div class="page-badge">DevLink Marketplace</div>
+    <h1>Roblox assets, <em>built by pros.</em></h1>
+    <p>Browse ready-made scripts, UI kits, models, and full game templates — all made by developers from the DevLink roster.</p>
+  </div>
+
+  <div class="verticals">
+    <div class="verticals-inner">
+      <span class="section-label">Browse by category</span>
+      <h2 class="section-title">What are you looking for?</h2>
+      <div class="verticals-grid">
+
+        <a href="/marketplace/assets" class="vertical-card active">
+          <div class="v-tag">Available now</div>
+          <div class="v-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+          </div>
+          <h3>Scripts &amp; Systems</h3>
+          <p>Lua scripts, combat systems, inventory frameworks, admin panels, and more — drop-in ready.</p>
+          <div class="v-arrow">Browse scripts <span>&#8594;</span></div>
+        </a>
+
+        <a href="/marketplace/assets?cat=ui" class="vertical-card active">
+          <div class="v-tag">Available now</div>
+          <div class="v-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M3 9h18M9 21V9"/></svg>
+          </div>
+          <h3>UI Kits</h3>
+          <p>HUDs, shop interfaces, loading screens, menus — pixel-perfect and ready to plug in.</p>
+          <div class="v-arrow">Browse UI kits <span>&#8594;</span></div>
+        </a>
+
+        <a href="/marketplace/assets?cat=models" class="vertical-card active">
+          <div class="v-tag">Available now</div>
+          <div class="v-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+          </div>
+          <h3>3D Models &amp; Maps</h3>
+          <p>Environments, props, full map kits and themed worlds built for Roblox Studio.</p>
+          <div class="v-arrow">Browse models <span>&#8594;</span></div>
+        </a>
+
+        <a href="/marketplace/assets?cat=templates" class="vertical-card active">
+          <div class="v-tag">Available now</div>
+          <div class="v-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          </div>
+          <h3>Full Game Templates</h3>
+          <p>Complete, launchable game templates — pick a genre, customise, and ship.</p>
+          <div class="v-arrow">Browse templates <span>&#8594;</span></div>
+        </a>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="how-sell">
+    <div class="how-sell-inner">
+      <span class="section-label">For Developers</span>
+      <h2 class="section-title">Sell your assets through DevLink</h2>
+      <div class="sell-steps">
+        <div class="sell-step"><div class="sell-step-num">01</div><h3>Submit your asset</h3><p>Fill in the listing form with your asset details, description, price, and preview. We review every submission.</p></div>
+        <div class="sell-step"><div class="sell-step-num">02</div><h3>We review and approve</h3><p>Only quality assets make it through. If approved, we set up your listing and Stripe payment link.</p></div>
+        <div class="sell-step"><div class="sell-step-num">03</div><h3>You earn 90%</h3><p>Every sale goes through DevLink. You keep 90% — we take a 10% cut. Paid out promptly.</p></div>
+        <div class="sell-step"><div class="sell-step-num">04</div><h3>Passive income</h3><p>Your asset stays live. Every time someone buys, you earn — no extra work required from you.</p></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="cta-strip">
+    <div class="cta-strip-inner">
+      <h2>Ready to list your asset?</h2>
+      <p>Submit your asset for review and start earning passive income through the DevLink marketplace.</p>
+      <div class="cta-buttons">
+        <a href="/marketplace/assets" class="btn-primary">Browse Assets</a>
+        <a href="/marketplace/assets#submit" class="btn-secondary">Submit an Asset</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-wrap">
+    <footer>
+      <a href="/" class="footer-logo">
+        <img src="/DevLinkRBBX.png" alt="DevLink" onerror="this.style.display='none'"/>
+        <span>DevLink</span>
+      </a>
+      <div class="footer-links">
+        <a href="https://x.com/DevLinkRBX" target="_blank" rel="noopener noreferrer">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.748l7.73-8.835L1.254 2.25H8.08l4.259 5.63 5.905-5.63zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+          @DevLinkRBX
+        </a>
+        <a href="https://discord.gg/aTQ67uwRN" target="_blank" rel="noopener noreferrer">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03z"/></svg>
+          Discord
+        </a>
+        <span class="footer-contact">Contact: <a href="#" id="footerEmail" onclick="var e='devlink.co'+'@'+'outlook.com';this.href='mailto:'+e;this.textContent=e;return true;">click to reveal</a></span>
+      </div>
+      <p class="footer-copy">&#169; 2026 DevLink. A Roblox development agency. &middot; <a href="/legal" class="footer-legal">Terms &amp; Privacy</a></p>
+    </footer>
+  </div>
+
+  <script data-cfasync="false" src="/main.js"></script>
+
+</body>
+</html>

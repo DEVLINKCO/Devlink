@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta http-equiv="X-Content-Type-Options" content="nosniff"/>
+  <meta http-equiv="X-Frame-Options" content="DENY"/>
+  <link rel="icon" href="/favicon.png" type="image/png"/>
+  <meta name="referrer" content="strict-origin-when-cross-origin"/>
+  <meta name="description" content="Apply to join the DevLink roster as a Roblox developer. We find clients, you build."/>
+  <meta property="og:title" content="Apply as a Developer - DevLink"/>
+  <meta property="og:description" content="Apply to join the DevLink roster as a Roblox developer. Keep 85% of every project. No exclusivity."/>
+  <meta property="og:image" content="https://devlinkco.online/DevLinkRBBX.png"/>
+  <meta property="og:url" content="https://devlinkco.online/apply"/>
+  <meta property="og:type" content="website"/>
+  <meta name="twitter:card" content="summary"/>
+  <meta name="twitter:title" content="Apply as a Developer - DevLink"/>
+  <meta name="twitter:description" content="Apply to join the DevLink roster as a Roblox developer. Keep 85% of every project. No exclusivity."/>
+  <meta name="twitter:image" content="https://devlinkco.online/DevLinkRBBX.png"/>
+  <title>Apply as a Developer - DevLink</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="/styles.css"/>
+  <script data-cfasync="false">try{var t=localStorage.getItem('devlink-theme');if(t)document.documentElement.setAttribute('data-theme',t);}catch(e){}</script>
+  <script data-cfasync="false" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+</head>
+<body>
+<nav>
+  <a href="/" class="nav-logo">
+    <img src="/DevLinkRBBX.png" alt="DevLink" onerror="this.style.display='none'"/>
+    <span>DevLink</span>
+  </a>
+  <div class="nav-right">
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle light/dark mode">
+      <svg id="themeIcon" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3a9 9 0 1 0 9 9c0-.46-.04-.92-.1-1.36a5.389 5.389 0 0 1-4.4 2.26 5.403 5.403 0 0 1-3.14-9.8c-.44-.06-.9-.1-1.36-.1z"/></svg>
+      <span id="themeLabel">Light</span>
+    </button>
+    <a href="/" class="nav-back">Back to home</a>
+  </div>
+</nav>
+
+<div class="page">
+  <div class="page-header">
+    <span class="page-tag">For Developers</span>
+    <h1>Apply to join the roster.</h1>
+    <p>We review every application personally. If you are a good fit, we will reach out to discuss how we work together.</p>
+    <p class="contact-hint">Questions? <a href="#" onclick="var e='devlink.co'+'@'+'outlook.com';this.href='mailto:'+e;this.textContent=e;return true;">click to reveal email</a></p>
+  </div>
+
+  <div class="info-strip">
+    <div class="info-item"><strong>You keep 85%</strong><span>We take a 15% commission on matched projects only</span></div>
+    <div class="info-item"><strong>We find clients</strong><span>You focus on building, we handle the outreach</span></div>
+    <div class="info-item"><strong>No exclusivity</strong><span>Work with us alongside your own clients</span></div>
+  </div>
+
+  <form class="form-card glass-card" id="applyForm" novalidate autocomplete="off">
+    <div class="hp"><input type="text" name="website" tabindex="-1" autocomplete="off"/></div>
+    <input type="hidden" name="form_type" value="Developer Application"/>
+    <input type="hidden" name="sender_name" id="senderName"/>
+    <input type="hidden" name="reply_email" id="replyEmail"/>
+    <input type="hidden" name="form_details" id="formDetails"/>
+    <input type="hidden" id="selectedSkills" name="selected_skills"/>
+    <input type="hidden" id="rateType" name="rate_type" value="Per Project"/>
+
+    <div class="form-section-header">
+      <div class="form-section-num">1</div>
+      <span class="form-section-title">Your Details</span>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group" id="g-name">
+        <label for="devName">Full Name <span class="req">*</span></label>
+        <input type="text" id="devName" name="dev_name" placeholder="Your name" autocomplete="name" maxlength="100"/>
+        <div class="err-msg">Please enter your name</div>
+      </div>
+      <div class="form-group" id="g-email">
+        <label for="devEmail">Email Address <span class="req">*</span></label>
+        <input type="email" id="devEmail" name="dev_email" placeholder="you@email.com" autocomplete="email" maxlength="254"/>
+        <div class="err-msg">Please enter a valid email</div>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Preferred Contact Method</label>
+      <div class="contact-method-toggle">
+        <label class="method-option">
+          <input type="radio" name="contact_method" value="Email" checked/>
+          <span>Email</span>
+        </label>
+        <label class="method-option">
+          <input type="radio" name="contact_method" value="Discord"/>
+          <span>Discord</span>
+        </label>
+      </div>
+    </div>
+    <div class="form-group" id="g-discord" style="display:none">
+      <label for="discordUser">Discord Username <span class="req">*</span></label>
+      <input type="text" id="discordUser" name="discord_username" placeholder="your_username" maxlength="50"/>
+      <div class="err-msg">Please enter your Discord username</div>
+    </div>
+    <div class="form-group" id="g-roblox">
+      <label for="robloxUser">Roblox Username <span class="req">*</span></label>
+      <input type="text" id="robloxUser" name="roblox_username" placeholder="Your Roblox username" maxlength="20"/>
+      <div class="err-msg">Please enter your Roblox username</div>
+    </div>
+    <div class="form-group" id="g-portfolio">
+      <label for="portfolio">Portfolio / Work Examples</label>
+      <input type="url" id="portfolio" name="portfolio_link" placeholder="https://... link to your portfolio or past work" maxlength="300"/>
+      <div class="err-msg">Please enter a valid URL</div>
+    </div>
+
+    <hr class="section-divider"/>
+
+    <div class="form-section-header">
+      <div class="form-section-num">2</div>
+      <span class="form-section-title">Skills and Experience</span>
+    </div>
+
+    <div class="skills-section" id="skillsSection">
+      <label class="skills-label">Your Specialisms <span class="req">*</span></label>
+      <div class="skills-grid">
+        <button type="button" class="skill-btn" data-skill="Scripting (Lua)">Scripting (Lua)</button>
+        <button type="button" class="skill-btn" data-skill="Building / 3D">Building / 3D</button>
+        <button type="button" class="skill-btn" data-skill="UI Design">UI Design</button>
+        <button type="button" class="skill-btn" data-skill="Animation">Animation</button>
+        <button type="button" class="skill-btn" data-skill="VFX / Particles">VFX / Particles</button>
+        <button type="button" class="skill-btn" data-skill="Game Design">Game Design</button>
+        <button type="button" class="skill-btn" data-skill="Audio">Audio</button>
+      </div>
+      <div class="err-msg">Please select at least one specialism</div>
+    </div>
+    <div class="form-group" id="g-exp">
+      <label for="experience">Years of Experience <span class="req">*</span></label>
+      <select id="experience" name="experience">
+        <option value="">Select experience level</option>
+        <option value="Less than 1 year">Less than 1 year</option>
+        <option value="1 to 2 years">1 to 2 years</option>
+        <option value="2 to 4 years">2 to 4 years</option>
+        <option value="4+ years">4+ years</option>
+      </select>
+      <div class="err-msg">Please select your experience level</div>
+    </div>
+    <div class="form-group" id="g-about">
+      <label for="aboutYou">Tell us about yourself <span class="req">*</span></label>
+      <textarea id="aboutYou" name="about_you" maxlength="1000" placeholder="Describe your experience, the kind of projects you have worked on, and what you enjoy building most..."></textarea>
+      <span class="char-count" id="aboutCount">0 / 1000</span>
+      <div class="err-msg">Please tell us a bit about yourself</div>
+    </div>
+
+    <hr class="section-divider"/>
+
+    <div class="form-section-header">
+      <div class="form-section-num">3</div>
+      <span class="form-section-title">Availability and Rates</span>
+    </div>
+
+    <div class="form-group" id="g-avail">
+      <label for="availability">Availability <span class="req">*</span></label>
+      <select id="availability" name="availability">
+        <option value="">Select availability</option>
+        <option value="Full-time (40h+/week)">Full-time (40h+/week)</option>
+        <option value="Part-time (20-40h/week)">Part-time (20-40h/week)</option>
+        <option value="Limited (under 20h/week)">Limited (under 20h/week)</option>
+        <option value="Project-by-project">Project-by-project</option>
+      </select>
+      <div class="err-msg">Please select your availability</div>
+    </div>
+    <div>
+      <label class="skills-label">Preferred Rate Type</label>
+      <div class="pay-tabs">
+        <button type="button" class="pay-tab on" data-type="project">Per Project</button>
+        <button type="button" class="pay-tab" data-type="hourly">Hourly Rate</button>
+        <button type="button" class="pay-tab" data-type="both">Both</button>
+      </div>
+      <div class="pay-fields">
+        <div class="pay-field show" id="pf-project">
+          <div class="form-group">
+            <label for="rateProject">Typical Project Rate</label>
+            <input type="text" id="rateProject" name="rate_project" placeholder="e.g. 150 to 500" maxlength="80"/>
+          </div>
+        </div>
+        <div class="pay-field" id="pf-hourly">
+          <div class="form-group">
+            <label for="rateHourly">Hourly Rate</label>
+            <input type="text" id="rateHourly" name="rate_hourly" placeholder="e.g. 20 per hour" maxlength="80"/>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="submit-wrap">
+      <button type="submit" class="submit-btn" id="submitBtn">
+        <span class="btn-label">Submit Application</span>
+        <span class="spinner"></span>
+      </button>
+      <div class="success-msg" id="successMsg">Your application has been received. We review every submission personally and will be in touch if you are a good fit.</div>
+      <p class="form-note">Your details go directly to the DevLink team and are not stored or shared.</p>
+    </div>
+  </form>
+</div>
+
+<div class="footer-wrap">
+  <footer>
+    <a href="/" class="footer-logo">
+      <img src="/DevLinkRBBX.png" alt="DevLink" onerror="this.style.display='none'"/>
+      <span>DevLink</span>
+    </a>
+    <div class="footer-links">
+      <a href="https://x.com/DevLinkRBX" target="_blank" rel="noopener noreferrer">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.748l7.73-8.835L1.254 2.25H8.08l4.259 5.63 5.905-5.63zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+        @DevLinkRBX
+      </a>
+      <a href="https://discord.gg/aTQ67uwRN" target="_blank" rel="noopener noreferrer">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03z"/></svg>
+        Discord
+      </a>
+    </div>
+    <p class="footer-copy">&#169; 2026 DevLink. &middot; <a href="/legal" class="footer-legal">Terms &amp; Privacy</a></p>
+  </footer>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script data-cfasync="false">
+window.onload = function() {
+  var PUBLIC_KEY = 'iCCi3WGf2aQ8yeT1q';
+  var TEMPLATE_TO_YOU = 'template_2jg1lt4';
+  var TEMPLATE_AUTOREPLY = 'template_5jyjxy9';
+  var SERVICE_ID = 'service_b2nnw1e';
+  if (window.emailjs) { emailjs.init(PUBLIC_KEY); }
+
+  /* Contact method toggle */
+  var methodRadios = document.querySelectorAll('[name="contact_method"]');
+  var discordGroup = document.getElementById('g-discord');
+  for (var mr = 0; mr < methodRadios.length; mr++) {
+    methodRadios[mr].addEventListener('change', function() {
+      discordGroup.style.display = this.value === 'Discord' ? 'block' : 'none';
+      if (this.value === 'Email') { clrErr('g-discord'); }
+    });
+  }
+
+  var selectedSkills = [];
+  var skillBtns = document.querySelectorAll('.skill-btn');
+  for (var s = 0; s < skillBtns.length; s++) {
+    skillBtns[s].addEventListener('click', function() {
+      var skill = this.getAttribute('data-skill');
+      var on = this.classList.toggle('on');
+      if (on) { selectedSkills.push(skill); } else { selectedSkills = selectedSkills.filter(function(x) { return x !== skill; }); }
+      document.getElementById('selectedSkills').value = selectedSkills.join(', ');
+      if (selectedSkills.length) { document.getElementById('skillsSection').classList.remove('has-error'); }
+    });
+  }
+
+  var payTabs = document.querySelectorAll('.pay-tab');
+  for (var p = 0; p < payTabs.length; p++) {
+    payTabs[p].addEventListener('click', function() {
+      for (var i = 0; i < payTabs.length; i++) { payTabs[i].classList.remove('on'); }
+      this.classList.add('on');
+      var type = this.getAttribute('data-type');
+      document.getElementById('rateType').value = this.textContent;
+      document.getElementById('pf-project').classList.toggle('show', type === 'project' || type === 'both');
+      document.getElementById('pf-hourly').classList.toggle('show', type === 'hourly' || type === 'both');
+    });
+  }
+
+  function sanitize(str) { return String(str).trim().replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#x27;'); }
+  function isValidEmail(v) { return /^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$/.test(v.trim()); }
+  function isValidUrl(v) { if (!v.trim()) { return true; } try { new URL(v.trim()); return true; } catch(e) { return false; } }
+  function stripScript(str) { return str.replace(/<script[\s\S]*?>[\s\S]*?<\/script>/gi,'').replace(/javascript:/gi,''); }
+
+  var formLoadTime = Date.now();
+  var lastSubmit = 0;
+  var submitCount = 0;
+  var form = document.getElementById('applyForm');
+  var submitBtn = document.getElementById('submitBtn');
+  var btnLabel = submitBtn.querySelector('.btn-label');
+  var successMsg = document.getElementById('successMsg');
+  var toastEl = document.getElementById('toast');
+  var toastTimer;
+
+  var aboutTxt = document.getElementById('aboutYou');
+  var aboutCount = document.getElementById('aboutCount');
+  aboutTxt.addEventListener('input', function() {
+    var l = this.value.length, m = parseInt(this.maxLength);
+    aboutCount.textContent = l + ' / ' + m;
+    aboutCount.className = 'char-count' + (l >= m ? ' over' : l > m * 0.9 ? ' warn' : '');
+    if (l) { clrErr('g-about'); }
+  });
+
+  function toast(msg, type) {
+    clearTimeout(toastTimer);
+    toastEl.textContent = msg;
+    toastEl.className = 'toast' + (type === 'error' ? ' err' : '') + ' show';
+    toastTimer = setTimeout(function() { toastEl.classList.remove('show'); }, 5000);
+  }
+  function setErr(id) { document.getElementById(id).classList.add('has-error'); }
+  function clrErr(id) { document.getElementById(id).classList.remove('has-error'); }
+
+  document.getElementById('devName').addEventListener('input', function() { if (this.value.trim()) { clrErr('g-name'); } });
+  document.getElementById('devEmail').addEventListener('input', function() { if (isValidEmail(this.value)) { clrErr('g-email'); } });
+  document.getElementById('discordUser').addEventListener('input', function() { if (this.value.trim()) { clrErr('g-discord'); } });
+  document.getElementById('robloxUser').addEventListener('input', function() { if (this.value.trim()) { clrErr('g-roblox'); } });
+  document.getElementById('portfolio').addEventListener('input', function() { if (isValidUrl(this.value)) { clrErr('g-portfolio'); } });
+  document.getElementById('experience').addEventListener('change', function() { if (this.value) { clrErr('g-exp'); } });
+  document.getElementById('availability').addEventListener('change', function() { if (this.value) { clrErr('g-avail'); } });
+
+  function getContactMethod() {
+    var radios = document.querySelectorAll('[name="contact_method"]');
+    for (var i = 0; i < radios.length; i++) { if (radios[i].checked) { return radios[i].value; } }
+    return 'Email';
+  }
+
+  function validate() {
+    var ok = true;
+    var errs = form.querySelectorAll('.has-error');
+    for (var i = 0; i < errs.length; i++) { errs[i].classList.remove('has-error'); }
+    if (!document.getElementById('devName').value.trim()) { setErr('g-name'); ok = false; }
+    if (!isValidEmail(document.getElementById('devEmail').value)) { setErr('g-email'); ok = false; }
+    if (getContactMethod() === 'Discord' && !document.getElementById('discordUser').value.trim()) { setErr('g-discord'); ok = false; }
+    if (!document.getElementById('robloxUser').value.trim()) { setErr('g-roblox'); ok = false; }
+    if (!isValidUrl(document.getElementById('portfolio').value)) { setErr('g-portfolio'); ok = false; }
+    if (!selectedSkills.length) { document.getElementById('skillsSection').classList.add('has-error'); ok = false; }
+    if (!document.getElementById('experience').value) { setErr('g-exp'); ok = false; }
+    if (!document.getElementById('aboutYou').value.trim()) { setErr('g-about'); ok = false; }
+    if (!document.getElementById('availability').value) { setErr('g-avail'); ok = false; }
+    return ok;
+  }
+
+  form.addEventListener('submit', function(e) {
+    e.preventDefault();
+    if (Date.now() - formLoadTime < 3000) { toast('Application submitted successfully.'); return; }
+    if (document.querySelector('[name="website"]').value.trim()) { toast('Application submitted successfully.'); return; }
+    if (Date.now() - lastSubmit < 30000) { toast('Please wait before submitting again.', 'error'); return; }
+    if (submitCount >= 3) { toast('Too many submissions. Please email us directly.', 'error'); return; }
+    if (!validate()) {
+      toast('Please fill in all required fields.', 'error');
+      var first = form.querySelector('.has-error');
+      if (first) { first.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
+      return;
+    }
+    var name = sanitize(document.getElementById('devName').value);
+    var email = sanitize(document.getElementById('devEmail').value.trim().toLowerCase());
+    document.getElementById('senderName').value = name;
+    document.getElementById('replyEmail').value = email;
+    var contactMethod = getContactMethod();
+    var discordVal = document.getElementById('discordUser').value.trim();
+    document.getElementById('formDetails').value = stripScript(
+      'Developer Application from ' + name + '\n' +
+      'Email: ' + email + '\n' +
+      'Preferred Contact: ' + contactMethod + (contactMethod === 'Discord' ? ' (' + sanitize(discordVal) + ')' : '') + '\n' +
+      'Roblox Username: ' + sanitize(document.getElementById('robloxUser').value) + '\n' +
+      'Portfolio: ' + sanitize(document.getElementById('portfolio').value || 'Not provided') + '\n\n' +
+      'Skills: ' + sanitize(selectedSkills.join(', ')) + '\n' +
+      'Experience: ' + sanitize(document.getElementById('experience').value) + '\n' +
+      'Availability: ' + sanitize(document.getElementById('availability').value) + '\n' +
+      'Rate Type: ' + sanitize(document.getElementById('rateType').value) + '\n' +
+      'Project Rate: ' + sanitize(document.getElementById('rateProject').value || 'N/A') + '\n' +
+      'Hourly Rate: ' + sanitize(document.getElementById('rateHourly').value || 'N/A') + '\n\n' +
+      'About:\n' + sanitize(document.getElementById('aboutYou').value)
+    );
+    submitBtn.disabled = true;
+    submitBtn.classList.add('loading');
+    btnLabel.textContent = 'Sending...';
+    successMsg.classList.remove('show');
+    emailjs.sendForm(SERVICE_ID, TEMPLATE_TO_YOU, form).then(function() {
+      return emailjs.sendForm(SERVICE_ID, TEMPLATE_AUTOREPLY, form);
+    }).then(function() {
+      lastSubmit = Date.now();
+      submitCount++;
+      successMsg.classList.add('show');
+      successMsg.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      toast('Application received. We will be in touch if you are a good fit.');
+      form.reset();
+      selectedSkills = [];
+      var onBtns = document.querySelectorAll('.skill-btn.on');
+      for (var i = 0; i < onBtns.length; i++) { onBtns[i].classList.remove('on'); }
+      document.getElementById('selectedSkills').value = '';
+      aboutCount.textContent = '0 / 1000';
+      aboutCount.className = 'char-count';
+      for (var j = 0; j < payTabs.length; j++) { payTabs[j].classList.remove('on'); }
+      document.querySelector('.pay-tab[data-type="project"]').classList.add('on');
+      document.getElementById('pf-project').classList.add('show');
+      document.getElementById('pf-hourly').classList.remove('show');
+    }).catch(function() {
+      toast('Something went wrong. Please try again or email us directly.', 'error');
+    }).finally(function() {
+      submitBtn.disabled = false;
+      submitBtn.classList.remove('loading');
+      btnLabel.textContent = 'Submit Application';
+    });
+  });
+};
+</script>
+<script data-cfasync="false" src="/main.js"></script>
+</body>
+</html>
