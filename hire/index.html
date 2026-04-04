@@ -116,6 +116,9 @@
         <option value="Other">Other</option>
       </select>
       <div class="err-msg">Please select a project type</div>
+      <div id="otherTypeWrap" style="display:none;margin-top:8px;">
+        <input type="text" id="otherTypeInput" placeholder="Describe what you need built..." maxlength="100"/>
+      </div>
     </div>
     <div class="form-group" id="g-gamelink">
       <label for="gameLink">Roblox Game Link</label>
@@ -251,7 +254,12 @@ window.onload = function() {
   document.getElementById('clientName').addEventListener('input', function() { if (this.value.trim()) { clrErr('g-name'); } });
   document.getElementById('clientEmail').addEventListener('input', function() { if (isValidEmail(this.value)) { clrErr('g-email'); } });
   document.getElementById('discordUser').addEventListener('input', function() { if (this.value.trim()) { clrErr('g-discord'); } });
-  document.getElementById('projectType').addEventListener('change', function() { if (this.value) { clrErr('g-projtype'); } });
+  document.getElementById('projectType').addEventListener('change', function() {
+    if (this.value) { clrErr('g-projtype'); }
+    document.getElementById('otherTypeWrap').style.display = this.value === 'Other' ? 'block' : 'none';
+    if (this.value !== 'Other') { document.getElementById('otherTypeInput').value = ''; }
+  });
+  document.getElementById('otherTypeInput').addEventListener('input', function() { if (this.value.trim()) { clrErr('g-projtype'); } });
   document.getElementById('gameLink').addEventListener('input', function() { if (isValidUrl(this.value)) { clrErr('g-gamelink'); } });
   document.getElementById('budget').addEventListener('change', function() { if (this.value) { clrErr('g-budget'); } });
   document.getElementById('timeline').addEventListener('change', function() { if (this.value) { clrErr('g-timeline'); } });
@@ -269,7 +277,9 @@ window.onload = function() {
     if (!document.getElementById('clientName').value.trim()) { setErr('g-name'); ok = false; }
     if (!isValidEmail(document.getElementById('clientEmail').value)) { setErr('g-email'); ok = false; }
     if (getContactMethod() === 'Discord' && !document.getElementById('discordUser').value.trim()) { setErr('g-discord'); ok = false; }
-    if (!document.getElementById('projectType').value) { setErr('g-projtype'); ok = false; }
+    var projType = document.getElementById('projectType').value;
+    if (!projType) { setErr('g-projtype'); ok = false; }
+    else if (projType === 'Other' && !document.getElementById('otherTypeInput').value.trim()) { setErr('g-projtype'); ok = false; }
     if (!isValidUrl(document.getElementById('gameLink').value)) { setErr('g-gamelink'); ok = false; }
     if (!document.getElementById('projectBrief').value.trim()) { setErr('g-brief'); ok = false; }
     if (!document.getElementById('budget').value) { setErr('g-budget'); ok = false; }
@@ -300,7 +310,7 @@ window.onload = function() {
       'Email: ' + email + '\n' +
       'Preferred Contact: ' + contactMethod + (contactMethod === 'Discord' ? ' (' + sanitize(discordVal) + ')' : '') + '\n' +
       'Roblox Username: ' + sanitize(document.getElementById('robloxUser').value || 'Not provided') + '\n\n' +
-      'Project Type: ' + sanitize(document.getElementById('projectType').value) + '\n' +
+      'Project Type: ' + sanitize(document.getElementById('projectType').value === 'Other' ? document.getElementById('otherTypeInput').value.trim() : document.getElementById('projectType').value) + '\n' +
       'Game Link: ' + sanitize(document.getElementById('gameLink').value || 'Not provided') + '\n' +
       'Budget: ' + sanitize(document.getElementById('budget').value) + '\n' +
       'Timeline: ' + sanitize(document.getElementById('timeline').value) + '\n\n' +
@@ -319,6 +329,7 @@ window.onload = function() {
       successMsg.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
       toast('Enquiry received. We will be in touch within 24 hours.');
       form.reset();
+      document.getElementById('otherTypeWrap').style.display = 'none';
       briefCount.textContent = '0 / 1500';
       briefCount.className = 'char-count';
     }).catch(function() {
