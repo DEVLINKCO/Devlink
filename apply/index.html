@@ -124,6 +124,10 @@
         <button type="button" class="skill-btn" data-skill="VFX / Particles">VFX / Particles</button>
         <button type="button" class="skill-btn" data-skill="Game Design">Game Design</button>
         <button type="button" class="skill-btn" data-skill="Audio">Audio</button>
+        <button type="button" class="skill-btn" data-skill="Other">Other</button>
+      </div>
+      <div id="otherSkillWrap" style="display:none;margin-top:8px;">
+        <input type="text" id="otherSkillInput" placeholder="Describe your specialism..." maxlength="100"/>
       </div>
       <div class="err-msg">Please select at least one specialism</div>
     </div>
@@ -238,16 +242,38 @@ window.onload = function() {
   }
 
   var selectedSkills = [];
+  var otherSkillValue = '';
   var skillBtns = document.querySelectorAll('.skill-btn');
   for (var s = 0; s < skillBtns.length; s++) {
     skillBtns[s].addEventListener('click', function() {
       var skill = this.getAttribute('data-skill');
-      var on = this.classList.toggle('on');
-      if (on) { selectedSkills.push(skill); } else { selectedSkills = selectedSkills.filter(function(x) { return x !== skill; }); }
+      var isOn = this.classList.toggle('on');
+      if (skill === 'Other') {
+        var wrap = document.getElementById('otherSkillWrap');
+        wrap.style.display = isOn ? 'block' : 'none';
+        if (isOn) {
+          document.getElementById('otherSkillInput').focus();
+          if (otherSkillValue) { selectedSkills.push(otherSkillValue); }
+        } else {
+          if (otherSkillValue) { selectedSkills = selectedSkills.filter(function(x) { return x !== otherSkillValue; }); }
+          document.getElementById('otherSkillInput').value = '';
+          otherSkillValue = '';
+        }
+      } else {
+        if (isOn) { selectedSkills.push(skill); } else { selectedSkills = selectedSkills.filter(function(x) { return x !== skill; }); }
+      }
       document.getElementById('selectedSkills').value = selectedSkills.join(', ');
       if (selectedSkills.length) { document.getElementById('skillsSection').classList.remove('has-error'); }
     });
   }
+  document.getElementById('otherSkillInput').addEventListener('input', function() {
+    var newVal = this.value.trim();
+    if (otherSkillValue) { selectedSkills = selectedSkills.filter(function(x) { return x !== otherSkillValue; }); }
+    otherSkillValue = newVal;
+    if (newVal) { selectedSkills.push(newVal); }
+    document.getElementById('selectedSkills').value = selectedSkills.join(', ');
+    if (selectedSkills.length) { document.getElementById('skillsSection').classList.remove('has-error'); }
+  });
 
   var payTabs = document.querySelectorAll('.pay-tab');
   for (var p = 0; p < payTabs.length; p++) {
@@ -370,6 +396,9 @@ window.onload = function() {
       toast('Application received. We will be in touch if you are a good fit.');
       form.reset();
       selectedSkills = [];
+      otherSkillValue = '';
+      document.getElementById('otherSkillInput').value = '';
+      document.getElementById('otherSkillWrap').style.display = 'none';
       var onBtns = document.querySelectorAll('.skill-btn.on');
       for (var i = 0; i < onBtns.length; i++) { onBtns[i].classList.remove('on'); }
       document.getElementById('selectedSkills').value = '';
