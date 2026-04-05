@@ -99,6 +99,82 @@
       }
     }
 
+    /* ── Hero word-cycling animation ── */
+    var words = ["Roblox.", "Developers.", "Studios.", "Builders.", "Creators.", "You."];
+    var wordIdx = 0;
+    var wordEl = document.getElementById("word");
+    if (wordEl) {
+      wordEl.textContent = words[0];
+      wordEl.style.transition = "transform 0.35s ease, opacity 0.35s";
+      wordEl.style.transform = "translateY(0)";
+      wordEl.style.opacity = "1";
+      setInterval(function () {
+        wordEl.style.transition = "transform 0.35s ease, opacity 0.35s";
+        wordEl.style.transform = "translateY(-120%)";
+        wordEl.style.opacity = "0";
+        setTimeout(function () {
+          wordIdx = (wordIdx + 1) % words.length;
+          wordEl.textContent = words[wordIdx];
+          wordEl.style.transition = "none";
+          wordEl.style.transform = "translateY(120%)";
+          requestAnimationFrame(function () {
+            requestAnimationFrame(function () {
+              wordEl.style.transition = "transform 0.35s ease, opacity 0.35s";
+              wordEl.style.transform = "translateY(0)";
+              wordEl.style.opacity = "1";
+            });
+          });
+        }, 360);
+      }, 2000);
+    }
+
+    /* ── Trust block word-cycling animation ── */
+    var trustWords = ["No ghosting.", "No scams.", "No stress."];
+    var trustIdx = 0;
+    var trustEl = document.getElementById("trustWord");
+    if (trustEl) {
+      trustEl.textContent = trustWords[0];
+      trustEl.style.transition = "transform 0.35s ease, opacity 0.35s";
+      trustEl.style.transform = "translateY(0)";
+      trustEl.style.opacity = "1";
+      setInterval(function () {
+        trustEl.style.transition = "transform 0.35s ease, opacity 0.35s";
+        trustEl.style.transform = "translateY(-120%)";
+        trustEl.style.opacity = "0";
+        setTimeout(function () {
+          trustIdx = (trustIdx + 1) % trustWords.length;
+          trustEl.textContent = trustWords[trustIdx];
+          trustEl.style.transition = "none";
+          trustEl.style.transform = "translateY(120%)";
+          requestAnimationFrame(function () {
+            requestAnimationFrame(function () {
+              trustEl.style.transition = "transform 0.35s ease, opacity 0.35s";
+              trustEl.style.transform = "translateY(0)";
+              trustEl.style.opacity = "1";
+            });
+          });
+        }, 360);
+      }, 2000);
+    }
+
+    /* ── Hero grid cursor reveal ── */
+    var heroSection = document.querySelector('.hero');
+    var gridCursor = document.getElementById('heroGridCursor');
+    if (heroSection && gridCursor) {
+      heroSection.addEventListener('mousemove', function (e) {
+        var rect = heroSection.getBoundingClientRect();
+        var x = e.clientX - rect.left;
+        var y = e.clientY - rect.top;
+        var mask = 'radial-gradient(circle 220px at ' + x + 'px ' + y + 'px, black 0%, transparent 100%)';
+        gridCursor.style.webkitMaskImage = mask;
+        gridCursor.style.maskImage = mask;
+      });
+      heroSection.addEventListener('mouseleave', function () {
+        gridCursor.style.webkitMaskImage = 'radial-gradient(circle 220px at -999px -999px, black 0%, transparent 100%)';
+        gridCursor.style.maskImage = 'radial-gradient(circle 220px at -999px -999px, black 0%, transparent 100%)';
+      });
+    }
+
     /* ── Legal tab switching ── */
     var legalTabs = document.querySelectorAll('.legal-tab');
     if (legalTabs.length) {
