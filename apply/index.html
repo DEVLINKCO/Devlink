@@ -383,12 +383,12 @@ window.onload = function() {
       'About:\n' + sanitize(document.getElementById('aboutYou').value)
     );
     var sbData = {
-      dev_name: name,
-      dev_email: email,
+      name: name,
+      email: email,
       contact_method: contactMethod,
-      discord_username: sanitize(discordVal) || null,
+      discord: sanitize(discordVal) || null,
       roblox_username: sanitize(document.getElementById('robloxUser').value) || null,
-      portfolio_link: sanitize(document.getElementById('portfolio').value) || null,
+      portfolio: sanitize(document.getElementById('portfolio').value) || null,
       skills: sanitize(selectedSkills.join(', ')) || null,
       experience: sanitize(document.getElementById('experience').value),
       availability: sanitize(document.getElementById('availability').value),
