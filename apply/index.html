@@ -196,7 +196,7 @@
         <span class="spinner"></span>
       </button>
       <div class="success-msg" id="successMsg">Your application has been received. We review every submission personally and will be in touch if you are a good fit.</div>
-      <p class="form-note">Your details go directly to the DevLink team and are not stored or shared.</p>
+      <p class="form-note">Your details are stored securely and used only to process your enquiry.</p>
     </div>
   </form>
 </div>
@@ -382,6 +382,20 @@ window.onload = function() {
       'Hourly Rate: ' + sanitize(document.getElementById('rateHourly').value || 'N/A') + '\n\n' +
       'About:\n' + sanitize(document.getElementById('aboutYou').value)
     );
+    var sbData = {
+      dev_name: name,
+      dev_email: email,
+      contact_method: contactMethod,
+      discord_username: sanitize(discordVal) || null,
+      roblox_username: sanitize(document.getElementById('robloxUser').value) || null,
+      portfolio_link: sanitize(document.getElementById('portfolio').value) || null,
+      skills: sanitize(selectedSkills.join(', ')) || null,
+      experience: sanitize(document.getElementById('experience').value),
+      availability: sanitize(document.getElementById('availability').value),
+      rate_project: sanitize(document.getElementById('rateProject').value) || null,
+      rate_hourly: sanitize(document.getElementById('rateHourly').value) || null,
+      about: sanitize(document.getElementById('aboutYou').value)
+    };
     submitBtn.disabled = true;
     submitBtn.classList.add('loading');
     btnLabel.textContent = 'Sending...';
@@ -389,6 +403,13 @@ window.onload = function() {
     emailjs.sendForm(SERVICE_ID, TEMPLATE_TO_YOU, form).then(function() {
       return emailjs.sendForm(SERVICE_ID, TEMPLATE_AUTOREPLY, form);
     }).then(function() {
+      supabaseClient.from('developer_applications').insert([sbData]).select('id').then(function(result) {
+        if (result.data && result.data[0]) {
+          var rid = String(result.data[0].id);
+          while (rid.length < 6) { rid = '0' + rid; }
+          supabaseClient.from('developer_applications').update({ reference_id: 'D-' + rid }).eq('id', result.data[0].id).then(function() {}).catch(function() {});
+        }
+      }).catch(function() {});
       lastSubmit = Date.now();
       submitCount++;
       successMsg.classList.add('show');
@@ -419,5 +440,12 @@ window.onload = function() {
 };
 </script>
 <script data-cfasync="false" src="/main.js"></script>
+<script data-cfasync="false" src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script data-cfasync="false">
+  var supabaseClient = supabase.createClient(
+    'https://qgqpwxitbdjoggiwtjra.supabase.co',
+    'sb_publishable_GyM73jJAcyrjpGLJlbJN4g_jDHJJWlm'
+  );
+</script>
 </body>
 </html>
