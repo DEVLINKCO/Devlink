@@ -22,6 +22,13 @@
   <link rel="stylesheet" href="/styles.css"/>
   <script data-cfasync="false">try{var t=localStorage.getItem('devlink-theme');if(t)document.documentElement.setAttribute('data-theme',t);}catch(e){}</script>
   <script data-cfasync="false" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <script data-cfasync="false" src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script data-cfasync="false">
+    var supabaseClient = supabase.createClient(
+      'https://qgqpwxitbdjoggiwtjra.supabase.co',
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFncXB3eGl0YmRqb2dnaXd0anJhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUzNTM2NDYsImV4cCI6MjA5MDkyOTY0Nn0.7vXKc33-Ok-V7nOIoxw2gZ0LxjdrR0ZEp59Y1Cgej4w'
+    );
+  </script>
 </head>
 <body>
 <nav>
@@ -403,13 +410,15 @@ window.onload = function() {
     emailjs.sendForm(SERVICE_ID, TEMPLATE_TO_YOU, form).then(function() {
       return emailjs.sendForm(SERVICE_ID, TEMPLATE_AUTOREPLY, form);
     }).then(function() {
-      supabaseClient.from('developer_applications').insert([sbData]).select('id').then(function(result) {
-        if (result.data && result.data[0]) {
-          var rid = String(result.data[0].id);
-          while (rid.length < 6) { rid = '0' + rid; }
-          supabaseClient.from('developer_applications').update({ reference_id: 'D-' + rid }).eq('id', result.data[0].id).then(function() {}).catch(function() {});
-        }
-      }).catch(function() {});
+      supabaseClient.from('developer_applications').insert([sbData]).then(function() {
+        supabaseClient.from('developer_applications').select('id').eq('email', sbData.email).order('id', { ascending: false }).limit(1).then(function(result) {
+          if (result.data && result.data[0]) {
+            var rid = String(result.data[0].id);
+            while (rid.length < 6) { rid = '0' + rid; }
+            supabaseClient.from('developer_applications').update({ reference_id: 'D-' + rid }).eq('id', result.data[0].id).then(function() {}).catch(function(err) { console.error(err); });
+          }
+        }).catch(function(err) { console.error(err); });
+      }).catch(function(err) { console.error(err); });
       lastSubmit = Date.now();
       submitCount++;
       successMsg.classList.add('show');
@@ -440,12 +449,5 @@ window.onload = function() {
 };
 </script>
 <script data-cfasync="false" src="/main.js"></script>
-<script data-cfasync="false" src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
-<script data-cfasync="false">
-  var supabaseClient = supabase.createClient(
-    'https://qgqpwxitbdjoggiwtjra.supabase.co',
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFncXB3eGl0YmRqb2dnaXd0anJhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUzNTM2NDYsImV4cCI6MjA5MDkyOTY0Nn0.7vXKc33-Ok-V7nOIoxw2gZ0LxjdrR0ZEp59Y1Cgej4w'
-  );
-</script>
 </body>
 </html>
