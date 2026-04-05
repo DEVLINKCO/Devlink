@@ -538,14 +538,14 @@
 
         var sbData = {
           dev_name: sanitize(devName),
-          dev_email: sanitize(devEmail),
-          discord_username: sanitize(devDiscord) || null,
+          email: sanitize(devEmail),
+          discord: sanitize(devDiscord) || null,
           roblox_username: sanitize(devRoblox) || null,
           asset_name: sanitize(assetName),
-          asset_category: sanitize(assetCat),
-          asset_price: sanitize(assetPrice),
-          asset_description: sanitize(assetDesc),
-          asset_preview_url: sanitize(assetPreview) || null,
+          category: sanitize(assetCat),
+          price: sanitize(assetPrice),
+          description: sanitize(assetDesc),
+          preveiw_link: sanitize(assetPreview) || null,
           contact_method: selectedMethod
         };
         emailjs.send('service_b2nnw1e', 'template_2jg1lt4', params)
