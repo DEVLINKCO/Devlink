@@ -65,9 +65,10 @@
 
   <!-- ── HERO ── -->
   <section class="hero">
+    <div class="hero-grid-cursor" id="heroGridCursor"></div>
     <div class="hero-badge"><span></span> Roblox Development Agency</div>
-    <h1>The agency built for <span class="accent">Roblox.</span></h1>
-    <p>We connect clients with talented, vetted Roblox developers. Tell us what you need — we find the right person and get it built.</p>
+    <h1>The agency built for <span class="word-clip"><span id="word" class="accent"></span></span></h1>
+    <p>We connect clients with talented, vetted Roblox developers. Tell us what you need and we will find the right person and get it built.</p>
     <div class="hero-buttons">
       <a href="/hire" class="btn-primary">Hire a Developer</a>
       <a href="/apply" class="btn-secondary">Join as a Developer</a>
@@ -193,12 +194,26 @@
 
   <div class="accent-divider"></div>
 
-  <!-- ── TESTIMONIAL BLOCK ── -->
+  <!-- ── TRUST BLOCK ── -->
   <div class="testimonial-block reveal">
     <div class="testimonial-inner">
-      <div class="testimonial-quote-mark">"</div>
-      <p class="testimonial-text">Sent the brief over, had a developer introduction the next day. The whole thing felt personal — like someone actually read what I wrote and made a real decision, not just an algorithm.</p>
-      <p class="testimonial-author">Content Creator &amp; Game Publisher</p>
+      <div class="trust-icons">
+        <!-- Shield with inner checkmark detail -->
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M12 2L3 6.5v5.25C3 16.95 7.05 21.6 12 23c4.95-1.4 9-6.05 9-11.25V6.5L12 2z"/>
+          <path d="M12 2L3 6.5v5.25C3 16.95 7.05 21.6 12 23c4.95-1.4 9-6.05 9-11.25V6.5L12 2z" stroke-width="0.5" opacity="0.35"/>
+          <path d="M8.5 12l2.5 2.5 4.5-4.5" stroke-width="1.8"/>
+        </svg>
+        <!-- Lock with keyhole detail -->
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="4" y="10" width="16" height="12" rx="2.5" ry="2.5"/>
+          <path d="M8 10V7a4 4 0 0 1 8 0v3"/>
+          <circle cx="12" cy="16" r="1.5" fill="currentColor" stroke="none"/>
+          <line x1="12" y1="17.5" x2="12" y2="19.5" stroke-width="1.8"/>
+        </svg>
+      </div>
+      <p class="testimonial-text">Every DevLink project is protected. Escrow payments, vetted developers, and a human in the middle keeping both sides safe.</p>
+      <p class="trust-rotating"><span class="word-clip"><span id="trustWord"></span></span></p>
     </div>
   </div>
 
