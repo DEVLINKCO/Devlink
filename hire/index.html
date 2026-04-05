@@ -317,15 +317,15 @@ window.onload = function() {
       'Project Brief:\n' + sanitize(document.getElementById('projectBrief').value)
     );
     var sbData = {
-      client_name: name,
-      client_email: email,
+      name: name,
+      email: email,
       contact_method: contactMethod,
-      discord_username: sanitize(discordVal) || null,
+      discord: sanitize(discordVal) || null,
       roblox_username: sanitize(document.getElementById('robloxUser').value) || null,
       project_type: sanitize(document.getElementById('projectType').value === 'Other' ? document.getElementById('otherTypeInput').value.trim() : document.getElementById('projectType').value),
       game_link: sanitize(document.getElementById('gameLink').value) || null,
       project_brief: sanitize(document.getElementById('projectBrief').value),
-      budget_range: sanitize(document.getElementById('budget').value),
+      budget: sanitize(document.getElementById('budget').value),
       timeline: sanitize(document.getElementById('timeline').value)
     };
     submitBtn.disabled = true;
