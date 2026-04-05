@@ -164,7 +164,7 @@
         <span class="spinner"></span>
       </button>
       <div class="success-msg" id="successMsg">Your enquiry has been received. We will review your brief and get back to you within 24 hours.</div>
-      <p class="form-note">Your details go directly to the DevLink team and are not stored or shared.</p>
+      <p class="form-note">Your details are stored securely and used only to process your enquiry.</p>
     </div>
   </form>
 </div>
@@ -316,6 +316,18 @@ window.onload = function() {
       'Timeline: ' + sanitize(document.getElementById('timeline').value) + '\n\n' +
       'Project Brief:\n' + sanitize(document.getElementById('projectBrief').value)
     );
+    var sbData = {
+      client_name: name,
+      client_email: email,
+      contact_method: contactMethod,
+      discord_username: sanitize(discordVal) || null,
+      roblox_username: sanitize(document.getElementById('robloxUser').value) || null,
+      project_type: sanitize(document.getElementById('projectType').value === 'Other' ? document.getElementById('otherTypeInput').value.trim() : document.getElementById('projectType').value),
+      game_link: sanitize(document.getElementById('gameLink').value) || null,
+      project_brief: sanitize(document.getElementById('projectBrief').value),
+      budget_range: sanitize(document.getElementById('budget').value),
+      timeline: sanitize(document.getElementById('timeline').value)
+    };
     submitBtn.disabled = true;
     submitBtn.classList.add('loading');
     btnLabel.textContent = 'Sending...';
@@ -323,6 +335,13 @@ window.onload = function() {
     emailjs.sendForm(SERVICE_ID, TEMPLATE_TO_YOU, form).then(function() {
       return emailjs.sendForm(SERVICE_ID, TEMPLATE_AUTOREPLY, form);
     }).then(function() {
+      supabaseClient.from('client_enquiries').insert([sbData]).select('id').then(function(result) {
+        if (result.data && result.data[0]) {
+          var rid = String(result.data[0].id);
+          while (rid.length < 6) { rid = '0' + rid; }
+          supabaseClient.from('client_enquiries').update({ reference_id: 'C-' + rid }).eq('id', result.data[0].id).then(function() {}).catch(function() {});
+        }
+      }).catch(function() {});
       lastSubmit = Date.now();
       submitCount++;
       successMsg.classList.add('show');
@@ -343,5 +362,12 @@ window.onload = function() {
 };
 </script>
 <script data-cfasync="false" src="/main.js"></script>
+<script data-cfasync="false" src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script data-cfasync="false">
+  var supabaseClient = supabase.createClient(
+    'https://qgqpwxitbdjoggiwtjra.supabase.co',
+    'sb_publishable_GyM73jJAcyrjpGLJlbJN4g_jDHJJWlm'
+  );
+</script>
 </body>
 </html>
