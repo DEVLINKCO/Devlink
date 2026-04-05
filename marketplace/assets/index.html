@@ -112,7 +112,7 @@
           </div>
           <div class="asset-footer">
             <!-- Replace # with your Stripe Payment Link URL -->
-            <a href="#" class="asset-buy" target="_blank" rel="noopener noreferrer">Buy Now</a>
+            <a href="/marketplace/maintainance" class="asset-buy">Buy Now</a>
           </div>
         </div>
 
@@ -131,7 +131,7 @@
             </div>
           </div>
           <div class="asset-footer">
-            <a href="#" class="asset-buy" target="_blank" rel="noopener noreferrer">Buy Now</a>
+            <a href="/marketplace/maintainance" class="asset-buy">Buy Now</a>
           </div>
         </div>
 
@@ -150,7 +150,7 @@
             </div>
           </div>
           <div class="asset-footer">
-            <a href="#" class="asset-buy" target="_blank" rel="noopener noreferrer">Buy Now</a>
+            <a href="/marketplace/maintainance" class="asset-buy">Buy Now</a>
           </div>
         </div>
 
@@ -169,7 +169,7 @@
             </div>
           </div>
           <div class="asset-footer">
-            <a href="#" class="asset-buy" target="_blank" rel="noopener noreferrer">Buy Now</a>
+            <a href="/marketplace/maintainance" class="asset-buy">Buy Now</a>
           </div>
         </div>
 
@@ -188,7 +188,7 @@
             </div>
           </div>
           <div class="asset-footer">
-            <a href="#" class="asset-buy" target="_blank" rel="noopener noreferrer">Buy Now</a>
+            <a href="/marketplace/maintainance" class="asset-buy">Buy Now</a>
           </div>
         </div>
 
@@ -207,7 +207,7 @@
             </div>
           </div>
           <div class="asset-footer">
-            <a href="#" class="asset-buy" target="_blank" rel="noopener noreferrer">Buy Now</a>
+            <a href="/marketplace/maintainance" class="asset-buy">Buy Now</a>
           </div>
         </div>
 
@@ -226,7 +226,7 @@
             </div>
           </div>
           <div class="asset-footer">
-            <a href="#" class="asset-buy" target="_blank" rel="noopener noreferrer">Buy Now</a>
+            <a href="/marketplace/maintainance" class="asset-buy">Buy Now</a>
           </div>
         </div>
 
@@ -245,7 +245,7 @@
             </div>
           </div>
           <div class="asset-footer">
-            <a href="#" class="asset-buy" target="_blank" rel="noopener noreferrer">Buy Now</a>
+            <a href="/marketplace/maintainance" class="asset-buy">Buy Now</a>
           </div>
         </div>
 
@@ -264,7 +264,7 @@
             </div>
           </div>
           <div class="asset-footer">
-            <a href="#" class="asset-buy" target="_blank" rel="noopener noreferrer">Buy Now</a>
+            <a href="/marketplace/maintainance" class="asset-buy">Buy Now</a>
           </div>
         </div>
 
@@ -354,7 +354,7 @@
         </div>
 
         <button class="submit-btn" id="submitBtn" type="button">Submit for Review</button>
-        <p class="form-privacy">Your details go directly to the DevLink team and are not stored or shared.</p>
+        <p class="form-privacy">Your details are stored securely and used only to process your enquiry.</p>
       </div>
 
       <div class="form-success" id="formSuccess">
@@ -519,25 +519,47 @@
         btn.disabled = true;
         btn.textContent = 'Sending…';
 
+        var contactInfo = selectedMethod === 'Discord' ? 'Discord: ' + sanitize(devDiscord) : 'Email: ' + sanitize(devEmail);
+        var form_details = 'Asset Name: ' + sanitize(assetName) + '\n' +
+          'Category: ' + sanitize(assetCat) + '\n' +
+          'Price: \u00a3' + sanitize(assetPrice) + '\n' +
+          'Description: ' + sanitize(assetDesc) + '\n' +
+          'Preview: ' + (sanitize(assetPreview) || 'Not provided') + '\n' +
+          'Roblox Username: ' + (sanitize(devRoblox) || 'Not provided') + '\n' +
+          'Contact: ' + contactInfo;
+
         var params = {
-          from_name: sanitize(devName),
-          from_email: sanitize(devEmail),
-          preferred_contact: selectedMethod + (selectedMethod === 'Discord' ? ' (' + sanitize(devDiscord) + ')' : ''),
-          roblox_username: sanitize(devRoblox) || 'Not provided',
-          discord_username: selectedMethod === 'Discord' ? sanitize(devDiscord) : 'Not provided',
+          form_type: 'Asset Submission',
+          sender_name: sanitize(devName),
+          reply_email: sanitize(devEmail),
+          email: sanitize(devEmail),
+          form_details: form_details
+        };
+
+        var sbData = {
+          dev_name: sanitize(devName),
+          dev_email: sanitize(devEmail),
+          discord_username: sanitize(devDiscord) || null,
+          roblox_username: sanitize(devRoblox) || null,
           asset_name: sanitize(assetName),
           asset_category: sanitize(assetCat),
           asset_price: sanitize(assetPrice),
           asset_description: sanitize(assetDesc),
-          asset_preview: sanitize(assetPreview) || 'Not provided',
-          reply_to: sanitize(devEmail)
+          asset_preview_url: sanitize(assetPreview) || null,
+          contact_method: selectedMethod
         };
-
         emailjs.send('service_b2nnw1e', 'template_2jg1lt4', params)
           .then(function() {
             return emailjs.send('service_b2nnw1e', 'template_5jyjxy9', params);
           })
           .then(function() {
+            supabaseClient.from('asset_submissions').insert([sbData]).select('id').then(function(result) {
+              if (result.data && result.data[0]) {
+                var rid = String(result.data[0].id);
+                while (rid.length < 6) { rid = '0' + rid; }
+                supabaseClient.from('asset_submissions').update({ reference_id: 'A-' + rid }).eq('id', result.data[0].id).then(function() {}).catch(function() {});
+              }
+            }).catch(function() {});
             submitted = true;
             document.getElementById('submitForm').style.display = 'none';
             document.getElementById('formSuccess').style.display = 'block';
@@ -552,6 +574,13 @@
     };
   </script>
   <script data-cfasync="false" src="/main.js"></script>
+  <script data-cfasync="false" src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script data-cfasync="false">
+    var supabaseClient = supabase.createClient(
+      'https://qgqpwxitbdjoggiwtjra.supabase.co',
+      'sb_publishable_GyM73jJAcyrjpGLJlbJN4g_jDHJJWlm'
+    );
+  </script>
 
 </body>
 </html>
