@@ -391,19 +391,37 @@ nav.scrolled {
   overflow: hidden;
 }
 
-/* Grid line background */
+/* Grid line background — animated scroll */
 .hero::before {
   content: '';
   position: absolute;
-  inset: 0;
+  inset: -60px;
   background-image:
     linear-gradient(var(--border) 1px, transparent 1px),
     linear-gradient(90deg, var(--border) 1px, transparent 1px);
   background-size: 60px 60px;
-  opacity: 0.18;
+  opacity: 0.22;
   -webkit-mask-image: radial-gradient(ellipse 70% 50% at center 40%, black 20%, transparent 70%);
   mask-image: radial-gradient(ellipse 70% 50% at center 40%, black 20%, transparent 70%);
+  animation: heroGridScroll 14s linear infinite;
   pointer-events: none;
+}
+
+/* Cursor-reveal grid layer (brighter, masked to follow mouse) */
+.hero-grid-cursor {
+  position: absolute;
+  inset: -60px;
+  background-image:
+    linear-gradient(var(--muted) 1px, transparent 1px),
+    linear-gradient(90deg, var(--muted) 1px, transparent 1px);
+  background-size: 60px 60px;
+  opacity: 0.5;
+  animation: heroGridScroll 14s linear infinite;
+  -webkit-mask-image: radial-gradient(circle 220px at -999px -999px, black 0%, transparent 100%);
+  mask-image: radial-gradient(circle 220px at -999px -999px, black 0%, transparent 100%);
+  pointer-events: none;
+  z-index: 0;
+  transition: -webkit-mask-image 0.05s, mask-image 0.05s;
 }
 
 /* Radial glow orb */
@@ -464,6 +482,16 @@ nav.scrolled {
 }
 .hero h1 .accent {
   color: var(--muted);
+}
+.word-clip {
+  display: inline-block;
+  overflow: hidden;
+  height: 1.05em;
+  vertical-align: bottom;
+}
+#word {
+  display: block;
+  will-change: transform, opacity;
 }
 
 .hero p {
@@ -704,7 +732,7 @@ nav.scrolled {
 .bento-grid .feature-card::before { display: none; }
 
 
-/* ── 14. TESTIMONIAL BLOCK ── */
+/* ── 14. TRUST BLOCK ── */
 .testimonial-block {
   padding: 120px 24px;
   text-align: center;
@@ -712,35 +740,65 @@ nav.scrolled {
 }
 
 .testimonial-inner {
-  max-width: 800px;
+  max-width: 720px;
   margin: 0 auto;
   position: relative;
 }
 
-.testimonial-quote-mark {
-  font-family: 'Syne', sans-serif;
-  font-size: 6rem;
-  font-weight: 800;
-  color: var(--muted);
-  opacity: 0.5;
-  line-height: 0.5;
-  margin-bottom: 24px;
+.testimonial-inner::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 600px;
+  height: 300px;
+  background: radial-gradient(ellipse at center, var(--accent-glow) 0%, transparent 70%);
+  opacity: 0.45;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.trust-icons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  color: var(--accent);
+  margin-bottom: 28px;
+  opacity: 0.9;
+  position: relative;
+  z-index: 1;
 }
 
 .testimonial-text {
-  font-size: clamp(1.5rem, 3vw, 2.2rem);
-  font-style: italic;
+  font-size: clamp(1.3rem, 2.6vw, 1.9rem);
+  font-style: normal;
   font-weight: 400;
-  line-height: 1.5;
+  line-height: 1.55;
   color: var(--white);
-  margin-bottom: 32px;
+  margin-bottom: 36px;
+  position: relative;
+  z-index: 1;
 }
 
-.testimonial-author {
-  font-size: 0.88rem;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  color: var(--muted);
+.trust-rotating {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(1.4rem, 3vw, 2rem);
+  font-weight: 800;
+  color: var(--white);
+  margin: 0;
+  line-height: 1.3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 1;
+}
+
+.trust-rotating .word-clip {
+  height: 1.35em;
+  overflow: hidden;
 }
 
 
@@ -1396,7 +1454,12 @@ textarea { min-height: 120px; resize: vertical; }
   text-decoration: none;
   position: relative;
   overflow: hidden;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  transition: border-color 0.2s;
 }
+.vertical-card:hover { border-color: var(--accent-dim); }
 .vertical-card::after {
   content: '';
   position: absolute;
@@ -1741,6 +1804,7 @@ footer {
 
 
 /* ── 25. KEYFRAMES ── */
+@keyframes heroGridScroll { from { background-position: 0 0; } to { background-position: 60px 60px; } }
 @keyframes fadeUp { from { opacity: 0; transform: translateY(32px); } to { opacity: 1; transform: translateY(0); } }
 @keyframes pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.4; transform: scale(0.75); } }
 @keyframes spin { to { transform: translateY(-50%) rotate(360deg); } }
