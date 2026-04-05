@@ -342,13 +342,15 @@ window.onload = function() {
     emailjs.sendForm(SERVICE_ID, TEMPLATE_TO_YOU, form).then(function() {
       return emailjs.sendForm(SERVICE_ID, TEMPLATE_AUTOREPLY, form);
     }).then(function() {
-      supabaseClient.from('client_enquiries').insert([sbData]).select('id').then(function(result) {
-        if (result.data && result.data[0]) {
-          var rid = String(result.data[0].id);
-          while (rid.length < 6) { rid = '0' + rid; }
-          supabaseClient.from('client_enquiries').update({ reference_id: 'C-' + rid }).eq('id', result.data[0].id).then(function() {}).catch(function() {});
-        }
-      }).catch(function() {});
+      supabaseClient.from('client_enquiries').insert([sbData]).then(function() {
+        supabaseClient.from('client_enquiries').select('id').eq('email', sbData.email).order('id', { ascending: false }).limit(1).then(function(result) {
+          if (result.data && result.data[0]) {
+            var rid = String(result.data[0].id);
+            while (rid.length < 6) { rid = '0' + rid; }
+            supabaseClient.from('client_enquiries').update({ reference_id: 'C-' + rid }).eq('id', result.data[0].id).then(function() {}).catch(function(err) { console.error(err); });
+          }
+        }).catch(function(err) { console.error(err); });
+      }).catch(function(err) { console.error(err); });
       lastSubmit = Date.now();
       submitCount++;
       successMsg.classList.add('show');
