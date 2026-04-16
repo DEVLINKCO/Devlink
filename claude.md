@@ -4,7 +4,7 @@
 
 DevLink is a Roblox development agency website at **devlinkco.online**.  
 It connects clients who need Roblox projects built with vetted developers from a curated roster.  
-DevLink takes a 15% commission on every matched project. Developers keep 85%.
+DevLink takes a 25% commission on every matched project. Developers keep 75%.
 
 This is a **pure HTML/CSS/JS project — no frameworks, no npm, no build tools.**  
 There are three self-contained HTML files and a handful of static assets.
