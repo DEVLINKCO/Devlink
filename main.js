@@ -9,6 +9,9 @@
     var ico = document.getElementById('themeIcon');
     if (lbl) lbl.textContent = t === 'light' ? 'Dark' : 'Light';
     if (ico) ico.innerHTML = t === 'light' ? SUN : MOON;
+    var logoSrc = t === 'light' ? '/DevLinkRBBX-Black.png' : '/DevLinkRBBX.png';
+    var logos = document.querySelectorAll('.nav-logo img, .footer-logo img');
+    for (var i = 0; i < logos.length; i++) { logos[i].src = logoSrc; }
     try { localStorage.setItem('devlink-theme', t); } catch (e) {}
   }
 
