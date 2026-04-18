@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta http-equiv="X-Content-Type-Options" content="nosniff"/>
+  <meta http-equiv="X-Frame-Options" content="DENY"/>
+  <link rel="icon" href="/favicon.png" type="image/png"/>
+  <meta name="referrer" content="strict-origin-when-cross-origin"/>
+  <meta name="description" content="How DevLink Co works — a plain-English guide for clients and developers."/>
+  <meta property="og:title" content="How We Operate – DevLink"/>
+  <meta property="og:description" content="A plain-English guide to how DevLink Co works — for clients and developers alike."/>
+  <meta property="og:image" content="https://devlinkco.online/DevLinkRBBX.png"/>
+  <meta property="og:url" content="https://devlinkco.online/how-we-operate"/>
+  <meta property="og:type" content="website"/>
+  <title>How We Operate – DevLink</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="/styles.css"/>
+  <script data-cfasync="false">try{var t=localStorage.getItem('devlink-theme');if(t)document.documentElement.setAttribute('data-theme',t);}catch(e){}</script>
+  <style>
+    .hwo-section {
+      margin-bottom: 3.5rem;
+    }
+    .hwo-section-label {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--accent);
+      margin-bottom: 0.5rem;
+    }
+    .hwo-divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 3rem 0;
+    }
+    .hwo-callout {
+      border-left: 3px solid var(--accent);
+      background: var(--bg2);
+      padding: 1rem 1.25rem;
+      border-radius: 0 8px 8px 0;
+      margin: 1.25rem 0;
+    }
+    .hwo-callout strong {
+      display: block;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--accent);
+      margin-bottom: 0.5rem;
+    }
+    .hwo-callout p { margin: 0; font-size: 0.9rem; color: var(--white); }
+    .hwo-steps {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      margin: 1.5rem 0;
+    }
+    .hwo-step {
+      display: flex;
+      gap: 1.25rem;
+      align-items: flex-start;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.25rem;
+    }
+    .hwo-step-num {
+      flex-shrink: 0;
+      width: 2rem;
+      height: 2rem;
+      background: var(--accent);
+      color: var(--bg);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 0.9rem;
+    }
+    .hwo-step-body { flex: 1; }
+    .hwo-step-body strong {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 0.35rem;
+      color: var(--white);
+    }
+    .hwo-step-body p { margin: 0; font-size: 0.9rem; color: var(--muted); }
+    .hwo-role {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 1rem;
+    }
+    .hwo-role h3 {
+      margin: 0 0 0.5rem;
+      font-size: 1rem;
+    }
+    .hwo-role p { margin: 0; font-size: 0.9rem; color: var(--muted); }
+    .hwo-tools {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      margin: 1.25rem 0;
+    }
+    .hwo-tool {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.85rem;
+      padding: 0.85rem 1rem;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+    }
+    .hwo-tool-name {
+      font-weight: 600;
+      font-size: 0.88rem;
+      min-width: 7rem;
+      color: var(--white);
+    }
+    .hwo-tool-desc {
+      font-size: 0.88rem;
+      color: var(--muted);
+    }
+    .hwo-section p a,
+    .hwo-section li a,
+    .hwo-callout p a,
+    .hwo-role p a,
+    .hwo-step-body p a,
+    .hwo-tool-desc a {
+      color: var(--accent);
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      transition: opacity 0.2s;
+    }
+    .hwo-section p a:hover,
+    .hwo-section li a:hover,
+    .hwo-callout p a:hover,
+    .hwo-role p a:hover,
+    .hwo-step-body p a:hover,
+    .hwo-tool-desc a:hover { opacity: 0.75; }
+    .hwo-section .btn-primary,
+    .hwo-section .btn-secondary { text-decoration: none; }
+    @media (max-width: 600px) {
+      .hwo-step { flex-direction: column; gap: 0.75rem; }
+      .hwo-step-num { width: 1.75rem; height: 1.75rem; font-size: 0.8rem; }
+      .hwo-tool { flex-direction: column; gap: 0.35rem; }
+    }
+  </style>
+</head>
+<body>
+<nav>
+  <a href="/" class="nav-logo">
+    <img src="/DevLinkRBBX.png" alt="DevLink" onerror="this.style.display='none'"/>
+    <span>DevLink</span>
+  </a>
+  <div class="nav-right">
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle light/dark mode">
+      <svg id="themeIcon" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3a9 9 0 1 0 9 9c0-.46-.04-.92-.1-1.36a5.389 5.389 0 0 1-4.4 2.26 5.403 5.403 0 0 1-3.14-9.8c-.44-.06-.9-.1-1.36-.1z"/></svg>
+      <span id="themeLabel">Light</span>
+    </button>
+    <a href="/" class="nav-cta">Back to home</a>
+  </div>
+</nav>
+
+<div class="page">
+  <div class="page-header">
+    <span class="page-tag">Guide</span>
+    <h1>How We Operate</h1>
+    <p>A plain-English guide to how DevLink Co works &mdash; for clients and developers alike.</p>
+  </div>
+
+  <p style="font-style:italic;color:var(--muted);margin-bottom:2.5rem;">Version 1.0 &mdash; Operational guide (not a legal agreement)<br/>See also: <a href="/legal" style="color:var(--accent);text-decoration:underline;text-underline-offset:3px;">Terms of Service</a> &middot; <a href="/legal#privacy" onclick="window.location='/legal';return true;" style="color:var(--accent);text-decoration:underline;text-underline-offset:3px;">Privacy Policy</a></p>
+
+  <!-- WHO WE ARE -->
+  <div class="hwo-section reveal">
+    <div class="hwo-section-label">Introduction</div>
+    <h2>Who We Are</h2>
+    <p>DevLink Co is a professional Roblox development agency. We bring together skilled developers, designers, composers, and project managers to deliver high-quality work for Roblox games and experiences of all sizes.</p>
+    <p>We operate primarily through Discord, with a website for clients and developers who prefer not to use Discord. Everything we do is built around clear communication, honest pricing, and work we are genuinely proud to put our name on.</p>
+
+    <div class="hwo-callout">
+      <strong>Our standard</strong>
+      <p>We only work with developers we would personally recommend. Every developer at DevLink Co has been through a thorough application and interview process. Quality and trust are not optional extras &mdash; they are the foundation of how we operate.</p>
+    </div>
+  </div>
+
+  <hr class="hwo-divider"/>
+
+  <!-- THE TEAM -->
+  <div class="hwo-section reveal">
+    <div class="hwo-section-label">The Team</div>
+    <h2>Who You'll Interact With</h2>
+    <p style="color:var(--muted);font-style:italic;margin-bottom:1.5rem;">What each role does</p>
+
+    <div class="hwo-role">
+      <h3>Directors</h3>
+      <p>The owners and founders of DevLink Co. Directors set the standards, make final decisions on disputes or serious issues, and are ultimately responsible for everything that happens under the DevLink Co name. They are not typically involved in day-to-day project work, but are always available if something needs escalating.</p>
+    </div>
+
+    <div class="hwo-role">
+      <h3>Project Managers (PMs)</h3>
+      <p>Your main point of contact throughout a project. PMs handle enquiry reviews, scoping conversations, quotes, and client communication from start to finish. They coordinate with developers on your behalf and oversee the progress of your project. If you have a question, a concern, or an update, your PM is who you speak to.</p>
+    </div>
+
+    <div class="hwo-role">
+      <h3>Moderators</h3>
+      <p>Moderators keep the DevLink Co Discord server running smoothly for everyone. They oversee the client-developer relay system during active projects, manage the community, and handle any conduct issues. They are not project managers, but they play an important role in keeping communication structured and professional.</p>
+    </div>
+
+    <div class="hwo-role">
+      <h3>Developers</h3>
+      <p>Our developers are Roblox specialists &mdash; scripters, modellers, UI designers, animators, composers, and more. Each project is assigned to the developer best suited to the work. Developers do not communicate with clients directly by name &mdash; all contact is managed through the relay system described below.</p>
+    </div>
+  </div>
+
+  <hr class="hwo-divider"/>
+
+  <!-- FOR CLIENTS -->
+  <div class="hwo-section reveal">
+    <div class="hwo-section-label">For Clients</div>
+    <h2>Everything You Need to Know</h2>
+    <p style="color:var(--muted);font-style:italic;margin-bottom:1.5rem;">Everything you need to know about working with DevLink Co</p>
+
+    <h3>How to Get Started</h3>
+    <p>You can reach us in two ways:</p>
+    <ul>
+      <li>Join our <a href="https://discord.gg/aTQ67uwRN" target="_blank" rel="noopener noreferrer">Discord server</a> and work through the onboarding steps, or</li>
+      <li>Submit an enquiry through our <a href="/hire">website</a> if you would prefer to keep things to email.</li>
+    </ul>
+    <p>Both routes lead to the same process. Discord is where the majority of active project work happens, so joining the server gives you the best experience and fastest response times.</p>
+
+    <h3 style="margin-top:2rem;">The Client Journey</h3>
+    <p style="color:var(--muted);font-style:italic;margin-bottom:1rem;">From first enquiry to delivered work</p>
+
+    <div class="hwo-steps">
+      <div class="hwo-step">
+        <div class="hwo-step-num">1</div>
+        <div class="hwo-step-body">
+          <strong>Submit an Enquiry</strong>
+          <p>Fill out our enquiry form with the basics &mdash; what you need, what type of developer you're looking for, and your budget. No lengthy brief required at this stage.</p>
+        </div>
+      </div>
+      <div class="hwo-step">
+        <div class="hwo-step-num">2</div>
+        <div class="hwo-step-body">
+          <strong>Triage</strong>
+          <p>Your enquiry comes through to our team. A Project Manager or senior staff member will review it and either progress it or decline it. We only progress enquiries where the scope and budget are realistic. If we decline, we'll tell you why.</p>
+        </div>
+      </div>
+      <div class="hwo-step">
+        <div class="hwo-step-num">3</div>
+        <div class="hwo-step-body">
+          <strong>Scoping Conversation</strong>
+          <p>If progressed, a private chat is opened and your PM reaches out. This is where we get into the details &mdash; what you actually need, your timeline, any specific requirements, and what a fair budget looks like for the work involved.</p>
+        </div>
+      </div>
+      <div class="hwo-step">
+        <div class="hwo-step-num">4</div>
+        <div class="hwo-step-body">
+          <strong>Quote</strong>
+          <p>Your PM issues a formal written quote covering the full scope, price, payment structure, and estimated timeline. Nothing starts until you've agreed to the quote.</p>
+        </div>
+      </div>
+      <div class="hwo-step">
+        <div class="hwo-step-num">5</div>
+        <div class="hwo-step-body">
+          <strong>Payment</strong>
+          <p>Once the quote is agreed, payment is taken via PayPal. Most projects follow a 40% deposit upfront, 60% on completion structure. 100% upfront is also available. Work begins once payment clears.</p>
+        </div>
+      </div>
+      <div class="hwo-step">
+        <div class="hwo-step-num">6</div>
+        <div class="hwo-step-body">
+          <strong>Development</strong>
+          <p>Your project is assigned to the right developer and work begins. Your PM keeps you updated on progress throughout.</p>
+        </div>
+      </div>
+      <div class="hwo-step">
+        <div class="hwo-step-num">7</div>
+        <div class="hwo-step-body">
+          <strong>Delivery &amp; Approval</strong>
+          <p>Completed work is delivered through the relay system. You review it, request any agreed revisions, and approve the final deliverable. Final payment (if on the 40/60 structure) is taken before files are released.</p>
+        </div>
+      </div>
+    </div>
+
+    <h3 style="margin-top:2rem;">The Relay System</h3>
+    <p>DevLink Co uses a relay system for all client-developer communication during active projects. Rather than speaking directly with your developer, messages are passed through a managed channel overseen by a moderator and your PM.</p>
+
+    <div class="hwo-callout">
+      <strong>Why we do this</strong>
+      <p>The relay protects both sides. Developers can focus on the work without managing client expectations directly. Clients get responses that are clear, considered, and professionally handled. It also means there is always a record of everything discussed, which protects you if anything is ever disputed.</p>
+    </div>
+
+    <p>In practice, your PM will handle the majority of day-to-day communication. The relay is most active during feedback and revision stages where direct input from your developer adds value.</p>
+
+    <h3 style="margin-top:2rem;">Revisions</h3>
+    <p>Revisions are part of the process and are included in every project. The number of rounds appropriate for your project depends on the type of work &mdash; audio and music naturally involve more back-and-forth than a scripting task. Your quote will set out what is included.</p>
+    <p>Changes that go beyond the agreed scope &mdash; such as new features, significant redesigns, or a change in direction &mdash; will be quoted separately. We will always flag this before proceeding. There are no surprise charges.</p>
+
+    <h3 style="margin-top:2rem;">If Something Goes Wrong</h3>
+    <p>We stand behind our work. If you have a concern about quality, progress, or anything else, the right first step is always to raise it with your PM directly. Most issues are resolved quickly at that level.</p>
+    <p>If a developer is unable to complete your project for any reason, DevLink Co will work to reassign the work to another developer internally. If that is not possible, we will be transparent with you and offer a refund based on the following tiers for work not completed:</p>
+    <ul>
+      <li>Work not yet started: 75% or more of the amount paid</li>
+      <li>Substantial progress made: 50% or more</li>
+      <li>Project 75% or more complete: assessed on a case-by-case basis</li>
+    </ul>
+
+    <div class="hwo-callout">
+      <strong>Raise a ticket</strong>
+      <p>For any issue that cannot be resolved through your PM, you can raise a formal support ticket. Senior staff and Directors will be brought in to review the situation and reach a resolution. Full details of how disputes are handled are in our <a href="/legal">Terms of Service</a>.</p>
+    </div>
+
+    <h3 style="margin-top:2rem;">Budget &amp; Project Minimums</h3>
+    <p>We do not have a fixed minimum project value. A small audio asset at a fair rate is as welcome as a full-scale game commission. What we do not accept is a budget that is not realistic for what is being asked. If your enquiry is declined on budget grounds, we will tell you clearly and you are welcome to resubmit with an adjusted scope or budget.</p>
+
+    <div class="hwo-callout">
+      <strong>Not sure what something should cost?</strong>
+      <p>Be honest in your enquiry about what you have available. PMs are experienced at finding a scope that works within a realistic budget. A conversation costs nothing.</p>
+    </div>
+  </div>
+
+  <hr class="hwo-divider"/>
+
+  <!-- FOR DEVELOPERS -->
+  <div class="hwo-section reveal">
+    <div class="hwo-section-label">For Developers</div>
+    <h2>What It Means to Be Part of DevLink Co</h2>
+
+    <h3>Who We Are Looking For</h3>
+    <p>We are currently recruiting Roblox developers across all disciplines &mdash; scripting, modelling, UI/UX, animation, music and sound design. We are looking for people who are skilled, reliable, and professional in how they communicate and deliver work.</p>
+    <p>We do not expect perfection, but we do expect honesty. If you are not right for a project, say so. If something comes up that affects your work, tell us. The developers who thrive at DevLink Co are the ones who treat it like a professional environment, because that is what it is.</p>
+
+    <h3 style="margin-top:2rem;">How to Apply</h3>
+    <p>You can apply through our <a href="/apply">website</a> or directly through the Discord server. Either route leads to the same process:</p>
+
+    <div class="hwo-steps">
+      <div class="hwo-step">
+        <div class="hwo-step-num">1</div>
+        <div class="hwo-step-body">
+          <strong>Submit an Application</strong>
+          <p>Fill out the developer application form. Tell us about your skills, your experience, your availability, and share examples of your work. The more specific you are, the better.</p>
+        </div>
+      </div>
+      <div class="hwo-step">
+        <div class="hwo-step-num">2</div>
+        <div class="hwo-step-body">
+          <strong>Review</strong>
+          <p>Your application is reviewed by the team. We look at the quality of your portfolio, the relevance of your skills to current and upcoming projects, and how you have presented yourself.</p>
+        </div>
+      </div>
+      <div class="hwo-step">
+        <div class="hwo-step-num">3</div>
+        <div class="hwo-step-body">
+          <strong>Interview</strong>
+          <p>Shortlisted applicants are invited to an interview. This is a conversation, not an exam &mdash; we want to understand how you work, how you communicate, and whether DevLink Co is the right fit for you as much as the other way around.</p>
+        </div>
+      </div>
+      <div class="hwo-step">
+        <div class="hwo-step-num">4</div>
+        <div class="hwo-step-body">
+          <strong>Onboarding</strong>
+          <p>Successful applicants are onboarded into the DevLink Co team. You will be introduced to our processes, tools, and standards before being assigned to any project work.</p>
+        </div>
+      </div>
+    </div>
+
+    <h3 style="margin-top:2rem;">How Projects Work for Developers</h3>
+    <p>When a project matches your skills and availability, your PM will brief you on the scope, deliverables, timeline, and client expectations. You will have a clear picture of what is needed before any work begins.</p>
+    <p>Client communication is handled through the relay system &mdash; you do not manage client relationships directly. Your job is to focus on the work. Your PM handles expectations, timelines, and any difficult conversations on your behalf.</p>
+    <p>Deliver your work through the relay channel. If you hit a problem, tell your PM early. We would always rather adjust a plan than explain a missed deadline to a client.</p>
+
+    <h3 style="margin-top:2rem;">Standards We Expect</h3>
+    <ul>
+      <li>Deliver work that matches the agreed brief. If the brief is unclear, ask before assuming.</li>
+      <li>Communicate proactively &mdash; especially if something is going to be late or is not going to plan.</li>
+      <li>Keep client information confidential. The relay system exists partly to protect clients &mdash; do not share project details outside of DevLink Co channels.</li>
+      <li>Represent DevLink Co professionally in all interactions. How you behave reflects on the brand.</li>
+      <li>Do not take on work you cannot complete. Abandoning a project mid-way causes real problems for clients and for the team.</li>
+    </ul>
+
+    <div class="hwo-callout">
+      <strong>Our commitment to developers</strong>
+      <p>DevLink Co takes its developer relationships seriously. We will not put you in an impossible situation with a client. We manage expectations, we deal with difficult conversations, and we have your back when things get complicated &mdash; as long as you have been honest with us.</p>
+    </div>
+  </div>
+
+  <hr class="hwo-divider"/>
+
+  <!-- TOOLS & INFRASTRUCTURE -->
+  <div class="hwo-section reveal">
+    <div class="hwo-section-label">Infrastructure</div>
+    <h2>Our Tools &amp; Infrastructure</h2>
+    <p style="color:var(--muted);font-style:italic;margin-bottom:1.5rem;">Where everything lives and how it is tracked</p>
+
+    <div class="hwo-tools">
+      <div class="hwo-tool">
+        <div class="hwo-tool-name">Discord</div>
+        <div class="hwo-tool-desc">Our primary workspace. All active project communication, enquiries, support tickets, and team coordination happen here.</div>
+      </div>
+      <div class="hwo-tool">
+        <div class="hwo-tool-name">Website</div>
+        <div class="hwo-tool-desc">Our public-facing presence. Clients and developers who prefer not to use Discord can submit enquiries and applications through the website. These feed directly into our team.</div>
+      </div>
+      <div class="hwo-tool">
+        <div class="hwo-tool-name">Supabase</div>
+        <div class="hwo-tool-desc">Our back-end logging system. All tickets, project records, and key decisions are logged here. This gives us a reliable record of every project regardless of what happens in Discord.</div>
+      </div>
+      <div class="hwo-tool">
+        <div class="hwo-tool-name">Archived channels</div>
+        <div class="hwo-tool-desc">Completed projects are archived within Discord, giving us a full history of work delivered and conversations had.</div>
+      </div>
+    </div>
+
+    <div class="hwo-callout">
+      <strong>Data &amp; privacy</strong>
+      <p>Information submitted through our website or Discord is handled in accordance with our <a href="/legal">Privacy Policy</a>. We do not share client or developer information with third parties beyond what is necessary to complete project work.</p>
+    </div>
+  </div>
+
+  <hr class="hwo-divider"/>
+
+  <!-- FINAL WORD -->
+  <div class="hwo-section reveal" style="text-align:center;max-width:600px;margin-left:auto;margin-right:auto;">
+    <h2>A Final Word</h2>
+    <p>DevLink Co is built on the idea that professional Roblox development should be accessible, reliable, and genuinely well-managed. We are not a marketplace or a freelancer directory &mdash; we are a team, and every project that goes out under our name is one we stand behind.</p>
+    <p>If you have questions about anything in this document, or about working with us in any capacity, reach out. We would rather answer a question upfront than have a misunderstanding later.</p>
+    <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;margin-top:1.5rem;">
+      <a href="/hire" class="btn-primary">Start a project</a>
+      <a href="/apply" class="btn-secondary">Apply as a developer</a>
+    </div>
+  </div>
+</div>
+
+<div class="footer-wrap">
+  <footer>
+    <a href="/" class="footer-logo">
+      <img src="/DevLinkRBBX.png" alt="DevLink" onerror="this.style.display='none'"/>
+      <span>DevLink</span>
+    </a>
+    <div class="footer-links">
+      <a href="https://x.com/DevLinkRBX" target="_blank" rel="noopener noreferrer">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.748l7.73-8.835L1.254 2.25H8.08l4.259 5.63 5.905-5.63zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+        @DevLinkRBX
+      </a>
+      <a href="https://discord.gg/aTQ67uwRN" target="_blank" rel="noopener noreferrer">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03z"/></svg>
+        Discord
+      </a>
+      <span class="footer-contact">Contact: <a href="#" id="footerEmail" onclick="var e='devlink.co'+'@'+'outlook.com';this.href='mailto:'+e;this.textContent=e;return true;">click to reveal</a></span>
+    </div>
+    <p class="footer-copy">&#169; 2026 DevLink. A Roblox development agency. &middot; <a href="/legal" class="footer-legal">Terms &amp; Privacy</a></p>
+  </footer>
+</div>
+
+<script data-cfasync="false" src="/main.js"></script>
+</body>
+</html>

@@ -547,7 +547,7 @@ nav.scrolled {
   color: var(--accent);
   letter-spacing: 0.02em;
   margin: 0;
-  padding: 14px 0 0;
+  padding: 56px 0 0;
 }
 
 .marquee-item {
@@ -1387,7 +1387,8 @@ textarea { min-height: 120px; resize: vertical; }
 .legal-section p { color: var(--muted); font-size: 0.92rem; line-height: 1.8; margin-bottom: 14px; }
 .legal-section ul { color: var(--muted); font-size: 0.92rem; line-height: 1.8; margin: 0 0 14px 20px; }
 .legal-section ul li { margin-bottom: 6px; }
-.legal-section a { color: var(--white); text-underline-offset: 3px; }
+.legal-section a { color: var(--accent); text-decoration: underline; text-underline-offset: 3px; transition: opacity 0.2s; }
+.legal-section a:hover { opacity: 0.75; }
 .updated { font-size: 0.82rem; color: var(--muted); margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--border); }
 
 

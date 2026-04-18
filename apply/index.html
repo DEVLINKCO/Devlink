@@ -22,13 +22,6 @@
   <link rel="stylesheet" href="/styles.css"/>
   <script data-cfasync="false">try{var t=localStorage.getItem('devlink-theme');if(t)document.documentElement.setAttribute('data-theme',t);}catch(e){}</script>
   <script data-cfasync="false" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-  <script data-cfasync="false" src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
-  <script data-cfasync="false">
-    var supabaseClient = supabase.createClient(
-      'https://qgqpwxitbdjoggiwtjra.supabase.co',
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFncXB3eGl0YmRqb2dnaXd0anJhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUzNTM2NDYsImV4cCI6MjA5MDkyOTY0Nn0.7vXKc33-Ok-V7nOIoxw2gZ0LxjdrR0ZEp59Y1Cgej4w'
-    );
-  </script>
 </head>
 <body>
 <nav>
@@ -224,7 +217,7 @@
         Discord
       </a>
     </div>
-    <p class="footer-copy">&#169; 2026 DevLink. &middot; <a href="/legal" class="footer-legal">Terms &amp; Privacy</a></p>
+    <p class="footer-copy">&#169; 2026 DevLink. &middot; <a href="/legal" class="footer-legal">Terms &amp; Privacy</a> &middot; <a href="/how-we-operate" class="footer-legal">How We Operate</a></p>
   </footer>
 </div>
 
@@ -232,6 +225,7 @@
 
 <script data-cfasync="false">
 window.onload = function() {
+  var APPS_SCRIPT_URL = 'https://script.google.com/macros/s/PASTE_URL_HERE/exec';
   var PUBLIC_KEY = 'iCCi3WGf2aQ8yeT1q';
   var TEMPLATE_TO_YOU = 'template_2jg1lt4';
   var TEMPLATE_AUTOREPLY = 'template_5jyjxy9';
@@ -389,18 +383,21 @@ window.onload = function() {
       'Hourly Rate: ' + sanitize(document.getElementById('rateHourly').value || 'N/A') + '\n\n' +
       'About:\n' + sanitize(document.getElementById('aboutYou').value)
     );
-    var sbData = {
+    var refNum = String(Date.now()).slice(-6);
+    var sheetData = {
+      form_type: 'Developer Application',
+      reference_id: 'D-' + refNum,
       name: name,
       email: email,
       contact_method: contactMethod,
-      discord: sanitize(discordVal) || null,
-      roblox_username: sanitize(document.getElementById('robloxUser').value) || null,
-      portfolio: sanitize(document.getElementById('portfolio').value) || null,
-      skills: sanitize(selectedSkills.join(', ')) || null,
+      discord: sanitize(discordVal) || '',
+      roblox_username: sanitize(document.getElementById('robloxUser').value) || '',
+      portfolio: sanitize(document.getElementById('portfolio').value) || '',
+      skills: sanitize(selectedSkills.join(', ')) || '',
       experience: sanitize(document.getElementById('experience').value),
       availability: sanitize(document.getElementById('availability').value),
-      rate_project: sanitize(document.getElementById('rateProject').value) || null,
-      rate_hourly: sanitize(document.getElementById('rateHourly').value) || null,
+      rate_project: sanitize(document.getElementById('rateProject').value) || '',
+      rate_hourly: sanitize(document.getElementById('rateHourly').value) || '',
       about: sanitize(document.getElementById('aboutYou').value)
     };
     submitBtn.disabled = true;
@@ -410,15 +407,7 @@ window.onload = function() {
     emailjs.sendForm(SERVICE_ID, TEMPLATE_TO_YOU, form).then(function() {
       return emailjs.sendForm(SERVICE_ID, TEMPLATE_AUTOREPLY, form);
     }).then(function() {
-      supabaseClient.from('developer_applications').insert([sbData]).then(function() {
-        supabaseClient.from('developer_applications').select('id').eq('email', sbData.email).order('id', { ascending: false }).limit(1).then(function(result) {
-          if (result.data && result.data[0]) {
-            var rid = String(result.data[0].id);
-            while (rid.length < 6) { rid = '0' + rid; }
-            supabaseClient.from('developer_applications').update({ reference_id: 'D-' + rid }).eq('id', result.data[0].id).then(function() {}).catch(function(err) { console.error(err); });
-          }
-        }).catch(function(err) { console.error(err); });
-      }).catch(function(err) { console.error(err); });
+      fetch(APPS_SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(sheetData) }).catch(function(err) { console.error(err); });
       lastSubmit = Date.now();
       submitCount++;
       successMsg.classList.add('show');

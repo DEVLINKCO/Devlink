@@ -17,6 +17,47 @@
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="/styles.css"/>
   <script data-cfasync="false">try{var t=localStorage.getItem('devlink-theme');if(t)document.documentElement.setAttribute('data-theme',t);}catch(e){}</script>
+  <style>
+    .legal-callout {
+      border-left: 3px solid var(--accent);
+      background: var(--bg2);
+      padding: 1rem 1.25rem;
+      border-radius: 0 8px 8px 0;
+      margin: 1.25rem 0;
+    }
+    .legal-callout strong {
+      display: block;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--accent);
+      margin-bottom: 0.5rem;
+    }
+    .legal-callout p { margin: 0; font-size: 0.9rem; color: var(--white); }
+    .legal-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1.25rem 0;
+      font-size: 0.88rem;
+    }
+    .legal-table th {
+      background: var(--bg3);
+      padding: 0.7rem 1rem;
+      text-align: left;
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 600;
+      border-bottom: 2px solid var(--border);
+      color: var(--white);
+    }
+    .legal-table td {
+      padding: 0.7rem 1rem;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+      color: var(--white);
+    }
+    .legal-table tr:last-child td { border-bottom: none; }
+    .legal-table tr:hover td { background: var(--bg2); }
+  </style>
 </head>
 <body>
 <nav>
@@ -48,100 +89,464 @@
   <!-- TERMS OF SERVICE -->
   <div class="legal-section active" id="tab-tos">
 
-    <h2>1. About DevLink</h2>
-    <p>DevLink ("we", "us", "our") is a Roblox development talent agency operating at devlinkco.online. We connect clients who need Roblox development work with vetted developers on our roster. By submitting an enquiry or application through this site, you agree to these Terms of Service.</p>
+    <p style="font-style:italic;color:var(--muted);margin-bottom:2rem;">Version 1.3 &mdash; Governed by the laws of England &amp; Wales<br/>See also: <a href="/how-we-operate">How We Operate</a> &middot; <a href="/legal#privacy" onclick="document.querySelector('[data-tab=privacy]').click();return false;">Privacy Policy</a></p>
 
-    <h2>2. Our Role</h2>
-    <p>DevLink acts as an intermediary between clients and developers. We are not a party to any contract for development work — that relationship is between the client and the developer directly. Our role is to facilitate the introduction and take a 25% commission from the developer's fee for matched projects.</p>
+    <p>These Terms of Service set out the legal framework for every project DevLink Co takes on. We have written them to be honest, clear, and fair to both sides. If something here is unclear, reach out before agreeing.</p>
+    <p>These Terms apply to all clients. By clicking to accept during Discord onboarding, you confirm you have read them and agree to be bound by them.</p>
 
-    <h2>3. For Clients</h2>
-    <p>By submitting a hire enquiry, you agree to:</p>
+    <h2>1. Acceptance of Terms</h2>
+    <p>You accept these Terms by clicking to agree during the DevLink Co Discord server onboarding. That click is a legally binding action and functions in the same way as a digital signature. You cannot proceed into the server or engage with our services without completing this step.</p>
+
+    <div class="legal-callout">
+      <strong>Age confirmation</strong>
+      <p>DevLink Co does not knowingly provide services to individuals under the age of 13. Users aged 13&ndash;17 must have the consent of a parent or guardian before engaging DevLink Co services. By accepting these Terms, you confirm that you meet this age requirement or have obtained the necessary parental consent.</p>
+    </div>
+
+    <p>If you are acting on behalf of a company or organisation, you confirm that you have the authority to bind that entity to these Terms.</p>
+    <p>Informal discussions, Discord messages, and verbal conversations do not constitute a binding agreement and cannot override these Terms. Only a formal written quote issued by DevLink Co &mdash; or an amendment signed by both parties &mdash; can modify what has been agreed.</p>
+
+    <h2>2. Our Services</h2>
+    <p>DevLink Co is a professional development agency specialising in Roblox. Our services include but are not limited to:</p>
     <ul>
-      <li>Provide accurate project information in your brief.</li>
-      <li>Agree on a clear scope and payment terms directly with the matched developer before work begins.</li>
-      <li>Deal fairly and honestly with developers introduced through DevLink.</li>
+      <li>Scripting and programming</li>
+      <li>3D modelling and asset creation</li>
+      <li>UI/UX design</li>
+      <li>Music composition and sound design</li>
+      <li>Animation</li>
+      <li>Optimisation and debugging</li>
+      <li>Project consultation and management</li>
     </ul>
-    <p>DevLink does not guarantee a match will be found for every enquiry, or that any project will be completed to your satisfaction. We will make reasonable efforts to mediate disputes but accept no liability for work carried out by developers.</p>
+    <p>Every project begins with a scoping form submitted by the Client, followed by a conversation with a DevLink Co Project Manager to define deliverables and agree a budget. A formal written quote is issued before any work begins. No work starts without a confirmed quote and cleared payment.</p>
+    <p>We retain professional discretion over tools, architecture, and implementation methods unless specific technical requirements are agreed in the written quote. Any features or functionality not explicitly listed in your quote are not included in the project.</p>
 
-    <h2>4. For Developers</h2>
-    <p>By submitting a developer application, you agree to:</p>
+    <div class="legal-callout">
+      <strong>One point of contact</strong>
+      <p>DevLink Co is your contracting party for every project. You do not have a direct agreement with individual developers &mdash; all responsibility and accountability sits with DevLink Co as a business. We may bring in trusted internal or external developers to complete work, but that is our responsibility to manage, not yours.</p>
+    </div>
+
+    <p>We only work with developers we would personally recommend. In the unlikely event that a developer underperforms or misrepresents themselves, DevLink Co will resolve that situation internally. You will not be left without recourse &mdash; see Section 9 for how we handle disputes.</p>
+
+    <div class="legal-callout">
+      <strong>Platform compliance</strong>
+      <p>DevLink Co creates content exclusively for Roblox. We can advise on platform requirements, but we cannot guarantee that deliverables will be approved, remain compliant, or stay available on the Roblox platform. Platform rules change without notice and are outside our control. Ensuring your project complies with all relevant Roblox policies is your responsibility.</p>
+    </div>
+
+    <h2>3. Project Scope</h2>
+    <p>DevLink Co takes projects on a case-by-case basis. There is no fixed minimum project value &mdash; a small sound effect at a fair rate is as welcome as a large-scale game build. We reserve the right to decline any project where the budget is not reasonable for the scope of work requested, and we will always tell you clearly if that is the case.</p>
+    <p>The agreed scope of work is defined in the written quote. Anything not listed in the quote is not included. If you want to expand the project after work has begun, we will issue an amended or additional quote. We will always flag this before proceeding &mdash; there will be no surprise charges.</p>
+    <p>If you provide materials, assets, or instructions that are inaccurate, incomplete, or unclear, this may affect the quality or accuracy of the deliverables. DevLink Co is not responsible for errors that result directly from Client-provided input. You are responsible for reviewing all work before final approval.</p>
+
+    <div class="legal-callout">
+      <strong>Client-provided materials</strong>
+      <p>Any assets, content, or files you provide must be legally owned or properly licensed by you. DevLink Co does not verify the legal status of client-supplied materials. If a third-party claim arises from materials you have provided, that is your legal and financial responsibility &mdash; not ours.</p>
+    </div>
+
+    <h2>4. Payment</h2>
+    <p>Payments are currently processed via PayPal. Stripe support is planned for a future update.</p>
+    <p>Projects can be structured in one of two ways, agreed before work begins:</p>
     <ul>
-      <li>Provide accurate information about your skills, experience, and portfolio.</li>
-      <li>Accept a 25% commission deduction on any project matched through DevLink.</li>
-      <li>Communicate honestly and professionally with clients.</li>
-      <li>Deliver work that meets the agreed brief to a reasonable standard.</li>
+      <li><strong>40/60 split</strong> &mdash; 40% deposit upfront to begin work, 60% on completion before final files are delivered. This is the default for most projects.</li>
+      <li><strong>100% upfront</strong> &mdash; available at the Client's choice, with the same refund protections as below.</li>
     </ul>
-    <p>DevLink reserves the right to remove developers from the roster at any time. Inclusion on the roster does not constitute employment or a guaranteed minimum of work.</p>
+    <p>Milestone-based payment schedules are available for larger projects and must be agreed in writing within the quote. All amounts are confirmed before any work begins. You are responsible for any transaction fees, currency conversion charges, or processing costs applied by your payment provider.</p>
 
-    <h2>5. Marketplace</h2>
-    <p>Assets listed on the DevLink Marketplace are sold by individual developers. DevLink takes a 10% commission on each sale. All sales are final unless the asset is materially different from its description. Disputes about asset quality should be raised with us directly within 7 days of purchase.</p>
+    <h3>Refund Policy</h3>
+    <p>We operate a tiered refund policy designed to be fair to both sides:</p>
 
-    <h2>6. Payments</h2>
-    <p>DevLink does not currently process payments directly. Payment arrangements are agreed between clients and developers, or handled via third-party payment links (such as Stripe) for marketplace purchases. DevLink accepts no liability for payment disputes between clients and developers.</p>
+    <div class="legal-callout">
+      <strong>No work started</strong>
+      <p>If payment has been received but no work has begun, you are entitled to a full 100% refund. No questions asked, no delay.</p>
+    </div>
 
-    <h2>7. Prohibited Conduct</h2>
-    <p>You must not use DevLink's services to:</p>
+    <div class="legal-callout">
+      <strong>Work in progress</strong>
+      <p>If work has started, a refund will reflect the proportion of work not yet completed. DevLink Co will provide a clear breakdown of what has been done. The portion covering completed, usable work is non-refundable. The remainder will be returned.</p>
+    </div>
+
+    <div class="legal-callout">
+      <strong>Work delivered and approved</strong>
+      <p>Once a deliverable has been handed over and accepted by the Client, that payment is non-refundable.</p>
+    </div>
+
+    <p>If a service failure occurs on our side &mdash; such as a developer abandoning a project or work falling significantly short of the agreed standard &mdash; we will work with you to reach a fair resolution. This may include reassigning the project, a partial refund, or another agreed remedy.</p>
+
+    <h3>Late or Missed Payments</h3>
+    <p>If a payment deadline is missed, work may be paused after reasonable notice has been given. Ongoing non-payment may result in project termination. Amounts already paid for completed work are non-refundable in this scenario. During any pause, DevLink Co is not obligated to maintain progress or meet previously estimated timelines.</p>
+
+    <h3>Payment Disputes and Chargebacks</h3>
+    <p>If you have a concern about a payment, you must contact DevLink Co directly before raising any dispute with PayPal, Stripe, or any other payment provider. We commit to responding within 2 business days and working toward a resolution.</p>
+
+    <div class="legal-callout">
+      <strong>Chargebacks</strong>
+      <p>Initiating a chargeback or payment reversal without first attempting resolution through DevLink Co is a breach of these Terms. We reserve the right to suspend all services immediately, pursue recovery of funds through legal means, and seek reimbursement for any associated costs. All payments must be made in full without deduction or set-off unless agreed in writing.</p>
+    </div>
+
+    <h2>5. Revisions</h2>
+    <p>Revisions are a normal part of the creative process and are built into every project. The number of revision rounds appropriate for your project will depend on the type and scale of work &mdash; music and audio naturally involve more iterative feedback than scripting tasks, for example. Your quote will outline what is included.</p>
+    <p>Revisions within the agreed scope are covered. Changes that go beyond the agreed scope &mdash; such as new features, significant redesigns, or a change in creative direction &mdash; will be treated as additional work and quoted separately. We will always tell you before proceeding with anything that would be charged extra.</p>
+    <p>Once a revision has been approved and implemented, any resulting impact on performance, compatibility, or delivery timelines becomes the Client's responsibility. DevLink Co is not obligated to reverse or remedy issues caused by Client-approved changes unless separately agreed and paid for.</p>
+
+    <h2>6. Timelines &amp; Delivery</h2>
+    <p>All delivery estimates in quotes are good-faith projections, not contractual guarantees. Development work is complex, and timelines can shift due to technical challenges, platform behaviour, scope changes, or circumstances outside our control. We will always communicate proactively if a timeline needs to change.</p>
+    <p>Timelines may also be affected by delays on the Client's side &mdash; for example, slow feedback, missing assets, or unclear instructions. In those cases, the estimated delivery date adjusts accordingly and DevLink Co is not liable for the resulting delay.</p>
+
+    <div class="legal-callout">
+      <strong>Force majeure</strong>
+      <p>DevLink Co cannot be held responsible for delays or failures caused by events genuinely outside our control. This includes internet or platform outages, illness affecting key personnel, natural disasters, government actions, or other unforeseen disruptions. In such cases, services may be temporarily suspended without liability. We will communicate with you as soon as reasonably possible and work to resume the project.</p>
+    </div>
+
+    <h2>7. Intellectual Property &amp; Ownership</h2>
+
+    <h3>During Development</h3>
+    <p>All work created by DevLink Co remains our intellectual property until full payment has been received. Partial delivery does not transfer any ownership or usage rights. Unauthorised use of deliverables before full payment constitutes a material breach of these Terms.</p>
+
+    <h3>After Full Payment</h3>
+    <p>Upon receipt of full and final payment, ownership of the project deliverables transfers from DevLink Co to the Client. By default, all work created under this agreement &mdash; including scripts, models, UI assets, animations, music, and voice work &mdash; transfers fully to the client upon receipt of full payment. This is a work-for-hire arrangement. If a developer wishes to retain rights to any creative work (e.g. a music composition), this must be agreed in writing before the project begins and noted in the quote. Pre-existing DevLink Co tools remain its property; a perpetual licence is granted to the client.</p>
+
+    <div class="legal-callout">
+      <strong>Custom arrangements</strong>
+      <p>If you need a broader arrangement &mdash; for example, acquiring rights over generic tooling that DevLink Co would otherwise retain, or preventing portfolio use of your project &mdash; this can be discussed and agreed in writing as part of your quote. Additional terms may apply.</p>
+    </div>
+
+    <h3>Portfolio &amp; Promotional Rights</h3>
+    <p>DevLink Co retains the right to display completed work in our portfolio and use it for promotional purposes, unless you request otherwise in writing before the project begins. This includes screenshots, videos, and descriptions. You grant us a perpetual, worldwide, royalty-free licence for these purposes. This right survives termination of the agreement.</p>
+
+    <h2>8. Confidentiality</h2>
+    <p>Both parties agree to treat each other's non-public information with discretion. You agree not to share DevLink Co's internal processes, pricing, developer identities, or project details with third parties without our written permission. We agree to handle your project information with appropriate confidentiality and will not share client details beyond what is necessary to complete the work.</p>
+    <p>These obligations continue after the project ends and survive termination of this agreement. Any unauthorised disclosure &mdash; even after project completion &mdash; is a breach of these Terms, and DevLink Co reserves the right to seek damages or injunctive relief.</p>
+
+    <h2>9. Disputes &amp; Brand Protection</h2>
+
+    <h3>Come to Us First</h3>
+    <p>If you have a concern &mdash; about quality, conduct, progress, or anything else &mdash; please contact DevLink Co directly before taking any external action. We commit to acknowledging all complaints within 2 business days. Most issues can be resolved quickly and fairly without escalation.</p>
+    <p>This applies to both clients and developers. DevLink Co acts as the responsible party in all engagements. If a developer causes a problem, we deal with it &mdash; you do not need to pursue individuals directly.</p>
+
+    <h3>Quality Disputes</h3>
+    <p>If you believe delivered work does not meet the agreed standard, DevLink Co will carry out an internal review. Where we agree a shortfall exists, we will remedy it at no additional cost. Where we disagree, we will explain our position clearly and discuss what options are available. The tiered refund policy in Section 4 applies to all outcomes.</p>
+
+    <h3>Indemnification</h3>
+    <p>You agree to indemnify, defend, and hold harmless DevLink Co and all associated parties from any claims, damages, losses, liabilities, fines, or expenses arising from your use of our services, your breach of these Terms, or materials you have provided. This includes legal fees. DevLink Co may assume control of any legal defence where necessary, with costs recoverable from the Client. This obligation survives termination of the agreement.</p>
+
+    <div class="legal-callout">
+      <strong>A note on public statements</strong>
+      <p>DevLink Co cannot be held liable for reputational damage caused by public statements, social media posts, or reviews made by either clients or developers before a formal resolution process has been completed. We ask that both sides act professionally while a matter is being worked through. We will always do the same.</p>
+    </div>
+
+    <h3>Formal Resolution</h3>
+    <p>If direct communication does not resolve a dispute, both parties agree to attempt good-faith mediation before pursuing legal action. These Terms are governed by the laws of England &amp; Wales, and the courts of England &amp; Wales have exclusive jurisdiction over any unresolved disputes. Nothing in this section restricts any statutory consumer rights you may hold under the laws of your own jurisdiction, including the right to bring a claim in your local courts where that right applies.</p>
+
+    <h2>10. Limitation of Liability</h2>
+    <p>Nothing in these Terms limits or excludes DevLink Co's liability for death or personal injury caused by negligence, for fraud or fraudulent misrepresentation, or for any other liability that cannot be limited or excluded under the laws of England &amp; Wales. Subject to that, DevLink Co's total liability for any claim arising from a specific project is capped at the total amount you paid for that project. We are not liable for:</p>
     <ul>
-      <li>Submit false, misleading, or fraudulent information.</li>
-      <li>Solicit developers or clients found through DevLink for private work in a way that bypasses our commission arrangement.</li>
-      <li>Harass, abuse, or threaten any other user or the DevLink team.</li>
+      <li>Loss of revenue, profit, or business opportunity</li>
+      <li>Loss of data, in-game assets, or virtual currency</li>
+      <li>Platform decisions including account bans, content removal, or policy enforcement</li>
+      <li>Consequences arising from your modification, misuse, or incorrect deployment of delivered work</li>
+      <li>Delays or failures caused by events outside our reasonable control</li>
+    </ul>
+    <p>Deliverables are created in good faith based on the agreed brief. Once delivered and accepted, you take on full responsibility for how they are used and deployed. DevLink Co has no control over what happens to the work after handover.</p>
+    <p>This limitation of liability applies regardless of the legal basis of any claim and remains in force even if other provisions of this agreement are found to be unenforceable.</p>
+
+    <h2>11. Termination</h2>
+    <p>Either party can end a project engagement. The following applies depending on the circumstances:</p>
+
+    <div class="legal-callout">
+      <strong>Client cancels, no work started</strong>
+      <p>Full refund of any payments made.</p>
+    </div>
+
+    <div class="legal-callout">
+      <strong>Client cancels, work in progress</strong>
+      <p>Refund calculated per the tiered policy in Section 4. Completed, usable work is non-refundable.</p>
+    </div>
+
+    <div class="legal-callout">
+      <strong>Client cancels after delivery</strong>
+      <p>No refund. Work has been completed and handed over.</p>
+    </div>
+
+    <div class="legal-callout">
+      <strong>DevLink Co terminates due to Client breach</strong>
+      <p>Grounds include abusive behaviour, non-payment, misrepresentation, or serious breach of these Terms. No refund for completed work. DevLink Co reserves the right to retain work in progress and pursue outstanding payment.</p>
+    </div>
+
+    <div class="legal-callout">
+      <strong>DevLink Co terminates due to our own failure</strong>
+      <p>We will work with you to reach a fair resolution, which may include partial or full refund depending on the circumstances.</p>
+    </div>
+
+    <p>Upon termination, all access to ongoing services is revoked immediately. Work completed and paid for up to the point of termination may be delivered at DevLink Co's discretion.</p>
+    <p>DevLink Co also reserves the right to suspend or terminate access to the Discord server or any associated services for conduct that is abusive, dishonest, or otherwise damaging to the community or the business &mdash; with or without prior notice.</p>
+
+    <h2>12. Amendments to These Terms</h2>
+    <p>DevLink Co may update these Terms from time to time. Where changes are material, we will give notice through the Discord server. Continued engagement with DevLink Co after an update is posted constitutes acceptance of the revised Terms.</p>
+    <p>The version of these Terms in effect at the time your project quote is issued governs that project, unless both parties agree otherwise in writing. No waiver of any provision is valid unless made in writing by an authorised representative of DevLink Co. Failure to enforce a provision on one occasion does not constitute a permanent waiver of it.</p>
+
+    <h2>13. General</h2>
+    <ul>
+      <li>These Terms constitute the entire agreement between you and DevLink Co regarding our services, and supersede all prior communications unless formally incorporated into a written quote.</li>
+      <li>If any provision of these Terms is found to be unenforceable, the remaining provisions continue in full effect. The invalid provision will be modified only to the minimum extent necessary to make it enforceable.</li>
+      <li>Section headings are for readability only and do not affect the legal interpretation of any clause.</li>
+      <li>These Terms are governed by the laws of England &amp; Wales. Nothing in these Terms affects any statutory consumer rights you may hold under the laws of your own jurisdiction.</li>
+      <li>DevLink Co operates as an international business and welcomes clients from all territories. The choice of governing law does not restrict your ability to engage with us regardless of your location.</li>
     </ul>
 
-    <h2>8. Limitation of Liability</h2>
-    <p>DevLink is provided "as is". We make no warranties regarding the quality, availability, or fitness for purpose of any service. To the maximum extent permitted by law, DevLink's total liability to you shall not exceed £50.</p>
+    <p style="font-style:italic;color:var(--muted);margin-top:2rem;">Questions before agreeing? Reach out in our <a href="https://discord.gg/aTQ67uwRN" target="_blank" rel="noopener noreferrer">Discord</a> before clicking accept.</p>
 
-    <h2>9. Changes to These Terms</h2>
-    <p>We may update these Terms at any time. Continued use of DevLink's services after changes constitutes acceptance of the revised Terms.</p>
-
-    <h2>10. Contact</h2>
-    <p>Questions about these Terms? Contact us on <a href="https://discord.gg/aTQ67uwRN" target="_blank" rel="noopener noreferrer">Discord</a> or via email (shown at the bottom of any page on this site).</p>
-
-    <p class="updated">Last updated: March 2026</p>
+    <p class="updated">Terms of Service v1.3 &mdash; Last updated: April 2026</p>
   </div>
 
   <!-- PRIVACY POLICY -->
   <div class="legal-section" id="tab-privacy">
 
-    <h2>1. What Data We Collect</h2>
-    <p>When you submit a form on DevLink (hire enquiry, developer application, or asset submission), we collect the information you provide, which may include:</p>
-    <ul>
-      <li>Your name and email address.</li>
-      <li>Your Roblox username.</li>
-      <li>Project details, portfolio links, and rates you choose to share.</li>
-    </ul>
-    <p>We also collect standard technical data that your browser sends with every web request (such as your IP address), which is processed by our hosting provider (GitHub Pages).</p>
+    <p style="font-style:italic;color:var(--muted);margin-bottom:2rem;">Version 1.1 &mdash; Governed by UK GDPR and the Data Protection Act 2018<br/>See also: <a href="/how-we-operate">How We Operate</a> &middot; <a href="/legal#tos" onclick="document.querySelector('[data-tab=tos]').click();return false;">Terms of Service</a></p>
 
-    <h2>2. How We Use Your Data</h2>
-    <p>We use the information you submit solely to:</p>
+    <p>DevLink Co is committed to handling your personal data responsibly, transparently, and in accordance with applicable privacy law. This Privacy Policy explains what data we collect, why we collect it, how long we keep it, and what rights you have over it.</p>
+    <p>This policy applies to everyone who interacts with DevLink Co &mdash; clients, developers, and anyone who submits an enquiry or visits our website. It covers data collected through our Discord server, our website, and any other platform through which we operate.</p>
+
+    <h2>1. Who We Are</h2>
+    <p>DevLink Co is the data controller responsible for the personal data described in this policy. As data controller, we determine how and why your data is processed.</p>
+    <p>If you have any questions about this policy, or wish to exercise any of your data rights, you can contact us in the following ways:</p>
     <ul>
-      <li>Respond to your enquiry or evaluate your application.</li>
-      <li>Match you with a suitable developer or client, where applicable.</li>
-      <li>Send you an automatic confirmation email via EmailJS.</li>
+      <li>Email: <a href="#" onclick="var e='devlink.co'+'@'+'outlook.com';this.href='mailto:'+e;this.textContent=e;return true;">click to reveal</a></li>
+      <li>Discord: Open a support ticket in the DevLink Co server and mark it as a privacy request</li>
     </ul>
-    <p>We do not sell, rent, or share your personal data with third parties for marketing purposes.</p>
+    <p>We aim to respond to all privacy-related requests within 30 days of receipt, in line with our obligations under UK GDPR.</p>
+
+    <h2>2. What Data We Collect and Why</h2>
+
+    <h3>Client Data</h3>
+    <p>When you engage DevLink Co as a client, we collect and process the following categories of personal data:</p>
+
+    <table class="legal-table">
+      <thead>
+        <tr>
+          <th>What we collect</th>
+          <th>Why we collect it</th>
+          <th>Legal basis (GDPR)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Name or username</td>
+          <td>To identify you and manage your project</td>
+          <td>Contractual necessity</td>
+        </tr>
+        <tr>
+          <td>Contact details (email, Discord ID)</td>
+          <td>To communicate with you throughout your project</td>
+          <td>Contractual necessity</td>
+        </tr>
+        <tr>
+          <td>Project brief and requirements</td>
+          <td>To understand and deliver your project</td>
+          <td>Contractual necessity</td>
+        </tr>
+        <tr>
+          <td>Payment information (via PayPal)</td>
+          <td>To process and record project payments</td>
+          <td>Contractual necessity</td>
+        </tr>
+        <tr>
+          <td>Social or platform identifiers (e.g. Roblox username)</td>
+          <td>To coordinate delivery to the correct platform account</td>
+          <td>Contractual necessity</td>
+        </tr>
+        <tr>
+          <td>Communications via Discord relay</td>
+          <td>To maintain a record of agreed project scope and decisions</td>
+          <td>Legitimate interests</td>
+        </tr>
+        <tr>
+          <td>Form submissions from our website</td>
+          <td>To respond to your enquiry and assess your project</td>
+          <td>Legitimate interests</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Developer Data</h3>
+    <p>When you apply to join DevLink Co as a developer, or are onboarded as a team member, we collect and process the following:</p>
+
+    <table class="legal-table">
+      <thead>
+        <tr>
+          <th>What we collect</th>
+          <th>Why we collect it</th>
+          <th>Legal basis (GDPR)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Name or username</td>
+          <td>To identify you within the team</td>
+          <td>Contractual necessity</td>
+        </tr>
+        <tr>
+          <td>Contact details (email, Discord ID)</td>
+          <td>To communicate with you about projects and team matters</td>
+          <td>Contractual necessity</td>
+        </tr>
+        <tr>
+          <td>Portfolio links and work samples</td>
+          <td>To assess your skills and match you to appropriate projects</td>
+          <td>Legitimate interests</td>
+        </tr>
+        <tr>
+          <td>Skill set and areas of expertise</td>
+          <td>To assign you to suitable projects</td>
+          <td>Contractual necessity</td>
+        </tr>
+        <tr>
+          <td>Interview notes</td>
+          <td>To record the outcome of your application process</td>
+          <td>Legitimate interests</td>
+        </tr>
+        <tr>
+          <td>Payment details (your preferred payment method)</td>
+          <td>To pay you for completed project work</td>
+          <td>Contractual necessity</td>
+        </tr>
+        <tr>
+          <td>Communication logs via Discord relay</td>
+          <td>To maintain a record of project communications</td>
+          <td>Legitimate interests</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="legal-callout">
+      <strong>What we do not collect</strong>
+      <p>DevLink Co does not collect sensitive personal data such as health information, political views, ethnicity, or biometric data. We do not run advertising and do not use personal data for marketing purposes.</p>
+    </div>
 
     <h2>3. How We Store Your Data</h2>
-    <p>Form submissions are delivered to the DevLink team by email via <a href="https://www.emailjs.com" target="_blank" rel="noopener noreferrer">EmailJS</a>. Your submission data is stored in our email inbox and is not stored in any database by DevLink directly. We retain submission data for up to 12 months, after which it is deleted.</p>
-
-    <h2>4. Third-Party Services</h2>
-    <p>This site uses the following third-party services:</p>
+    <p>Personal data submitted to DevLink Co is stored and processed across the following systems:</p>
     <ul>
-      <li><strong>GitHub Pages</strong> — hosting. Subject to GitHub's <a href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement" target="_blank" rel="noopener noreferrer">privacy policy</a>.</li>
-      <li><strong>EmailJS</strong> — form submission delivery. Subject to EmailJS's <a href="https://www.emailjs.com/legal/privacy-policy/" target="_blank" rel="noopener noreferrer">privacy policy</a>.</li>
-      <li><strong>Google Fonts</strong> — typography. Subject to Google's <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">privacy policy</a>.</li>
+      <li><strong>Supabase</strong> &mdash; our primary database for project records, tickets, and structured data. Supabase operates on secure cloud infrastructure. Only authorised DevLink Co staff have access.</li>
+      <li><strong>Discord</strong> &mdash; our primary communication platform. Messages sent through Discord, including relay communications, are subject to Discord's own privacy policy and data handling practices in addition to this policy.</li>
+      <li><strong>Email</strong> &mdash; enquiries and communications submitted through our website contact form are received and stored via email. Access is limited to Directors and relevant staff.</li>
+      <li><strong>PayPal</strong> &mdash; payment transactions are processed by PayPal. DevLink Co does not store full payment card details. PayPal's privacy policy governs how your financial data is handled on their platform.</li>
+    </ul>
+    <p>Access to personal data is restricted to DevLink Co staff who need it to perform their role. Developers do not have access to client payment information. Moderators have access to relay logs but not to full project records.</p>
+
+    <div class="legal-callout">
+      <strong>We do not sell your data</strong>
+      <p>DevLink Co does not sell, rent, or trade personal data to any third party. Your data is used solely for the purposes described in this policy.</p>
+    </div>
+
+    <h2>4. Third-Party Data Processors</h2>
+    <p>DevLink Co uses the following third-party platforms that process personal data as part of our operations. Each operates under its own privacy terms, which we encourage you to review:</p>
+    <ul>
+      <li><strong>Discord</strong> &mdash; processes all message data sent through our server, including relay communications. Discord is a US-based service and transfers data internationally under standard contractual clauses.</li>
+      <li><strong>PayPal</strong> &mdash; processes payment transactions between clients and DevLink Co, and between DevLink Co and developers. PayPal is a regulated financial service.</li>
+      <li><strong>Supabase</strong> &mdash; our database provider. Supabase processes structured data we store on your behalf, including project records and tickets.</li>
+    </ul>
+    <p>We do not share your personal data with any third parties beyond those listed above, except where required by law.</p>
+
+    <h2>5. International Data Transfers</h2>
+    <p>DevLink Co operates as an international business and works with clients and developers from around the world. Some of the platforms we use &mdash; particularly Discord and Supabase &mdash; may process data on servers located outside the UK or European Economic Area.</p>
+    <p>Where data is transferred internationally, we rely on the safeguards provided by those platforms &mdash; including standard contractual clauses and adequacy decisions &mdash; to ensure your data receives an equivalent level of protection to that required under UK GDPR.</p>
+    <p>DevLink Co itself does not transfer your personal data to other countries for its own purposes. Any international processing occurs through the third-party platforms described in Section 4.</p>
+
+    <h2>6. How Long We Keep Your Data</h2>
+    <p>We do not keep personal data longer than necessary. Our general retention periods are as follows:</p>
+    <ul>
+      <li><strong>Active project data</strong> &mdash; retained for the duration of the project and for up to two years afterwards.</li>
+      <li><strong>Developer records</strong> &mdash; retained for up to two years after a developer's engagement with DevLink Co ends.</li>
+      <li><strong>Enquiry data (no project commenced)</strong> &mdash; retained for up to twelve months, after which it is deleted unless a project subsequently begins.</li>
+      <li><strong>Payment records</strong> &mdash; retained for up to six years in line with standard financial record-keeping obligations under UK law.</li>
+      <li><strong>Discord message history</strong> &mdash; messages posted in channels that DevLink Co controls are deleted in line with our general retention periods above. On valid erasure requests we will delete relevant messages from channels we control. Any residual data held by Discord on its own infrastructure is subject to Discord's privacy policy, but DevLink Co remains the data controller for DevLink Co data and handles deletion requests directly.</li>
+    </ul>
+    <p>When data reaches the end of its retention period, it is deleted from our systems. If you request deletion before that period ends, we will action your request unless we have a legal obligation to retain the data (for example, for tax or financial records).</p>
+
+    <h2>7. Minors</h2>
+    <p>DevLink Co's services are not directed at children under the age of 13. We do not knowingly collect personal data from anyone under 13. If we become aware that data has been submitted by someone under 13, it will be deleted promptly.</p>
+    <p>Users aged 13 to 17 may engage with DevLink Co with the knowledge and consent of a parent or legal guardian, in line with our Terms of Service. By using our services, users under 18 confirm that a parent or guardian has reviewed and approved their participation and accepts responsibility for their data.</p>
+    <p>If you are a parent or guardian and believe your child has provided personal data to DevLink Co without appropriate consent, please contact us using the details in Section 1 and we will take prompt action.</p>
+
+    <h2>8. Your Data Rights</h2>
+    <p>Under UK GDPR, you have the following rights in relation to your personal data. We will respond to all valid requests within 30 days:</p>
+
+    <table class="legal-table">
+      <thead>
+        <tr>
+          <th>Right</th>
+          <th>What it means</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Right of access</strong></td>
+          <td>You can ask us for a copy of the personal data we hold about you.</td>
+        </tr>
+        <tr>
+          <td><strong>Right to rectification</strong></td>
+          <td>You can ask us to correct inaccurate or incomplete data.</td>
+        </tr>
+        <tr>
+          <td><strong>Right to erasure</strong></td>
+          <td>You can ask us to delete your data. We will comply unless we have a legal obligation to retain it.</td>
+        </tr>
+        <tr>
+          <td><strong>Right to restrict processing</strong></td>
+          <td>You can ask us to pause how we use your data in certain circumstances.</td>
+        </tr>
+        <tr>
+          <td><strong>Right to data portability</strong></td>
+          <td>You can ask us to provide your data in a structured, commonly used format.</td>
+        </tr>
+        <tr>
+          <td><strong>Right to object</strong></td>
+          <td>You can object to processing based on legitimate interests. We will stop unless we have compelling grounds to continue.</td>
+        </tr>
+        <tr>
+          <td><strong>Right to withdraw consent</strong></td>
+          <td>Where processing is based on consent, you can withdraw it at any time without affecting prior processing.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p>To exercise any of these rights, contact us by email (address shown in the footer of any page) or open a privacy request ticket in our <a href="https://discord.gg/aTQ67uwRN" target="_blank" rel="noopener noreferrer">Discord server</a>. We may ask you to verify your identity before actioning a request.</p>
+    <p>If you are not satisfied with how we have handled your data or responded to your request, you have the right to lodge a complaint with the UK Information Commissioner's Office (ICO) at <a href="https://ico.org.uk" target="_blank" rel="noopener noreferrer">ico.org.uk</a>.</p>
+
+    <h2>9. Data Breaches</h2>
+    <p>DevLink Co takes data security seriously. In the event of a personal data breach &mdash; whether originating from our own systems or from a third-party platform we use, such as Discord or Supabase &mdash; we will take the following steps:</p>
+    <ul>
+      <li>Assess the breach immediately upon becoming aware of it, including what data was affected, how many people are impacted, and what risk this creates.</li>
+      <li>Report the breach to the ICO within 72 hours if it is likely to result in a risk to the rights and freedoms of individuals. This is a legal requirement under UK GDPR.</li>
+      <li>Notify affected individuals directly if the breach is likely to result in a high risk to their rights and freedoms, without undue delay.</li>
+      <li>Document the breach internally, including what happened, what data was affected, and what remedial action was taken.</li>
     </ul>
 
-    <h2>5. Cookies &amp; Local Storage</h2>
-    <p>DevLink uses browser localStorage to remember your light/dark theme preference. This data never leaves your device and is not transmitted to any server.</p>
-    <p>We do not use tracking cookies or analytics.</p>
+    <div class="legal-callout">
+      <strong>Important</strong>
+      <p>DevLink Co is the data controller and bears legal responsibility for breach reporting &mdash; regardless of which third-party platform the breach originates from. We do not rely on Discord or Supabase to report on our behalf. If you become aware of a potential breach involving DevLink Co data, contact us immediately via the details in Section 1.</p>
+    </div>
 
-    <h2>6. Your Rights</h2>
-    <p>You have the right to request access to, correction of, or deletion of any personal data we hold about you. To exercise these rights, contact us on <a href="https://discord.gg/aTQ67uwRN" target="_blank" rel="noopener noreferrer">Discord</a> or via the email address shown at the bottom of any page on this site.</p>
+    <h2>10. Cookies &amp; Website Tracking</h2>
+    <p>DevLink Co's website does not currently use tracking cookies, analytics tools, or third-party advertising scripts. The only data collected through our website is what you actively submit via our enquiry and application forms.</p>
+    <p>We use browser localStorage solely to remember your light/dark theme preference. This data never leaves your device and is not transmitted to any server.</p>
+    <p>If we introduce analytics or cookies in future, this policy will be updated and users will be informed. We will not implement tracking without updating this policy first.</p>
 
-    <h2>7. Changes to This Policy</h2>
-    <p>We may update this Privacy Policy from time to time. The date at the bottom of this page indicates when it was last revised.</p>
+    <h2>11. Changes to This Policy</h2>
+    <p>We may update this Privacy Policy from time to time to reflect changes in our practices, legal obligations, or the platforms we use. Where changes are material, we will notify users through our Discord server and update the version number and date at the top of this document.</p>
+    <p>Continued use of DevLink Co's services after an update constitutes acceptance of the revised policy. We encourage you to review this document periodically.</p>
 
-    <p class="updated">Last updated: March 2026</p>
+    <h2>12. Contact &amp; Complaints</h2>
+    <p>For any questions, requests, or concerns relating to this Privacy Policy or how we handle your data:</p>
+    <ul>
+      <li>Email us: <a href="#" onclick="var e='devlink.co'+'@'+'outlook.com';this.href='mailto:'+e;this.textContent=e;return true;">click to reveal</a></li>
+      <li>Open a privacy request ticket in the <a href="https://discord.gg/aTQ67uwRN" target="_blank" rel="noopener noreferrer">DevLink Co Discord server</a></li>
+    </ul>
+    <p>If you are unhappy with our response, or believe we are processing your data unlawfully, you have the right to complain to the UK Information Commissioner's Office:</p>
+    <ul>
+      <li>Website: <a href="https://ico.org.uk" target="_blank" rel="noopener noreferrer">ico.org.uk</a></li>
+      <li>Telephone: 0303 123 1113</li>
+      <li>Post: Information Commissioner's Office, Wycliffe House, Water Lane, Wilmslow, Cheshire, SK9 5AF</li>
+    </ul>
+
+    <p class="updated">Privacy Policy v1.1 &mdash; Last updated: April 2026</p>
   </div>
 </div>
 
@@ -162,7 +567,7 @@
       </a>
       <span class="footer-contact">Contact: <a href="#" id="footerEmail" onclick="var e='devlink.co'+'@'+'outlook.com';this.href='mailto:'+e;this.textContent=e;return true;">click to reveal</a></span>
     </div>
-    <p class="footer-copy">&#169; 2026 DevLink. A Roblox development agency.</p>
+    <p class="footer-copy">&#169; 2026 DevLink. A Roblox development agency. &middot; <a href="/how-we-operate" class="footer-legal">How We Operate</a></p>
   </footer>
 </div>
 

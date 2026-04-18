@@ -22,13 +22,6 @@
   <link rel="stylesheet" href="/styles.css"/>
   <script data-cfasync="false">try{var t=localStorage.getItem('devlink-theme');if(t)document.documentElement.setAttribute('data-theme',t);}catch(e){}</script>
   <script data-cfasync="false" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-  <script data-cfasync="false" src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
-  <script data-cfasync="false">
-    var supabaseClient = supabase.createClient(
-      'https://qgqpwxitbdjoggiwtjra.supabase.co',
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFncXB3eGl0YmRqb2dnaXd0anJhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUzNTM2NDYsImV4cCI6MjA5MDkyOTY0Nn0.7vXKc33-Ok-V7nOIoxw2gZ0LxjdrR0ZEp59Y1Cgej4w'
-    );
-  </script>
 </head>
 <body>
 
@@ -395,6 +388,8 @@
   <script data-cfasync="false">
     window.onload = function() {
 
+      var APPS_SCRIPT_URL = 'https://script.google.com/macros/s/PASTE_URL_HERE/exec';
+
       /* ── EMAILJS INIT ── */
       if (window.emailjs) { emailjs.init('iCCi3WGf2aQ8yeT1q'); }
 
@@ -543,32 +538,27 @@
           form_details: form_details
         };
 
-        var sbData = {
+        var refNum = String(Date.now()).slice(-6);
+        var sheetData = {
+          form_type: 'Asset Submission',
+          reference_id: 'A-' + refNum,
           dev_name: sanitize(devName),
           email: sanitize(devEmail),
-          discord: sanitize(devDiscord) || null,
-          roblox_username: sanitize(devRoblox) || null,
+          contact_method: selectedMethod,
+          discord: sanitize(devDiscord) || '',
+          roblox_username: sanitize(devRoblox) || '',
           asset_name: sanitize(assetName),
           category: sanitize(assetCat),
           price: sanitize(assetPrice),
           description: sanitize(assetDesc),
-          preveiw_link: sanitize(assetPreview) || null,
-          contact_method: selectedMethod
+          preveiw_link: sanitize(assetPreview) || ''
         };
         emailjs.send('service_b2nnw1e', 'template_2jg1lt4', params)
           .then(function() {
             return emailjs.send('service_b2nnw1e', 'template_5jyjxy9', params);
           })
           .then(function() {
-            supabaseClient.from('asset_submissions').insert([sbData]).then(function() {
-              supabaseClient.from('asset_submissions').select('id').eq('email', sbData.email).order('id', { ascending: false }).limit(1).then(function(result) {
-                if (result.data && result.data[0]) {
-                  var rid = String(result.data[0].id);
-                  while (rid.length < 6) { rid = '0' + rid; }
-                  supabaseClient.from('asset_submissions').update({ reference_id: 'A-' + rid }).eq('id', result.data[0].id).then(function() {}).catch(function(err) { console.error(err); });
-                }
-              }).catch(function(err) { console.error(err); });
-            }).catch(function(err) { console.error(err); });
+            fetch(APPS_SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(sheetData) }).catch(function(err) { console.error(err); });
             submitted = true;
             document.getElementById('submitForm').style.display = 'none';
             document.getElementById('formSuccess').style.display = 'block';
