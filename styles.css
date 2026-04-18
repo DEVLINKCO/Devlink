@@ -98,9 +98,9 @@ body::after {
 /* ── 4. NAVIGATION (floating glass pill) ── */
 nav {
   position: fixed;
-  top: 16px;
-  left: 32px;
-  right: 32px;
+  top: 0;
+  left: 0;
+  right: 0;
   z-index: 100;
   display: flex;
   align-items: center;
@@ -109,14 +109,14 @@ nav {
   background: var(--nav-bg);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border: 1px solid var(--glass-border);
-  border-radius: 100px;
-  transition: background 0.3s, border-color 0.3s, padding 0.3s, top 0.3s;
+  border: none;
+  border-bottom: 1px solid var(--glass-border);
+  border-radius: 0;
+  transition: background 0.3s, border-color 0.3s, padding 0.3s;
 }
 
 nav.scrolled {
   padding: 10px 24px;
-  top: 10px;
 }
 
 .nav-logo { display: flex; align-items: center; gap: 12px; text-decoration: none; }
