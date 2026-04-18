@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta http-equiv="X-Content-Type-Options" content="nosniff"/>
+  <meta http-equiv="X-Frame-Options" content="DENY"/>
+  <link rel="icon" href="/favicon.png" type="image/png"/>
+  <meta name="description" content="DevLink Marketplace – Coming Soon"/>
+  <title>Marketplace – DevLink</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="/styles.css"/>
+  <script data-cfasync="false">try{var t=localStorage.getItem('devlink-theme');if(t)document.documentElement.setAttribute('data-theme',t);}catch(e){}</script>
+</head>
+<body>
+
+  <nav>
+    <a href="/" class="nav-logo">
+      <img src="/DevLinkRBBX.png" alt="DevLink logo" onerror="this.style.display='none'"/>
+      <span>DevLink</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/#how">How It Works</a></li>
+      <li><a href="/#features">What We Offer</a></li>
+      <li><a href="/marketplace">Marketplace</a></li>
+      <li><a href="/#faq">FAQ</a></li>
+      <li><a href="/#join">Get Started</a></li>
+    </ul>
+    <div class="nav-right">
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle light/dark mode">
+        <svg id="themeIcon" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3a9 9 0 1 0 9 9c0-.46-.04-.92-.1-1.36a5.389 5.389 0 0 1-4.4 2.26 5.403 5.403 0 0 1-3.14-9.8c-.44-.06-.9-.1-1.36-.1z"/></svg>
+        <span id="themeLabel">Light</span>
+      </button>
+      <a href="/hire" class="nav-cta" style="text-decoration:none;">Hire a Dev</a>
+      <button class="nav-burger" id="navBurger" aria-label="Open menu">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <line x1="3" y1="6" x2="21" y2="6"/>
+          <line x1="3" y1="12" x2="21" y2="12"/>
+          <line x1="3" y1="18" x2="21" y2="18"/>
+        </svg>
+      </button>
+    </div>
+  </nav>
+
+  <div class="mobile-menu" id="mobileMenu">
+    <button class="mobile-close" id="mobileClose" aria-label="Close menu">&#x2715;</button>
+    <a href="/#how" class="mobile-nav-link">How It Works</a>
+    <a href="/#features" class="mobile-nav-link">What We Offer</a>
+    <a href="/marketplace" class="mobile-nav-link">Marketplace</a>
+    <a href="/#faq" class="mobile-nav-link">FAQ</a>
+    <a href="/#join" class="mobile-nav-link">Get Started</a>
+    <a href="/hire" class="mobile-cta mobile-nav-link">Hire a Dev</a>
+  </div>
+
+  <div class="maintenance-page">
+    <div class="badge"><span class="badge-dot"></span> Under Construction</div>
+    <h1>This page is <em>still being built.</em></h1>
+    <p class="sub">The DevLink Marketplace is on its way. Check the update log below for progress, or head back home in the meantime.</p>
+    <div class="actions">
+      <a href="/" class="btn-primary">Back to Home</a>
+      <a href="https://discord.gg/aTQ67uwRN" target="_blank" rel="noopener noreferrer" class="btn-secondary">Join Discord for Updates</a>
+    </div>
+
+    <div class="submit-callout">
+      <p>Want to sell your assets on the marketplace? <a href="https://discord.gg/aTQ67uwRN" target="_blank" rel="noopener noreferrer">Contact us on Discord</a> to submit them for review.</p>
+    </div>
+
+    <div class="log-wrap">
+      <span class="log-label">Update log</span>
+      <div class="log-card">
+        <div class="log-entry">
+          <span class="log-date">Mar 2026</span>
+          <span class="log-text"><span class="log-tag tag-wip">In progress</span>Marketplace backend and asset upload system in development</span>
+        </div>
+        <div class="log-entry">
+          <span class="log-date">Mar 2026</span>
+          <span class="log-text"><span class="log-tag tag-done">Done</span>Marketplace page design finalised</span>
+        </div>
+        <div class="log-entry">
+          <span class="log-date">Soon</span>
+          <span class="log-text"><span class="log-tag tag-soon">Coming soon</span>Public launch — browse and buy scripts, UI kits &amp; templates</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script data-cfasync="false" src="/main.js"></script>
+</body>
+</html>

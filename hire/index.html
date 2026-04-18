@@ -5,79 +5,23 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <meta http-equiv="X-Content-Type-Options" content="nosniff"/>
   <meta http-equiv="X-Frame-Options" content="DENY"/>
-  <link rel="icon" href="/Favicon.ico" type="image/x-icon"/>
+  <link rel="icon" href="/favicon.png" type="image/png"/>
   <meta name="referrer" content="strict-origin-when-cross-origin"/>
   <meta name="description" content="Hire a vetted Roblox developer through DevLink. Tell us what you need and we will find the right match."/>
+  <meta property="og:title" content="Hire a Developer - DevLink"/>
+  <meta property="og:description" content="Hire a vetted Roblox developer through DevLink. Tell us what you need and we'll find the right match."/>
+  <meta property="og:image" content="https://devlinkco.online/DevLinkRBBX.png"/>
+  <meta property="og:url" content="https://devlinkco.online/hire"/>
+  <meta property="og:type" content="website"/>
+  <meta name="twitter:card" content="summary"/>
+  <meta name="twitter:title" content="Hire a Developer - DevLink"/>
+  <meta name="twitter:description" content="Hire a vetted Roblox developer through DevLink. Tell us what you need and we'll find the right match."/>
+  <meta name="twitter:image" content="https://devlinkco.online/DevLinkRBBX.png"/>
   <title>Hire a Developer - DevLink</title>
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
-  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-  <style>
-    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-    :root,[data-theme="dark"]{--bg:#151515;--bg2:#1c1c1c;--bg3:#222;--white:#f5f5f5;--muted:#888;--border:#2e2e2e;--red:#ef5350;--input-bg:#1a1a1a;--input-focus:#282828}
-    [data-theme="light"]{--bg:#f5f5f5;--bg2:#ebebeb;--bg3:#e0e0e0;--white:#111;--muted:#666;--border:#d0d0d0;--red:#d32f2f;--input-bg:#f9f9f9;--input-focus:#fff}
-    html{scroll-behavior:smooth}
-    body{background:var(--bg);color:var(--white);font-family:'DM Sans',sans-serif;font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased;transition:background .3s,color .3s}
-    nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:20px 48px;background:rgba(21,21,21,.85);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);transition:background .3s}
-    [data-theme="light"] nav{background:rgba(245,245,245,.88)}
-    .nav-logo{display:flex;align-items:center;gap:12px;text-decoration:none}
-    .nav-logo img{width:32px;height:32px;border-radius:7px}
-    .nav-logo span{font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:800;color:var(--white);letter-spacing:-.02em}
-    .nav-right{display:flex;align-items:center;gap:16px}
-    .nav-back{color:var(--muted);text-decoration:none;font-size:.88rem;font-weight:500;transition:color .2s}
-    .nav-back:hover{color:var(--white)}
-    .theme-toggle{background:none;border:1px solid var(--border);border-radius:8px;padding:7px 10px;cursor:pointer;color:var(--muted);font-size:.85rem;display:flex;align-items:center;gap:6px;transition:all .2s;font-family:inherit}
-    .theme-toggle:hover{border-color:var(--muted);color:var(--white)}
-    .page{max-width:680px;margin:0 auto;padding:120px 24px 80px}
-    .page-tag{font-size:.75rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:12px;display:block}
-    .page-header{margin-bottom:48px}
-    .page-header h1{font-family:'Syne',sans-serif;font-size:clamp(2rem,5vw,3rem);font-weight:800;letter-spacing:-.03em;line-height:1.05;margin-bottom:14px}
-    .page-header p{color:var(--muted);font-size:1rem;line-height:1.7}
-    .contact-hint{display:inline-flex;align-items:center;gap:8px;margin-top:10px;font-size:.85rem;color:var(--muted)}
-    .contact-hint a{color:var(--muted);text-decoration:underline;text-underline-offset:3px;transition:color .2s}
-    .contact-hint a:hover{color:var(--white)}
-    .form-card{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:44px}
-    .form-row{display:grid;grid-template-columns:1fr 1fr;gap:20px}
-    .form-group{margin-bottom:24px;position:relative}
-    label{display:block;margin-bottom:8px;color:#aaa;font-size:.9rem;font-weight:500}
-    [data-theme="light"] label{color:#555}
-    .req{color:var(--red)}
-    input,select,textarea{width:100%;padding:12px 14px;background:var(--input-bg);border:1px solid var(--border);border-radius:8px;font-size:.95rem;font-family:inherit;color:var(--white);transition:border-color .2s,background .2s;-webkit-appearance:none}
-    select{cursor:pointer}
-    select option{background:var(--bg3);color:var(--white)}
-    input::placeholder,textarea::placeholder{color:#555}
-    [data-theme="light"] input::placeholder,[data-theme="light"] textarea::placeholder{color:#aaa}
-    input:focus,select:focus,textarea:focus{border-color:#555;outline:none;background:var(--input-focus)}
-    textarea{min-height:120px;resize:vertical}
-    .form-group.has-error input,.form-group.has-error select,.form-group.has-error textarea{border-color:var(--red)}
-    .err-msg{color:var(--red);font-size:.82rem;margin-top:5px;display:none}
-    .form-group.has-error .err-msg{display:block}
-    .char-count{position:absolute;bottom:-18px;right:0;font-size:.75rem;color:#555}
-    .char-count.warn{color:#fbc02d}
-    .char-count.over{color:var(--red)}
-    .section-divider{border:none;border-top:1px solid var(--border);margin:32px 0}
-    .section-title{font-family:'Syne',sans-serif;font-size:.78rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:20px}
-    .submit-wrap{margin-top:36px}
-    .submit-btn{width:100%;background:var(--white);color:var(--bg);border:none;padding:15px;border-radius:10px;font-size:.95rem;font-weight:600;cursor:pointer;font-family:inherit;letter-spacing:.02em;transition:opacity .2s,transform .15s;position:relative}
-    .submit-btn:hover:not(:disabled){opacity:.88;transform:translateY(-1px)}
-    .submit-btn:disabled{background:#333;color:#666;cursor:not-allowed;transform:none}
-    [data-theme="light"] .submit-btn:disabled{background:#ccc;color:#999}
-    .spinner{display:none;width:16px;height:16px;border:2px solid #666;border-top-color:#000;border-radius:50%;animation:spin .7s linear infinite;position:absolute;right:20px;top:50%;transform:translateY(-50%)}
-    .submit-btn.loading .spinner{display:block}
-    @keyframes spin{to{transform:translateY(-50%) rotate(360deg)}}
-    .success-msg{display:none;background:rgba(76,175,80,.1);border:1px solid rgba(76,175,80,.3);border-radius:10px;padding:18px 20px;margin-top:20px;color:#4caf50;font-size:.92rem;line-height:1.6}
-    .success-msg.show{display:block}
-    .form-note{text-align:center;font-size:.85rem;color:#555;margin-top:16px}
-    .toast{position:fixed;top:28px;right:28px;background:var(--bg2);border:1px solid var(--border);border-left:3px solid #4caf50;padding:14px 18px;border-radius:8px;font-size:.88rem;color:var(--white);opacity:0;visibility:hidden;transform:translateY(-6px);transition:all .25s;z-index:9999;max-width:300px}
-    .toast.err{border-left-color:var(--red)}
-    .toast.show{opacity:1;visibility:visible;transform:translateY(0)}
-    .hp{position:fixed;top:-9999px;left:-9999px;width:1px;height:1px;overflow:hidden;pointer-events:none;opacity:0}
-    @media(max-width:640px){
-      nav{padding:16px 20px}
-      .page{padding:100px 16px 60px}
-      .form-card{padding:28px 20px}
-      .form-row{grid-template-columns:1fr}
-    }
-  </style>
+  <link rel="stylesheet" href="/styles.css"/>
+  <script data-cfasync="false">try{var t=localStorage.getItem('devlink-theme');if(t)document.documentElement.setAttribute('data-theme',t);}catch(e){}</script>
+  <script data-cfasync="false" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 </head>
 <body>
 <nav>
@@ -102,14 +46,18 @@
     <p class="contact-hint">Prefer email? <a href="#" onclick="var e='devlink.co'+'@'+'outlook.com';this.href='mailto:'+e;this.textContent=e;return true;">click to reveal</a></p>
   </div>
 
-  <form class="form-card" id="hireForm" novalidate autocomplete="off">
+  <form class="form-card glass-card" id="hireForm" novalidate autocomplete="off">
     <div class="hp"><input type="text" name="website" tabindex="-1" autocomplete="off"/></div>
     <input type="hidden" name="form_type" value="Client Enquiry"/>
     <input type="hidden" name="sender_name" id="senderName"/>
     <input type="hidden" name="reply_email" id="replyEmail"/>
     <input type="hidden" name="form_details" id="formDetails"/>
 
-    <p class="section-title">Your Details</p>
+    <div class="form-section-header">
+      <div class="form-section-num">1</div>
+      <span class="form-section-title">Your Details</span>
+    </div>
+
     <div class="form-row">
       <div class="form-group" id="g-name">
         <label for="clientName">Full Name <span class="req">*</span></label>
@@ -123,12 +71,34 @@
       </div>
     </div>
     <div class="form-group">
+      <label>Preferred Contact Method</label>
+      <div class="contact-method-toggle">
+        <label class="method-option">
+          <input type="radio" name="contact_method" value="Email" checked/>
+          <span>Email</span>
+        </label>
+        <label class="method-option">
+          <input type="radio" name="contact_method" value="Discord"/>
+          <span>Discord</span>
+        </label>
+      </div>
+    </div>
+    <div class="form-group" id="g-discord" style="display:none">
+      <label for="discordUser">Discord Username <span class="req">*</span></label>
+      <input type="text" id="discordUser" name="discord_username" placeholder="your_username" maxlength="50"/>
+      <div class="err-msg">Please enter your Discord username</div>
+    </div>
+    <div class="form-group">
       <label for="robloxUser">Roblox Username</label>
       <input type="text" id="robloxUser" name="roblox_username" placeholder="Optional" maxlength="20"/>
     </div>
 
     <hr class="section-divider"/>
-    <p class="section-title">Project Details</p>
+
+    <div class="form-section-header">
+      <div class="form-section-num">2</div>
+      <span class="form-section-title">Project Details</span>
+    </div>
 
     <div class="form-group" id="g-projtype">
       <label for="projectType">What do you need built? <span class="req">*</span></label>
@@ -146,13 +116,16 @@
         <option value="Other">Other</option>
       </select>
       <div class="err-msg">Please select a project type</div>
+      <div id="otherTypeWrap" style="display:none;margin-top:8px;">
+        <input type="text" id="otherTypeInput" placeholder="Describe what you need built..." maxlength="100"/>
+      </div>
     </div>
     <div class="form-group" id="g-gamelink">
       <label for="gameLink">Roblox Game Link</label>
       <input type="url" id="gameLink" name="game_link" placeholder="https://www.roblox.com/games/..." maxlength="300"/>
       <div class="err-msg">Please enter a valid roblox.com URL</div>
     </div>
-    <div class="form-group" style="margin-bottom:32px" id="g-brief">
+    <div class="form-group" id="g-brief">
       <label for="projectBrief">Project Brief <span class="req">*</span></label>
       <textarea id="projectBrief" name="project_brief" maxlength="1500" placeholder="Describe your project in as much detail as you can..."></textarea>
       <span class="char-count" id="briefCount">0 / 1500</span>
@@ -168,7 +141,6 @@
           <option value="£250 – £500">£250 – £500</option>
           <option value="£500 – £1,000">£500 – £1,000</option>
           <option value="£1,000+">£1,000+</option>
-          <option value="Open to discuss">Open to discuss</option>
         </select>
         <div class="err-msg">Please select a budget</div>
       </div>
@@ -192,15 +164,36 @@
         <span class="spinner"></span>
       </button>
       <div class="success-msg" id="successMsg">Your enquiry has been received. We will review your brief and get back to you within 24 hours.</div>
-      <p class="form-note">Your details go directly to the DevLink team and are not stored or shared.</p>
+      <p class="form-note">Your details are stored securely and used only to process your enquiry.</p>
     </div>
   </form>
+</div>
+
+<div class="footer-wrap">
+  <footer>
+    <a href="/" class="footer-logo">
+      <img src="/DevLinkRBBX.png" alt="DevLink" onerror="this.style.display='none'"/>
+      <span>DevLink</span>
+    </a>
+    <div class="footer-links">
+      <a href="https://x.com/DevLinkRBX" target="_blank" rel="noopener noreferrer">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.748l7.73-8.835L1.254 2.25H8.08l4.259 5.63 5.905-5.63zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+        @DevLinkRBX
+      </a>
+      <a href="https://discord.gg/aTQ67uwRN" target="_blank" rel="noopener noreferrer">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03z"/></svg>
+        Discord
+      </a>
+    </div>
+    <p class="footer-copy">&#169; 2026 DevLink. &middot; <a href="/legal" class="footer-legal">Terms &amp; Privacy</a> &middot; <a href="/how-we-operate" class="footer-legal">How We Operate</a></p>
+  </footer>
 </div>
 
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <script data-cfasync="false">
 window.onload = function() {
+  var APPS_SCRIPT_URL = 'https://script.google.com/macros/s/PASTE_URL_HERE/exec';
   var PUBLIC_KEY = 'iCCi3WGf2aQ8yeT1q';
   var TEMPLATE_TO_YOU = 'template_2jg1lt4';
   var TEMPLATE_AUTOREPLY = 'template_5jyjxy9';
@@ -208,23 +201,6 @@ window.onload = function() {
 
   if (window.emailjs) { emailjs.init(PUBLIC_KEY); }
 
-  // Theme
-  var htmlEl = document.documentElement;
-  var toggleBtn = document.getElementById('themeToggle');
-  var labelEl = document.getElementById('themeLabel');
-  var iconEl = document.getElementById('themeIcon');
-  var MOON = '<path d="M12 3a9 9 0 1 0 9 9c0-.46-.04-.92-.1-1.36a5.389 5.389 0 0 1-4.4 2.26 5.403 5.403 0 0 1-3.14-9.8c-.44-.06-.9-.1-1.36-.1z"/>';
-  var SUN = '<path d="M12 7a5 5 0 1 0 0 10A5 5 0 0 0 12 7zm0-5a1 1 0 0 1 1 1v1a1 1 0 0 1-2 0V3a1 1 0 0 1 1-1zm0 17a1 1 0 0 1 1 1v1a1 1 0 0 1-2 0v-1a1 1 0 0 1 1-1zm9-9h1a1 1 0 0 1 0 2h-1a1 1 0 0 1 0-2zM3 11H2a1 1 0 0 0 0 2h1a1 1 0 0 0 0-2zm14.66-6.07.71-.71a1 1 0 0 1 1.41 1.41l-.71.71a1 1 0 0 1-1.41-1.41zM5.64 18.36l-.71.71a1 1 0 0 1-1.41-1.41l.71-.71a1 1 0 0 1 1.41 1.41zm12.02.71-.71-.71a1 1 0 0 1 1.41-1.41l.71.71a1 1 0 0 1-1.41 1.41zM5.64 5.64l-.71-.71A1 1 0 0 1 6.34 3.52l.71.71A1 1 0 0 1 5.64 5.64z"/>';
-  function applyTheme(t) {
-    htmlEl.setAttribute('data-theme', t);
-    if (labelEl) { labelEl.textContent = t === 'light' ? 'Dark' : 'Light'; }
-    if (iconEl) { iconEl.innerHTML = t === 'light' ? SUN : MOON; }
-    try { localStorage.setItem('devlink-theme', t); } catch(e) {}
-  }
-  try { var saved = localStorage.getItem('devlink-theme'); if (saved) { applyTheme(saved); } } catch(e) {}
-  if (toggleBtn) { toggleBtn.addEventListener('click', function() { applyTheme(htmlEl.getAttribute('data-theme') === 'dark' ? 'light' : 'dark'); }); }
-
-  // Security helpers
   function sanitize(str) {
     return String(str).trim().replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#x27;');
   }
@@ -248,12 +224,22 @@ window.onload = function() {
   var toastEl = document.getElementById('toast');
   var toastTimer;
 
+  /* Contact method toggle */
+  var methodRadios = document.querySelectorAll('[name="contact_method"]');
+  var discordGroup = document.getElementById('g-discord');
+  for (var m = 0; m < methodRadios.length; m++) {
+    methodRadios[m].addEventListener('change', function() {
+      discordGroup.style.display = this.value === 'Discord' ? 'block' : 'none';
+      if (this.value === 'Email') { clrErr('g-discord'); }
+    });
+  }
+
   var brief = document.getElementById('projectBrief');
   var briefCount = document.getElementById('briefCount');
   brief.addEventListener('input', function() {
-    var l = this.value.length, m = parseInt(this.maxLength);
-    briefCount.textContent = l + ' / ' + m;
-    briefCount.className = 'char-count' + (l >= m ? ' over' : l > m * 0.9 ? ' warn' : '');
+    var l = this.value.length, mx = parseInt(this.maxLength);
+    briefCount.textContent = l + ' / ' + mx;
+    briefCount.className = 'char-count' + (l >= mx ? ' over' : l > mx * 0.9 ? ' warn' : '');
     if (l) { clrErr('g-brief'); }
   });
 
@@ -268,10 +254,22 @@ window.onload = function() {
 
   document.getElementById('clientName').addEventListener('input', function() { if (this.value.trim()) { clrErr('g-name'); } });
   document.getElementById('clientEmail').addEventListener('input', function() { if (isValidEmail(this.value)) { clrErr('g-email'); } });
-  document.getElementById('projectType').addEventListener('change', function() { if (this.value) { clrErr('g-projtype'); } });
+  document.getElementById('discordUser').addEventListener('input', function() { if (this.value.trim()) { clrErr('g-discord'); } });
+  document.getElementById('projectType').addEventListener('change', function() {
+    if (this.value) { clrErr('g-projtype'); }
+    document.getElementById('otherTypeWrap').style.display = this.value === 'Other' ? 'block' : 'none';
+    if (this.value !== 'Other') { document.getElementById('otherTypeInput').value = ''; }
+  });
+  document.getElementById('otherTypeInput').addEventListener('input', function() { if (this.value.trim()) { clrErr('g-projtype'); } });
   document.getElementById('gameLink').addEventListener('input', function() { if (isValidUrl(this.value)) { clrErr('g-gamelink'); } });
   document.getElementById('budget').addEventListener('change', function() { if (this.value) { clrErr('g-budget'); } });
   document.getElementById('timeline').addEventListener('change', function() { if (this.value) { clrErr('g-timeline'); } });
+
+  function getContactMethod() {
+    var radios = document.querySelectorAll('[name="contact_method"]');
+    for (var i = 0; i < radios.length; i++) { if (radios[i].checked) { return radios[i].value; } }
+    return 'Email';
+  }
 
   function validate() {
     var ok = true;
@@ -279,7 +277,10 @@ window.onload = function() {
     for (var i = 0; i < errs.length; i++) { errs[i].classList.remove('has-error'); }
     if (!document.getElementById('clientName').value.trim()) { setErr('g-name'); ok = false; }
     if (!isValidEmail(document.getElementById('clientEmail').value)) { setErr('g-email'); ok = false; }
-    if (!document.getElementById('projectType').value) { setErr('g-projtype'); ok = false; }
+    if (getContactMethod() === 'Discord' && !document.getElementById('discordUser').value.trim()) { setErr('g-discord'); ok = false; }
+    var projType = document.getElementById('projectType').value;
+    if (!projType) { setErr('g-projtype'); ok = false; }
+    else if (projType === 'Other' && !document.getElementById('otherTypeInput').value.trim()) { setErr('g-projtype'); ok = false; }
     if (!isValidUrl(document.getElementById('gameLink').value)) { setErr('g-gamelink'); ok = false; }
     if (!document.getElementById('projectBrief').value.trim()) { setErr('g-brief'); ok = false; }
     if (!document.getElementById('budget').value) { setErr('g-budget'); ok = false; }
@@ -303,16 +304,34 @@ window.onload = function() {
     var email = sanitize(document.getElementById('clientEmail').value.trim().toLowerCase());
     document.getElementById('senderName').value = name;
     document.getElementById('replyEmail').value = email;
+    var contactMethod = getContactMethod();
+    var discordVal = document.getElementById('discordUser').value.trim();
     document.getElementById('formDetails').value = stripScript(
       'Client Enquiry from ' + name + '\n' +
       'Email: ' + email + '\n' +
+      'Preferred Contact: ' + contactMethod + (contactMethod === 'Discord' ? ' (' + sanitize(discordVal) + ')' : '') + '\n' +
       'Roblox Username: ' + sanitize(document.getElementById('robloxUser').value || 'Not provided') + '\n\n' +
-      'Project Type: ' + sanitize(document.getElementById('projectType').value) + '\n' +
+      'Project Type: ' + sanitize(document.getElementById('projectType').value === 'Other' ? document.getElementById('otherTypeInput').value.trim() : document.getElementById('projectType').value) + '\n' +
       'Game Link: ' + sanitize(document.getElementById('gameLink').value || 'Not provided') + '\n' +
       'Budget: ' + sanitize(document.getElementById('budget').value) + '\n' +
       'Timeline: ' + sanitize(document.getElementById('timeline').value) + '\n\n' +
       'Project Brief:\n' + sanitize(document.getElementById('projectBrief').value)
     );
+    var refNum = String(Date.now()).slice(-6);
+    var sheetData = {
+      form_type: 'Client Enquiry',
+      reference_id: 'C-' + refNum,
+      name: name,
+      email: email,
+      contact_method: contactMethod,
+      discord: sanitize(discordVal) || '',
+      roblox_username: sanitize(document.getElementById('robloxUser').value) || '',
+      project_type: sanitize(document.getElementById('projectType').value === 'Other' ? document.getElementById('otherTypeInput').value.trim() : document.getElementById('projectType').value),
+      game_link: sanitize(document.getElementById('gameLink').value) || '',
+      project_brief: sanitize(document.getElementById('projectBrief').value),
+      budget: sanitize(document.getElementById('budget').value),
+      timeline: sanitize(document.getElementById('timeline').value)
+    };
     submitBtn.disabled = true;
     submitBtn.classList.add('loading');
     btnLabel.textContent = 'Sending...';
@@ -320,12 +339,14 @@ window.onload = function() {
     emailjs.sendForm(SERVICE_ID, TEMPLATE_TO_YOU, form).then(function() {
       return emailjs.sendForm(SERVICE_ID, TEMPLATE_AUTOREPLY, form);
     }).then(function() {
+      fetch(APPS_SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(sheetData) }).catch(function(err) { console.error(err); });
       lastSubmit = Date.now();
       submitCount++;
       successMsg.classList.add('show');
       successMsg.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
       toast('Enquiry received. We will be in touch within 24 hours.');
       form.reset();
+      document.getElementById('otherTypeWrap').style.display = 'none';
       briefCount.textContent = '0 / 1500';
       briefCount.className = 'char-count';
     }).catch(function() {
@@ -338,5 +359,6 @@ window.onload = function() {
   });
 };
 </script>
+<script data-cfasync="false" src="/main.js"></script>
 </body>
 </html>

@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm install:*)",
+      "Bash(npm --version)",
+      "Bash(brew install:*)",
+      "Bash(xargs ls:*)",
+      "Bash(grep -E \"\\\\.\\(html|css|js|json|png|ico\\)$\")"
+    ]
+  }
+}
