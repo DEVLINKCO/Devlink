@@ -501,8 +501,9 @@ async function renderLedger() {
       </tbody>
     </table>
     <p style="color:var(--muted); font-size:12px; margin-top:16px;">
-      Confirming from the dashboard flips the ledger row but does not create allocation rows automatically.
-      Use the Discord "Confirm Payment Received" button on the project channel to trigger the full flow (ledger + allocations).
+      Confirming here creates the allocation rows automatically, exactly as the Discord
+      "Confirm Payment Received" button does. Both routes run the same split in the database,
+      so it does not matter which you use. Only confirm once you have actually seen the money arrive.
     </p>`;
 
   document.querySelectorAll('[data-confirm]').forEach(b => {
@@ -511,7 +512,8 @@ async function renderLedger() {
       if (!confirm(`Confirm payment ${ref}?`)) return;
       const { error } = await sb.from('ledger')
         .update({ status: 'confirmed', confirmed_at: new Date().toISOString(), confirmed_by: currentUser?.user_metadata?.full_name ?? 'Dashboard' })
-        .eq('reference', ref);
+        .eq('reference', ref)
+        .eq('status', 'pending');   // idempotency guard: never re-stamp an already-confirmed row
       if (error) alert(`Failed: ${error.message}`);
       renderLedger();
     };
