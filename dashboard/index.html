@@ -341,7 +341,7 @@ async function renderProjects() {
   if (!rows?.length) return $('projects-body').innerHTML = `<div class="empty">No projects yet.</div>`;
 
   const clientIds = [...new Set(rows.map(r => r.client_id).filter(Boolean))];
-  const { data: people } = await sb.from('people').select('id, codename, display_name').in('id', clientIds);
+  const { data: people } = await sb.from('people').select('id, codename, client_codename, display_name').in('id', clientIds);
   const byId = new Map((people ?? []).map(p => [p.id, p]));
 
   $('projects-body').innerHTML = `
@@ -355,7 +355,7 @@ async function renderProjects() {
           return `<tr>
             <td><code>${escape(r.id)}</code></td>
             <td>${escape(r.title)}</td>
-            <td>${escape(c?.codename ?? '—')} <span class="pill">${escape(c?.display_name ?? '')}</span></td>
+            <td>${escape(c?.client_codename ?? c?.codename ?? '—')} <span class="pill">${escape(c?.display_name ?? '')}</span></td>
             <td>${r.budget_pence != null ? pounds(r.budget_pence) : '—'}</td>
             <td><span class="pill">${escape(r.status)}</span></td>
             <td>${fmt(r.created_at)}</td>
@@ -394,7 +394,7 @@ async function renderEnquiries() {
   if (!rows?.length) return $('enquiries-body').innerHTML = `<h2>Enquiries</h2><div class="empty">No enquiries yet.</div>`;
 
   const clientIds = [...new Set(rows.map(r => r.client_id).filter(Boolean))];
-  const { data: people } = await sb.from('people').select('id, codename, display_name, email').in('id', clientIds);
+  const { data: people } = await sb.from('people').select('id, codename, client_codename, display_name, email').in('id', clientIds);
   const byId = new Map((people ?? []).map(p => [p.id, p]));
 
   const stageSelect = r => {
@@ -427,7 +427,7 @@ async function renderEnquiries() {
       <td><code>${escape(r.id)}</code></td>
       <td>${escape(r.source)}</td>
       <td>${escape(r.project_name ?? '')}</td>
-      <td>${escape(c?.codename ?? '—')} ${c?.email ? `<span class="pill">${escape(c.email)}</span>` : ''}</td>
+      <td>${escape(c?.client_codename ?? c?.codename ?? '—')} ${c?.email ? `<span class="pill">${escape(c.email)}</span>` : ''}</td>
       <td>${budgetDisplay(r)}</td>
       <td>${stageSelect(r)}</td>
       <td>${fmt(r.created_at)}</td>
@@ -527,7 +527,7 @@ async function renderPayouts() {
   // Fetch unpaid allocations with joined person.
   const { data: allocs, error } = await sb
     .from('allocations')
-    .select('id, party_id, role, amount_pence, people:party_id(codename, display_name, paypal_handle)')
+    .select('id, party_id, role, amount_pence, people:party_id(codename, dev_codename, display_name, paypal_handle)')
     .is('payout_ledger_id', null)
     .not('party_id', 'is', null);
 
@@ -539,7 +539,7 @@ async function renderPayouts() {
     if (!byParty.has(a.party_id)) {
       byParty.set(a.party_id, {
         partyId: a.party_id,
-        codename: a.people?.codename ?? '—',
+        codename: a.people?.dev_codename ?? a.people?.codename ?? '—',
         displayName: a.people?.display_name ?? '',
         paypal: a.people?.paypal_handle ?? '',
         total: 0,
@@ -649,7 +649,7 @@ async function renderApplications() {
 
   const { data: rows, error } = await sb
     .from('people')
-    .select('id, codename, display_name, email, age_status, application_status, notes, created_at')
+    .select('id, codename, dev_codename, display_name, email, age_status, application_status, notes, created_at')
     .eq('kind', 'developer')
     .neq('application_status', 'accepted')
     .order('created_at', { ascending: false });
@@ -667,7 +667,7 @@ async function renderApplications() {
       <thead><tr><th>Codename</th><th>Name</th><th>Email</th><th>Applied</th><th>Status</th><th></th></tr></thead>
       <tbody>
         ${rows.map(r => `<tr>
-          <td><code>${escape(r.codename ?? '')}</code></td>
+          <td><code>${escape(r.dev_codename ?? r.codename ?? '')}</code></td>
           <td>${escape(r.display_name ?? '')}</td>
           <td>${escape(r.email ?? '')}</td>
           <td>${fmt(r.created_at)}</td>
@@ -675,7 +675,7 @@ async function renderApplications() {
           <td><div class="row-actions">
             <button class="linkbtn" data-toggle="app-${escape(r.id)}">See more</button>
             ${r.application_status !== 'under_review' && r.application_status !== 'declined' ? `<button class="btn ghost" data-appset="under_review" data-id="${escape(r.id)}">Review</button>` : ''}
-            <button class="btn success" data-appset="accepted" data-id="${escape(r.id)}" data-code="${escape(r.codename ?? '')}">Accept</button>
+            <button class="btn success" data-appset="accepted" data-id="${escape(r.id)}" data-code="${escape(r.dev_codename ?? r.codename ?? '')}">Accept</button>
             ${r.application_status !== 'declined' ? `<button class="btn danger" data-appset="declined" data-id="${escape(r.id)}">Decline</button>` : ''}
           </div></td>
         </tr>
@@ -702,7 +702,7 @@ async function renderRoster() {
 
   const { data: rows, error } = await sb
     .from('people')
-    .select('id, codename, display_name, email, age_status, paypal_handle, application_status, notes, created_at')
+    .select('id, codename, dev_codename, display_name, email, age_status, paypal_handle, application_status, notes, created_at')
     .eq('kind', 'developer')
     .eq('application_status', 'accepted')
     .order('codename', { ascending: true });
@@ -715,7 +715,7 @@ async function renderRoster() {
       <thead><tr><th>Codename</th><th>Name</th><th>Email</th><th>Age</th><th>PayPal</th><th></th></tr></thead>
       <tbody>
         ${rows.map(r => `<tr>
-          <td><code>${escape(r.codename ?? '')}</code></td>
+          <td><code>${escape(r.dev_codename ?? r.codename ?? '')}</code></td>
           <td>${escape(r.display_name ?? '')}</td>
           <td>${escape(r.email ?? '')}</td>
           <td>${escape(AGE_LABEL[r.age_status] ?? r.age_status ?? '')}</td>
