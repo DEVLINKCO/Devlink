@@ -121,6 +121,24 @@
     }
     .center .btn:hover { background: #000; transform: scale(1.02); box-shadow: 0 8px 24px rgba(0,0,0,0.16); }
     code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; background: #f5f5f5; border: 1px solid var(--border); padding: 2px 6px; border-radius: 6px; color: #404040; }
+    /* Row actions */
+    td .row-actions { display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
+    .linkbtn { background: none; border: 0; color: var(--muted); font-size: 11px; font-weight: 600; cursor: pointer; padding: 4px 6px; border-radius: 6px; }
+    .linkbtn:hover { color: var(--text); background: var(--bg); }
+    select.stage {
+      font: inherit; font-size: 12px; font-weight: 600; color: var(--text);
+      background: var(--panel); border: 1px solid var(--border); border-radius: 8px;
+      padding: 5px 8px; cursor: pointer;
+    }
+    /* Expandable detail row */
+    .detail-row > td { background: #fafafa; padding: 0; }
+    .detail-inner { padding: 16px 18px; border-top: 1px dashed var(--border); }
+    .detail-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px 24px; margin: 0; }
+    .detail-grid .field { min-width: 0; }
+    .detail-grid dt { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); margin: 0 0 2px; }
+    .detail-grid dd { margin: 0; font-size: 13px; color: var(--text); word-break: break-word; white-space: pre-wrap; }
+    .detail-grid dd a { color: #2563eb; }
+    .detail-grid .wide { grid-column: 1 / -1; }
   </style>
 </head>
 <body>
@@ -136,6 +154,7 @@
 <nav id="nav" style="display:none">
   <button data-tab="projects"  class="active">Projects</button>
   <button data-tab="enquiries">Enquiries</button>
+  <button data-tab="applications">Applications</button>
   <button data-tab="payouts">Payouts</button>
   <button data-tab="ledger">Ledger</button>
   <button data-tab="roster">Roster</button>
@@ -162,6 +181,58 @@ const sb = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 const pounds = pence => `£${(Number(pence ?? 0) / 100).toFixed(2)}`;
 const fmt    = iso   => iso ? new Date(iso).toLocaleString() : '—';
 const escape = s     => (s ?? '').toString().replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+
+// ── Detail-view helpers ─────────────────────────────────────
+// `notes` on enquiries/people is a JSON blob holding the extra
+// form fields the tables don't have columns for. Parse it safely.
+function parseNotes(raw) {
+  if (raw == null) return {};
+  if (typeof raw === 'object') return raw;
+  try { const o = JSON.parse(raw); return (o && typeof o === 'object') ? o : { note: raw }; }
+  catch { return { note: raw }; }
+}
+
+const isUrl = v => typeof v === 'string' && /^https?:\/\//i.test(v.trim());
+
+// Render one value: links become anchors, everything else escaped text.
+function detailValue(v) {
+  if (Array.isArray(v)) v = v.join(', ');
+  if (v == null || v === '') return null;
+  const s = String(v);
+  return isUrl(s) ? `<a href="${escape(s)}" target="_blank" rel="noopener">${escape(s)}</a>` : escape(s);
+}
+
+// pairs: [ [label, value, {wide?:bool}], ... ] — empties dropped.
+function detailGrid(pairs) {
+  const cells = pairs.map(([label, value, opt]) => {
+    const rendered = detailValue(value);
+    if (rendered == null) return '';
+    return `<div class="field ${opt?.wide ? 'wide' : ''}"><dt>${escape(label)}</dt><dd>${rendered}</dd></div>`;
+  }).filter(Boolean).join('');
+  return `<dl class="detail-grid">${cells || '<div class="field"><dd>No extra details.</dd></div>'}</dl>`;
+}
+
+// A collapsed detail <tr> that a "See more" button toggles.
+function detailRow(id, colspan, innerHtml) {
+  return `<tr class="detail-row" id="detail-${id}" style="display:none"><td colspan="${colspan}"><div class="detail-inner">${innerHtml}</div></td></tr>`;
+}
+
+// Wire every [data-toggle] button to show/hide its detail row.
+function wireToggles() {
+  document.querySelectorAll('[data-toggle]').forEach(b => {
+    b.onclick = () => {
+      const row = document.getElementById(`detail-${b.dataset.toggle}`);
+      if (!row) return;
+      const open = row.style.display !== 'none';
+      row.style.display = open ? 'none' : 'table-row';
+      b.textContent = open ? 'See more' : 'See less';
+    };
+  });
+}
+
+// Budget: prefer the original label (range-safe); fall back to pence.
+const budgetDisplay = r =>
+  r.budget_text ? escape(r.budget_text) : (r.budget_pence != null ? pounds(r.budget_pence) : '—');
 
 // ── Auth state ──────────────────────────────────────────────
 const $ = id => document.getElementById(id);
@@ -242,7 +313,7 @@ document.querySelectorAll('nav button').forEach(b => {
 
 function switchTab(name) {
   document.querySelectorAll('nav button').forEach(b => b.classList.toggle('active', b.dataset.tab === name));
-  ({ projects: renderProjects, enquiries: renderEnquiries, payouts: renderPayouts, ledger: renderLedger, roster: renderRoster }[name]?.());
+  ({ projects: renderProjects, enquiries: renderEnquiries, applications: renderApplications, payouts: renderPayouts, ledger: renderLedger, roster: renderRoster }[name]?.());
 }
 
 // ── Projects ────────────────────────────────────────────────
@@ -283,12 +354,28 @@ async function renderProjects() {
 }
 
 // ── Enquiries ───────────────────────────────────────────────
+const ENQUIRY_STAGES = [
+  ['new',          'New'],
+  ['under_review', 'Under Review'],
+  ['accepted',     'Accepted'],
+  ['in_progress',  'In Progress'],
+  ['completed',    'Completed'],
+  ['declined',     'Declined'],
+];
+const enquiryStagePill = s => {
+  const label = (ENQUIRY_STAGES.find(x => x[0] === s) ?? [s, s])[1];
+  const cls = s === 'completed' || s === 'accepted' ? 'ok'
+            : s === 'declined' ? 'danger'
+            : s === 'new' ? 'pending' : '';
+  return `<span class="pill ${cls}">${escape(label)}</span>`;
+};
+
 async function renderEnquiries() {
   $('main').innerHTML = `<h2>Enquiries</h2><div id="enquiries-body">Loading…</div>`;
 
   const { data: rows, error } = await sb
     .from('enquiries')
-    .select('id, source, project_name, budget_pence, status, created_at, client_id, converted_project_id')
+    .select('id, source, project_name, description, budget_pence, budget_text, timeline_text, references_text, required_skills, referrer, status, pipeline_stage, notes, created_at, client_id, converted_project_id')
     .order('created_at', { ascending: false });
 
   if (error) return $('enquiries-body').innerHTML = `<div class="empty">Error: ${escape(error.message)}</div>`;
@@ -298,42 +385,59 @@ async function renderEnquiries() {
   const { data: people } = await sb.from('people').select('id, codename, display_name, email').in('id', clientIds);
   const byId = new Map((people ?? []).map(p => [p.id, p]));
 
-  const statusPill = s => ({
-    new:         `<span class="pill pending">new</span>`,
-    progressing: `<span class="pill">progressing</span>`,
-    converted:   `<span class="pill ok">converted</span>`,
-    declined:    `<span class="pill danger">declined</span>`,
-  }[s] ?? `<span class="pill">${escape(s)}</span>`);
+  const stageSelect = r => `<select class="stage" data-stage="${escape(r.id)}">
+    ${ENQUIRY_STAGES.map(([v, label]) =>
+      `<option value="${v}"${(r.pipeline_stage ?? 'new') === v ? ' selected' : ''}>${label}</option>`).join('')}
+  </select>`;
 
   $('enquiries-body').innerHTML = `
     <table>
-      <thead><tr><th>ID</th><th>Source</th><th>Project</th><th>Client</th><th>Budget</th><th>Status</th><th>Created</th><th></th></tr></thead>
+      <thead><tr><th>ID</th><th>Source</th><th>Project</th><th>Client</th><th>Budget</th><th>Stage</th><th>Created</th><th></th></tr></thead>
       <tbody>
         ${rows.map(r => {
           const c = byId.get(r.client_id);
+          const n = parseNotes(r.notes);
+          const detail = detailGrid([
+            ['Project Type',      r.project_name],
+            ['Budget',            r.budget_text ?? (r.budget_pence != null ? pounds(r.budget_pence) : null)],
+            ['Timeline',          r.timeline_text],
+            ['Preferred Contact', n.contactMethod],
+            ['Discord',           n.discord],
+            ['Roblox Username',   n.robloxUsername],
+            ['Game Link',         n.gameLink],
+            ['Required Skills',   Array.isArray(r.required_skills) ? r.required_skills.join(', ') : r.required_skills],
+            ['Referrer',          r.referrer],
+            ['Bot Status',        r.status],
+            ['Description',       r.description, { wide: true }],
+            ['References',        r.references_text, { wide: true }],
+          ]);
           return `<tr>
             <td><code>${escape(r.id)}</code></td>
             <td>${escape(r.source)}</td>
             <td>${escape(r.project_name ?? '')}</td>
             <td>${escape(c?.codename ?? '—')} ${c?.email ? `<span class="pill">${escape(c.email)}</span>` : ''}</td>
-            <td>${r.budget_pence != null ? pounds(r.budget_pence) : '—'}</td>
-            <td>${statusPill(r.status)}</td>
+            <td>${budgetDisplay(r)}</td>
+            <td>${stageSelect(r)}</td>
             <td>${fmt(r.created_at)}</td>
-            <td>
-              ${r.status === 'new' ? `<button class="btn ghost" data-decline="${escape(r.id)}">Decline</button>` : ''}
-            </td>
-          </tr>`;
+            <td><div class="row-actions"><button class="linkbtn" data-toggle="enq-${escape(r.id)}">See more</button></div></td>
+          </tr>
+          ${detailRow(`enq-${escape(r.id)}`, 8, detail)}`;
         }).join('')}
       </tbody>
     </table>`;
 
-  document.querySelectorAll('[data-decline]').forEach(b => {
-    b.onclick = async () => {
-      const id = b.dataset.decline;
-      if (!confirm(`Decline enquiry ${id}?`)) return;
-      const { error } = await sb.from('enquiries').update({ status: 'declined' }).eq('id', id);
-      if (error) alert(`Failed: ${error.message}`);
-      renderEnquiries();
+  wireToggles();
+  document.querySelectorAll('[data-stage]').forEach(sel => {
+    sel.onchange = async () => {
+      const id = sel.dataset.stage;
+      const stage = sel.value;
+      sel.disabled = true;
+      const patch = { pipeline_stage: stage };
+      // Mirror a decline onto the bot-facing status column for compatibility.
+      if (stage === 'declined') patch.status = 'declined';
+      const { error } = await sb.from('enquiries').update(patch).eq('id', id);
+      sel.disabled = false;
+      if (error) { alert(`Failed: ${error.message}`); renderEnquiries(); return; }
     };
   });
 }
@@ -483,18 +587,101 @@ async function markPaid({ partyId, codename, amountPence, allocationIds }) {
   renderPayouts();
 }
 
-// ── Roster ──────────────────────────────────────────────────
+// ── Shared: developer detail (from notes JSON + columns) ────
+const AGE_LABEL = { '18_plus': '18 or over', 'under_18_guardian': 'Under 18 (guardian consenting)' };
+function developerDetail(r) {
+  const n = parseNotes(r.notes);
+  return detailGrid([
+    ['Email',             r.email],
+    ['Age',               AGE_LABEL[r.age_status] ?? r.age_status],
+    ['Preferred Contact', n.contactMethod],
+    ['Discord',           n.discord],
+    ['Roblox Username',   n.robloxUsername],
+    ['Availability',      n.availability],
+    ['Experience',        n.experience],
+    ['Skill Level',       n.skillLevel],
+    ['Rate Type',         n.rateType],
+    ['Project Rate',      n.rateProject],
+    ['Hourly Rate',       n.rateHourly],
+    ['Referrer',          n.referrer],
+    ['Applied',           fmt(r.created_at)],
+    ['Portfolio',         n.portfolio, { wide: true }],
+    ['Skills',            Array.isArray(n.skills) ? n.skills.join(', ') : n.skills, { wide: true }],
+    ['About / Bio',       n.bio, { wide: true }],
+  ]);
+}
+
+// ── Applications (developers awaiting review) ───────────────
+const APP_STAGES = [
+  ['new',          'New',          'pending'],
+  ['under_review', 'Under Review', ''],
+  ['declined',     'Declined',     'danger'],
+];
+async function renderApplications() {
+  $('main').innerHTML = `<h2>Developer Applications</h2><div id="apps-body">Loading…</div>`;
+
+  const { data: rows, error } = await sb
+    .from('people')
+    .select('id, codename, display_name, email, age_status, application_status, notes, created_at')
+    .eq('kind', 'developer')
+    .neq('application_status', 'accepted')
+    .order('created_at', { ascending: false });
+
+  if (error) return $('apps-body').innerHTML = `<div class="empty">Error: ${escape(error.message)}</div>`;
+  if (!rows?.length) return $('apps-body').innerHTML = `<div class="empty">No applications awaiting review. Accepted developers are on the Roster.</div>`;
+
+  const statusPill = s => {
+    const [, label, cls] = APP_STAGES.find(x => x[0] === s) ?? [s, s, ''];
+    return `<span class="pill ${cls}">${escape(label)}</span>`;
+  };
+
+  $('apps-body').innerHTML = `
+    <table>
+      <thead><tr><th>Codename</th><th>Name</th><th>Email</th><th>Applied</th><th>Status</th><th></th></tr></thead>
+      <tbody>
+        ${rows.map(r => `<tr>
+          <td><code>${escape(r.codename ?? '')}</code></td>
+          <td>${escape(r.display_name ?? '')}</td>
+          <td>${escape(r.email ?? '')}</td>
+          <td>${fmt(r.created_at)}</td>
+          <td>${statusPill(r.application_status)}</td>
+          <td><div class="row-actions">
+            <button class="linkbtn" data-toggle="app-${escape(r.id)}">See more</button>
+            ${r.application_status !== 'under_review' && r.application_status !== 'declined' ? `<button class="btn ghost" data-appset="under_review" data-id="${escape(r.id)}">Review</button>` : ''}
+            <button class="btn success" data-appset="accepted" data-id="${escape(r.id)}" data-code="${escape(r.codename ?? '')}">Accept</button>
+            ${r.application_status !== 'declined' ? `<button class="btn danger" data-appset="declined" data-id="${escape(r.id)}">Decline</button>` : ''}
+          </div></td>
+        </tr>
+        ${detailRow(`app-${escape(r.id)}`, 6, developerDetail(r))}`).join('')}
+      </tbody>
+    </table>`;
+
+  wireToggles();
+  document.querySelectorAll('[data-appset]').forEach(b => {
+    b.onclick = async () => {
+      const status = b.dataset.appset;
+      if (status === 'accepted' && !confirm(`Accept ${b.dataset.code || 'this applicant'} onto the roster?`)) return;
+      if (status === 'declined' && !confirm('Decline this application?')) return;
+      const { error } = await sb.from('people').update({ application_status: status }).eq('id', b.dataset.id);
+      if (error) alert(`Failed: ${error.message}`);
+      renderApplications();
+    };
+  });
+}
+
+// ── Roster (accepted developers only) ───────────────────────
 async function renderRoster() {
   $('main').innerHTML = `<h2>Roster</h2><div id="roster-body">Loading…</div>`;
 
   const { data: rows, error } = await sb
     .from('people')
-    .select('id, codename, display_name, email, age_status, paypal_handle, notes, created_at')
+    .select('id, codename, display_name, email, age_status, paypal_handle, application_status, notes, created_at')
     .eq('kind', 'developer')
+    .eq('application_status', 'accepted')
     .order('codename', { ascending: true });
 
   if (error) return $('roster-body').innerHTML = `<div class="empty">Error: ${escape(error.message)}</div>`;
-  if (!rows?.length) return $('roster-body').innerHTML = `<div class="empty">No developers on the roster.</div>`;
+  if (!rows?.length) return $('roster-body').innerHTML = `<div class="empty">No accepted developers yet. Review new applicants under the Applications tab.</div>`;
 
   $('roster-body').innerHTML = `
     <table>
@@ -504,13 +691,18 @@ async function renderRoster() {
           <td><code>${escape(r.codename ?? '')}</code></td>
           <td>${escape(r.display_name ?? '')}</td>
           <td>${escape(r.email ?? '')}</td>
-          <td>${escape(r.age_status ?? '')}</td>
+          <td>${escape(AGE_LABEL[r.age_status] ?? r.age_status ?? '')}</td>
           <td>${r.paypal_handle ? `<code>${escape(r.paypal_handle)}</code>` : '<span class="pill">not set</span>'}</td>
-          <td><button class="btn ghost" data-editpp="${escape(r.id)}" data-cur="${escape(r.paypal_handle ?? '')}">Edit PayPal</button></td>
-        </tr>`).join('')}
+          <td><div class="row-actions">
+            <button class="linkbtn" data-toggle="ros-${escape(r.id)}">See more</button>
+            <button class="btn ghost" data-editpp="${escape(r.id)}" data-cur="${escape(r.paypal_handle ?? '')}">Edit PayPal</button>
+          </div></td>
+        </tr>
+        ${detailRow(`ros-${escape(r.id)}`, 6, developerDetail(r))}`).join('')}
       </tbody>
     </table>`;
 
+  wireToggles();
   document.querySelectorAll('[data-editpp]').forEach(b => {
     b.onclick = async () => {
       const cur = b.dataset.cur;

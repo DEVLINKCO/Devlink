@@ -154,9 +154,17 @@ async function handleHire(supabase: ReturnType<typeof createClient>, body: HireB
     return json({ error: 'That email address does not look valid.' }, 400);
   }
 
+  // Budget arrives as a fixed range LABEL ("£100 – £250", "Under £100",
+  // "£1,000+"). It is not a single amount, so we keep the label verbatim
+  // in budget_text for display, and derive budget_pence from the FIRST
+  // number only (the range's lower bound) for rough sorting. The old code
+  // stripped all non-digits and concatenated "100" + "250" into "100250".
+  const budgetText = budgetRaw;
   const budgetPence = budgetRaw
     ? (() => {
-        const n = parseFloat(budgetRaw.replace(/[^0-9.]/g, ''));
+        const m = budgetRaw.match(/[0-9][0-9,]*(?:\.[0-9]+)?/);
+        if (!m) return null;
+        const n = parseFloat(m[0].replace(/,/g, ''));
         return isFinite(n) && n > 0 ? Math.round(n * 100) : null;
       })()
     : null;
@@ -195,10 +203,12 @@ async function handleHire(supabase: ReturnType<typeof createClient>, body: HireB
       project_name:    projectName,
       description,
       budget_pence:    budgetPence,
+      budget_text:     budgetText,
       timeline_text:   timeline,
       references_text: references,
       required_skills: skills,
       referrer,
+      pipeline_stage:  'new',
       notes,
     });
     if (error) throw error;
@@ -279,12 +289,13 @@ async function handleApply(supabase: ReturnType<typeof createClient>, body: Appl
       contactMethod, discord, robloxUsername, availability, rateType, rateProject, rateHourly,
     });
     const { data, error } = await supabase.from('people').insert({
-      discord_id:   null,
+      discord_id:         null,
       email,
-      kind:         'developer',
+      kind:               'developer',
       codename,
-      display_name: displayName,
-      age_status:   ageStatus,
+      display_name:       displayName,
+      age_status:         ageStatus,
+      application_status: 'new',   // web applicants require review before the roster
       notes,
     }).select().single();
     if (error) throw error;
