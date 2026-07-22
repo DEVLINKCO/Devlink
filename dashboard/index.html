@@ -86,6 +86,18 @@
     .pill.ok       { background: rgba(5, 150, 105, 0.08); color: var(--success); border-color: rgba(5, 150, 105, 0.25); }
     .pill.pending  { background: rgba(217, 119, 6, 0.08); color: var(--warning); border-color: rgba(217, 119, 6, 0.25); }
     .pill.danger   { background: rgba(225, 29, 72, 0.08); color: var(--danger); border-color: rgba(225, 29, 72, 0.25); }
+    /* Stage colour coding (light row tints) */
+    tr.stg-under_review > td, tr.stg-in_progress > td { background: #fff8ef; }
+    tr.stg-accepted > td  { background: #f1faf5; }
+    tr.stg-completed > td { background: #ecf7f1; }
+    tr.stg-declined > td  { background: #fdf3f5; }
+    tr.stg-under_review:hover > td, tr.stg-in_progress:hover > td,
+    tr.stg-accepted:hover > td, tr.stg-completed:hover > td,
+    tr.stg-declined:hover > td { filter: brightness(0.98); }
+    select.stage.s-amber { color: #b45309; border-color: rgba(217,119,6,.45); }
+    select.stage.s-green { color: #047857; border-color: rgba(5,150,105,.45); }
+    select.stage.s-rose  { color: #be123c; border-color: rgba(225,29,72,.45); }
+    h2 + h2, table + h2 { margin-top: 28px; }
     .center {
       position: relative; text-align: center; padding: 24px;
       min-height: calc(100vh - 65px);
@@ -362,16 +374,16 @@ const ENQUIRY_STAGES = [
   ['completed',    'Completed'],
   ['declined',     'Declined'],
 ];
-const enquiryStagePill = s => {
-  const label = (ENQUIRY_STAGES.find(x => x[0] === s) ?? [s, s])[1];
-  const cls = s === 'completed' || s === 'accepted' ? 'ok'
-            : s === 'declined' ? 'danger'
-            : s === 'new' ? 'pending' : '';
-  return `<span class="pill ${cls}">${escape(label)}</span>`;
+// Stages that count as active project work vs incoming enquiries.
+const ACTIVE_STAGES = ['in_progress', 'completed'];
+// Tone applied to the stage <select> per stage.
+const STAGE_TONE = {
+  new: '', under_review: 's-amber', accepted: 's-green',
+  in_progress: 's-amber', completed: 's-green', declined: 's-rose',
 };
 
 async function renderEnquiries() {
-  $('main').innerHTML = `<h2>Enquiries</h2><div id="enquiries-body">Loading…</div>`;
+  $('main').innerHTML = `<div id="enquiries-body">Loading…</div>`;
 
   const { data: rows, error } = await sb
     .from('enquiries')
@@ -379,52 +391,65 @@ async function renderEnquiries() {
     .order('created_at', { ascending: false });
 
   if (error) return $('enquiries-body').innerHTML = `<div class="empty">Error: ${escape(error.message)}</div>`;
-  if (!rows?.length) return $('enquiries-body').innerHTML = `<div class="empty">No enquiries yet.</div>`;
+  if (!rows?.length) return $('enquiries-body').innerHTML = `<h2>Enquiries</h2><div class="empty">No enquiries yet.</div>`;
 
   const clientIds = [...new Set(rows.map(r => r.client_id).filter(Boolean))];
   const { data: people } = await sb.from('people').select('id, codename, display_name, email').in('id', clientIds);
   const byId = new Map((people ?? []).map(p => [p.id, p]));
 
-  const stageSelect = r => `<select class="stage" data-stage="${escape(r.id)}">
-    ${ENQUIRY_STAGES.map(([v, label]) =>
-      `<option value="${v}"${(r.pipeline_stage ?? 'new') === v ? ' selected' : ''}>${label}</option>`).join('')}
-  </select>`;
+  const stageSelect = r => {
+    const stage = r.pipeline_stage ?? 'new';
+    return `<select class="stage ${STAGE_TONE[stage] || ''}" data-stage="${escape(r.id)}">
+      ${ENQUIRY_STAGES.map(([v, label]) =>
+        `<option value="${v}"${stage === v ? ' selected' : ''}>${label}</option>`).join('')}
+    </select>`;
+  };
 
-  $('enquiries-body').innerHTML = `
+  const rowHtml = r => {
+    const c = byId.get(r.client_id);
+    const stage = r.pipeline_stage ?? 'new';
+    const n = parseNotes(r.notes);
+    const detail = detailGrid([
+      ['Project Type',      r.project_name],
+      ['Budget',            r.budget_text ?? (r.budget_pence != null ? pounds(r.budget_pence) : null)],
+      ['Timeline',          r.timeline_text],
+      ['Preferred Contact', n.contactMethod],
+      ['Discord',           n.discord],
+      ['Roblox Username',   n.robloxUsername],
+      ['Game Link',         n.gameLink],
+      ['Required Skills',   Array.isArray(r.required_skills) ? r.required_skills.join(', ') : r.required_skills],
+      ['Referrer',          r.referrer],
+      ['Bot Status',        r.status],
+      ['Description',       r.description, { wide: true }],
+      ['References',        r.references_text, { wide: true }],
+    ]);
+    return `<tr class="stg-${stage}">
+      <td><code>${escape(r.id)}</code></td>
+      <td>${escape(r.source)}</td>
+      <td>${escape(r.project_name ?? '')}</td>
+      <td>${escape(c?.codename ?? '—')} ${c?.email ? `<span class="pill">${escape(c.email)}</span>` : ''}</td>
+      <td>${budgetDisplay(r)}</td>
+      <td>${stageSelect(r)}</td>
+      <td>${fmt(r.created_at)}</td>
+      <td><div class="row-actions"><button class="linkbtn" data-toggle="enq-${escape(r.id)}">See more</button></div></td>
+    </tr>
+    ${detailRow(`enq-${escape(r.id)}`, 8, detail)}`;
+  };
+
+  const tableFor = (list, emptyMsg) => list.length ? `
     <table>
       <thead><tr><th>ID</th><th>Source</th><th>Project</th><th>Client</th><th>Budget</th><th>Stage</th><th>Created</th><th></th></tr></thead>
-      <tbody>
-        ${rows.map(r => {
-          const c = byId.get(r.client_id);
-          const n = parseNotes(r.notes);
-          const detail = detailGrid([
-            ['Project Type',      r.project_name],
-            ['Budget',            r.budget_text ?? (r.budget_pence != null ? pounds(r.budget_pence) : null)],
-            ['Timeline',          r.timeline_text],
-            ['Preferred Contact', n.contactMethod],
-            ['Discord',           n.discord],
-            ['Roblox Username',   n.robloxUsername],
-            ['Game Link',         n.gameLink],
-            ['Required Skills',   Array.isArray(r.required_skills) ? r.required_skills.join(', ') : r.required_skills],
-            ['Referrer',          r.referrer],
-            ['Bot Status',        r.status],
-            ['Description',       r.description, { wide: true }],
-            ['References',        r.references_text, { wide: true }],
-          ]);
-          return `<tr>
-            <td><code>${escape(r.id)}</code></td>
-            <td>${escape(r.source)}</td>
-            <td>${escape(r.project_name ?? '')}</td>
-            <td>${escape(c?.codename ?? '—')} ${c?.email ? `<span class="pill">${escape(c.email)}</span>` : ''}</td>
-            <td>${budgetDisplay(r)}</td>
-            <td>${stageSelect(r)}</td>
-            <td>${fmt(r.created_at)}</td>
-            <td><div class="row-actions"><button class="linkbtn" data-toggle="enq-${escape(r.id)}">See more</button></div></td>
-          </tr>
-          ${detailRow(`enq-${escape(r.id)}`, 8, detail)}`;
-        }).join('')}
-      </tbody>
-    </table>`;
+      <tbody>${list.map(rowHtml).join('')}</tbody>
+    </table>` : `<div class="empty">${emptyMsg}</div>`;
+
+  const enquiryList = rows.filter(r => !ACTIVE_STAGES.includes(r.pipeline_stage));
+  const projectList = rows.filter(r => ACTIVE_STAGES.includes(r.pipeline_stage));
+
+  $('main').innerHTML = `
+    <h2>Incoming Enquiries (${enquiryList.length})</h2>
+    ${tableFor(enquiryList, 'No incoming enquiries. Accepted work in progress shows under Active Projects.')}
+    <h2>Active Projects (${projectList.length})</h2>
+    ${tableFor(projectList, 'No active projects yet. Set an accepted enquiry to “In Progress” to move it here.')}`;
 
   wireToggles();
   document.querySelectorAll('[data-stage]').forEach(sel => {
@@ -436,8 +461,8 @@ async function renderEnquiries() {
       // Mirror a decline onto the bot-facing status column for compatibility.
       if (stage === 'declined') patch.status = 'declined';
       const { error } = await sb.from('enquiries').update(patch).eq('id', id);
-      sel.disabled = false;
-      if (error) { alert(`Failed: ${error.message}`); renderEnquiries(); return; }
+      if (error) alert(`Failed: ${error.message}`);
+      renderEnquiries(); // re-render so the row moves to the correct section
     };
   });
 }
