@@ -1,0 +1,532 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>DevLink Dashboard</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Syne:wght@700;800&display=swap');
+    :root {
+      --bg:     #fafafa;
+      --panel:  #ffffff;
+      --border: #e5e5e5;
+      --text:   #171717;
+      --muted:  #a3a3a3;
+      --accent: #171717;
+      --danger: #e11d48;
+      --success:#059669;
+      --warning:#d97706;
+    }
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0; padding: 0;
+      background: var(--bg); color: var(--text);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      font-size: 14px; line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #e5e5e5; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #d4d4d4; }
+    header {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 16px 24px; border-bottom: 1px solid var(--border);
+      background: var(--panel); box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+    }
+    header h1 { margin: 0; font-size: 14px; font-weight: 800; letter-spacing: 0.02em; text-transform: uppercase; color: var(--text); }
+    header .who { color: var(--muted); font-size: 11px; font-weight: 600; }
+    nav {
+      display: flex; gap: 4px; padding: 8px 24px;
+      border-bottom: 1px solid var(--border);
+      background: var(--panel);
+    }
+    nav button {
+      background: transparent; border: 1px solid transparent; color: var(--muted);
+      padding: 7px 14px; border-radius: 8px; cursor: pointer; font-size: 12px; font-weight: 600;
+      transition: background .15s ease, color .15s ease;
+    }
+    nav button:hover { background: var(--bg); color: var(--text); }
+    nav button.active { background: var(--text); color: var(--panel); box-shadow: 0 1px 2px rgba(0,0,0,.08); }
+    main { padding: 24px; max-width: 1400px; margin: 0 auto; }
+    section { display: none; }
+    section.active { display: block; }
+    h2 { margin: 0 0 16px; font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+    table {
+      width: 100%; border-collapse: collapse; font-size: 13px;
+      background: var(--panel); border: 1px solid var(--border); border-radius: 12px;
+      overflow: hidden; box-shadow: 0 1px 2px rgba(0,0,0,0.02);
+    }
+    th, td {
+      text-align: left; padding: 12px 14px; border-bottom: 1px solid var(--border);
+      vertical-align: top;
+    }
+    th { background: #fafafa; color: var(--muted); font-weight: 700; font-size: 10px; text-transform: uppercase; letter-spacing: 0.06em; }
+    tr:last-child td { border-bottom: 0; }
+    tr:hover td { background: #fafafa; }
+    .btn {
+      background: var(--accent); color: #fff; border: 0;
+      padding: 7px 14px; border-radius: 8px; cursor: pointer; font-size: 12px; font-weight: 600;
+      transition: background .15s ease, transform .1s ease;
+    }
+    .btn:hover { background: #000; }
+    .btn:active { transform: scale(0.98); }
+    .btn.ghost   { background: transparent; border: 1px solid var(--border); color: var(--text); }
+    .btn.ghost:hover { background: var(--bg); }
+    .btn.danger  { background: var(--danger); }
+    .btn.danger:hover { background: #be123c; }
+    .btn.success { background: var(--success); }
+    .btn.success:hover { background: #047857; }
+    .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    .empty {
+      padding: 48px; text-align: center; color: var(--muted); font-size: 12px; font-style: italic;
+      background: var(--panel); border: 1px solid var(--border); border-radius: 12px;
+    }
+    .pill { display: inline-block; padding: 2px 9px; border-radius: 999px; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.03em; background: #f5f5f5; color: var(--muted); border: 1px solid var(--border); }
+    .pill.ok       { background: rgba(5, 150, 105, 0.08); color: var(--success); border-color: rgba(5, 150, 105, 0.25); }
+    .pill.pending  { background: rgba(217, 119, 6, 0.08); color: var(--warning); border-color: rgba(217, 119, 6, 0.25); }
+    .pill.danger   { background: rgba(225, 29, 72, 0.08); color: var(--danger); border-color: rgba(225, 29, 72, 0.25); }
+    .center {
+      position: relative; text-align: center; padding: 24px;
+      min-height: calc(100vh - 65px);
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      padding-bottom: 20vh;
+    }
+    .center::before {
+      content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+      width: 640px; height: 460px;
+      background: radial-gradient(ellipse, rgba(23,23,23,0.05) 0%, transparent 65%);
+      pointer-events: none; z-index: 0;
+    }
+    .login-card {
+      position: relative; z-index: 1;
+      width: 100%; max-width: 520px;
+      background: var(--panel); border: 1px solid var(--border); border-radius: 24px;
+      padding: 64px 56px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04), 0 24px 48px -24px rgba(0,0,0,0.14);
+    }
+    .login-badge {
+      display: inline-flex; align-items: center;
+      background: var(--bg); border: 1px solid var(--border); border-radius: 100px;
+      padding: 7px 16px; margin-bottom: 24px;
+      font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted);
+    }
+    .login-badge.warn { color: var(--warning); border-color: rgba(217,119,6,0.25); background: rgba(217,119,6,0.08); }
+    .center h2 { margin: 0 0 14px; font-family: 'Syne', sans-serif; font-size: 32px; font-weight: 800; text-transform: none; letter-spacing: -0.02em; color: var(--text); }
+    .center p { margin: 0 0 32px; color: var(--muted); font-size: 15px; line-height: 1.6; }
+    .center .btn {
+      width: 100%; padding: 16px 24px; font-size: 15px; font-weight: 700; border-radius: 100px;
+      letter-spacing: 0.01em; box-shadow: 0 1px 2px rgba(0,0,0,0.06);
+      transition: transform .2s ease, box-shadow .3s ease, background .15s ease;
+    }
+    .center .btn:hover { background: #000; transform: scale(1.02); box-shadow: 0 8px 24px rgba(0,0,0,0.16); }
+    code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; background: #f5f5f5; border: 1px solid var(--border); padding: 2px 6px; border-radius: 6px; color: #404040; }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>DevLink Dashboard</h1>
+  <div>
+    <span class="who" id="who"></span>
+    <button class="btn ghost" id="signout" style="display:none">Sign out</button>
+  </div>
+</header>
+
+<nav id="nav" style="display:none">
+  <button data-tab="projects"  class="active">Projects</button>
+  <button data-tab="enquiries">Enquiries</button>
+  <button data-tab="payouts">Payouts</button>
+  <button data-tab="ledger">Ledger</button>
+  <button data-tab="roster">Roster</button>
+</nav>
+
+<main id="main"></main>
+
+<script type="module">
+// ============================================================
+// CONFIGURATION
+// Fill these two before deploying. The anon key is safe to expose;
+// RLS is what protects data (only staff can read).
+// ============================================================
+const SUPABASE_URL      = 'https://qgqpwxitbdjoggiwtjra.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFncXB3eGl0YmRqb2dnaXd0anJhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUzNTM2NDYsImV4cCI6MjA5MDkyOTY0Nn0.7vXKc33-Ok-V7nOIoxw2gZ0LxjdrR0ZEp59Y1Cgej4w';
+// Where Discord OAuth should send the user back after sign-in. Must
+// match the URL you configured in Supabase Auth (Auth -> URL config).
+const REDIRECT_TO = window.location.origin + window.location.pathname;
+
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+const sb = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+// ── Money helpers ───────────────────────────────────────────
+const pounds = pence => `£${(Number(pence ?? 0) / 100).toFixed(2)}`;
+const fmt    = iso   => iso ? new Date(iso).toLocaleString() : '—';
+const escape = s     => (s ?? '').toString().replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+
+// ── Auth state ──────────────────────────────────────────────
+const $ = id => document.getElementById(id);
+let currentUser = null;
+let isStaff     = false;
+
+async function renderAuth() {
+  const { data: { session } } = await sb.auth.getSession();
+  if (!session) return renderLogin();
+  currentUser = session.user;
+
+  // The Discord user id is in user_metadata.provider_id.
+  const discordId = session.user.user_metadata?.provider_id
+                 ?? session.user.user_metadata?.sub;
+
+  const { data: staffRow } = await sb.from('staff_access')
+    .select('access_level, display_name')
+    .eq('discord_id', discordId)
+    .maybeSingle();
+
+  isStaff = !!staffRow;
+
+  if (!isStaff) return renderNotStaff();
+
+  $('who').textContent = `${staffRow.display_name ?? 'Staff'} (${staffRow.access_level})`;
+  $('signout').style.display = 'inline-block';
+
+  $('nav').style.display = 'flex';
+  switchTab('projects');
+}
+
+function renderLogin() {
+  $('main').innerHTML = `
+    <div class="center">
+      <div class="login-card">
+        <span class="login-badge">Staff Access</span>
+        <h2>Staff Dashboard</h2>
+        <p>Sign in with Discord to continue. Access is granted automatically to Director, PM, and DevLink roles.</p>
+        <button class="btn" id="signin">Sign in with Discord</button>
+      </div>
+    </div>`;
+  $('signin').onclick = async () => {
+    await sb.auth.signInWithOAuth({
+      provider: 'discord',
+      options:  { redirectTo: REDIRECT_TO },
+    });
+  };
+}
+
+function renderNotStaff() {
+  $('main').innerHTML = `
+    <div class="center">
+      <div class="login-card">
+        <span class="login-badge warn">Restricted</span>
+        <h2>You do not have access</h2>
+        <p>This Discord account isn't on the DevLink staff list. Access is limited to Director, PM, and DevLink roles — if that's you, sign in with the correct Discord account below.</p>
+        <button class="btn" id="switch-account">Sign in with another account</button>
+      </div>
+    </div>`;
+  $('switch-account').onclick = async () => {
+    await sb.auth.signOut();
+    await sb.auth.signInWithOAuth({
+      provider: 'discord',
+      options:  { redirectTo: REDIRECT_TO },
+    });
+  };
+}
+
+$('signout').onclick = async () => {
+  await sb.auth.signOut();
+  location.reload();
+};
+
+// ── Nav ─────────────────────────────────────────────────────
+document.querySelectorAll('nav button').forEach(b => {
+  b.onclick = () => switchTab(b.dataset.tab);
+});
+
+function switchTab(name) {
+  document.querySelectorAll('nav button').forEach(b => b.classList.toggle('active', b.dataset.tab === name));
+  ({ projects: renderProjects, enquiries: renderEnquiries, payouts: renderPayouts, ledger: renderLedger, roster: renderRoster }[name]?.());
+}
+
+// ── Projects ────────────────────────────────────────────────
+async function renderProjects() {
+  $('main').innerHTML = `<h2>Projects</h2><div id="projects-body">Loading…</div>`;
+
+  const { data: rows, error } = await sb
+    .from('dl_projects')
+    .select('id, title, client_id, status, budget_pence, created_at, closed_at')
+    .order('created_at', { ascending: false });
+
+  if (error) return $('projects-body').innerHTML = `<div class="empty">Error: ${escape(error.message)}</div>`;
+  if (!rows?.length) return $('projects-body').innerHTML = `<div class="empty">No projects yet.</div>`;
+
+  const clientIds = [...new Set(rows.map(r => r.client_id).filter(Boolean))];
+  const { data: people } = await sb.from('people').select('id, codename, display_name').in('id', clientIds);
+  const byId = new Map((people ?? []).map(p => [p.id, p]));
+
+  $('projects-body').innerHTML = `
+    <table>
+      <thead>
+        <tr><th>ID</th><th>Title</th><th>Client</th><th>Budget</th><th>Status</th><th>Created</th></tr>
+      </thead>
+      <tbody>
+        ${rows.map(r => {
+          const c = byId.get(r.client_id);
+          return `<tr>
+            <td><code>${escape(r.id)}</code></td>
+            <td>${escape(r.title)}</td>
+            <td>${escape(c?.codename ?? '—')} <span class="pill">${escape(c?.display_name ?? '')}</span></td>
+            <td>${r.budget_pence != null ? pounds(r.budget_pence) : '—'}</td>
+            <td><span class="pill">${escape(r.status)}</span></td>
+            <td>${fmt(r.created_at)}</td>
+          </tr>`;
+        }).join('')}
+      </tbody>
+    </table>`;
+}
+
+// ── Enquiries ───────────────────────────────────────────────
+async function renderEnquiries() {
+  $('main').innerHTML = `<h2>Enquiries</h2><div id="enquiries-body">Loading…</div>`;
+
+  const { data: rows, error } = await sb
+    .from('enquiries')
+    .select('id, source, project_name, budget_pence, status, created_at, client_id, converted_project_id')
+    .order('created_at', { ascending: false });
+
+  if (error) return $('enquiries-body').innerHTML = `<div class="empty">Error: ${escape(error.message)}</div>`;
+  if (!rows?.length) return $('enquiries-body').innerHTML = `<div class="empty">No enquiries yet.</div>`;
+
+  const clientIds = [...new Set(rows.map(r => r.client_id).filter(Boolean))];
+  const { data: people } = await sb.from('people').select('id, codename, display_name, email').in('id', clientIds);
+  const byId = new Map((people ?? []).map(p => [p.id, p]));
+
+  const statusPill = s => ({
+    new:         `<span class="pill pending">new</span>`,
+    progressing: `<span class="pill">progressing</span>`,
+    converted:   `<span class="pill ok">converted</span>`,
+    declined:    `<span class="pill danger">declined</span>`,
+  }[s] ?? `<span class="pill">${escape(s)}</span>`);
+
+  $('enquiries-body').innerHTML = `
+    <table>
+      <thead><tr><th>ID</th><th>Source</th><th>Project</th><th>Client</th><th>Budget</th><th>Status</th><th>Created</th><th></th></tr></thead>
+      <tbody>
+        ${rows.map(r => {
+          const c = byId.get(r.client_id);
+          return `<tr>
+            <td><code>${escape(r.id)}</code></td>
+            <td>${escape(r.source)}</td>
+            <td>${escape(r.project_name ?? '')}</td>
+            <td>${escape(c?.codename ?? '—')} ${c?.email ? `<span class="pill">${escape(c.email)}</span>` : ''}</td>
+            <td>${r.budget_pence != null ? pounds(r.budget_pence) : '—'}</td>
+            <td>${statusPill(r.status)}</td>
+            <td>${fmt(r.created_at)}</td>
+            <td>
+              ${r.status === 'new' ? `<button class="btn ghost" data-decline="${escape(r.id)}">Decline</button>` : ''}
+            </td>
+          </tr>`;
+        }).join('')}
+      </tbody>
+    </table>`;
+
+  document.querySelectorAll('[data-decline]').forEach(b => {
+    b.onclick = async () => {
+      const id = b.dataset.decline;
+      if (!confirm(`Decline enquiry ${id}?`)) return;
+      const { error } = await sb.from('enquiries').update({ status: 'declined' }).eq('id', id);
+      if (error) alert(`Failed: ${error.message}`);
+      renderEnquiries();
+    };
+  });
+}
+
+// ── Ledger ──────────────────────────────────────────────────
+async function renderLedger() {
+  $('main').innerHTML = `<h2>Ledger</h2><div id="ledger-body">Loading…</div>`;
+
+  const { data: rows, error } = await sb
+    .from('ledger')
+    .select('id, project_id, direction, amount_pence, method, reference, status, created_at, confirmed_at, confirmed_by')
+    .order('created_at', { ascending: false })
+    .limit(200);
+
+  if (error) return $('ledger-body').innerHTML = `<div class="empty">Error: ${escape(error.message)}</div>`;
+  if (!rows?.length) return $('ledger-body').innerHTML = `<div class="empty">No ledger entries yet.</div>`;
+
+  const pill = r => r.status === 'confirmed' ? `<span class="pill ok">confirmed</span>`
+                : r.status === 'pending'   ? `<span class="pill pending">pending</span>`
+                :                            `<span class="pill danger">${escape(r.status)}</span>`;
+
+  $('ledger-body').innerHTML = `
+    <table>
+      <thead><tr><th>Reference</th><th>Project</th><th>Direction</th><th>Amount</th><th>Status</th><th>Created</th><th>Confirmed</th><th></th></tr></thead>
+      <tbody>
+        ${rows.map(r => `<tr>
+          <td><code>${escape(r.reference)}</code></td>
+          <td>${escape(r.project_id ?? '—')}</td>
+          <td>${escape(r.direction)}</td>
+          <td>${pounds(r.amount_pence)}</td>
+          <td>${pill(r)}</td>
+          <td>${fmt(r.created_at)}</td>
+          <td>${r.confirmed_at ? `${fmt(r.confirmed_at)}<br><span class="pill">${escape(r.confirmed_by ?? '')}</span>` : '—'}</td>
+          <td>${r.status === 'pending' && r.direction === 'in' ? `<button class="btn success" data-confirm="${escape(r.reference)}">Confirm</button>` : ''}</td>
+        </tr>`).join('')}
+      </tbody>
+    </table>
+    <p style="color:var(--muted); font-size:12px; margin-top:16px;">
+      Confirming from the dashboard flips the ledger row but does not create allocation rows automatically.
+      Use the Discord "Confirm Payment Received" button on the project channel to trigger the full flow (ledger + allocations).
+    </p>`;
+
+  document.querySelectorAll('[data-confirm]').forEach(b => {
+    b.onclick = async () => {
+      const ref = b.dataset.confirm;
+      if (!confirm(`Confirm payment ${ref}?`)) return;
+      const { error } = await sb.from('ledger')
+        .update({ status: 'confirmed', confirmed_at: new Date().toISOString(), confirmed_by: currentUser?.user_metadata?.full_name ?? 'Dashboard' })
+        .eq('reference', ref);
+      if (error) alert(`Failed: ${error.message}`);
+      renderLedger();
+    };
+  });
+}
+
+// ── Payouts ─────────────────────────────────────────────────
+async function renderPayouts() {
+  $('main').innerHTML = `<h2>Payouts</h2><div id="payouts-body">Loading…</div>`;
+
+  // Fetch unpaid allocations with joined person.
+  const { data: allocs, error } = await sb
+    .from('allocations')
+    .select('id, party_id, role, amount_pence, people:party_id(codename, display_name, paypal_handle)')
+    .is('payout_ledger_id', null)
+    .not('party_id', 'is', null);
+
+  if (error) return $('payouts-body').innerHTML = `<div class="empty">Error: ${escape(error.message)}</div>`;
+  if (!allocs?.length) return $('payouts-body').innerHTML = `<div class="empty">Nothing outstanding. Everyone's paid.</div>`;
+
+  const byParty = new Map();
+  for (const a of allocs) {
+    if (!byParty.has(a.party_id)) {
+      byParty.set(a.party_id, {
+        partyId: a.party_id,
+        codename: a.people?.codename ?? '—',
+        displayName: a.people?.display_name ?? '',
+        paypal: a.people?.paypal_handle ?? '',
+        total: 0,
+        allocationIds: [],
+      });
+    }
+    const b = byParty.get(a.party_id);
+    b.total += a.amount_pence;
+    b.allocationIds.push(a.id);
+  }
+  const groups = [...byParty.values()].sort((a, b) => b.total - a.total);
+
+  $('payouts-body').innerHTML = `
+    <table>
+      <thead><tr><th>Codename</th><th>Name</th><th>PayPal</th><th>Allocations</th><th>Owed</th><th></th></tr></thead>
+      <tbody>
+        ${groups.map(g => `<tr>
+          <td><code>${escape(g.codename)}</code></td>
+          <td>${escape(g.displayName)}</td>
+          <td>${g.paypal ? `<code>${escape(g.paypal)}</code>` : '<span class="pill">not set</span>'}</td>
+          <td>${g.allocationIds.length}</td>
+          <td>${pounds(g.total)}</td>
+          <td><button class="btn success"
+                       data-pay="${escape(g.partyId)}"
+                       data-code="${escape(g.codename)}"
+                       data-amt="${g.total}"
+                       data-ids="${escape(g.allocationIds.join(','))}">Mark Paid</button></td>
+        </tr>`).join('')}
+      </tbody>
+    </table>
+    <p style="color:var(--muted); font-size:12px; margin-top:16px;">
+      "Mark Paid" inserts a confirmed outbound ledger row and links every allocation to it. Only mark
+      after you've actually sent the money in PayPal.
+    </p>`;
+
+  document.querySelectorAll('[data-pay]').forEach(b => {
+    b.onclick = () => markPaid({
+      partyId:       b.dataset.pay,
+      codename:      b.dataset.code,
+      amountPence:   Number(b.dataset.amt),
+      allocationIds: b.dataset.ids.split(','),
+    });
+  });
+}
+
+async function markPaid({ partyId, codename, amountPence, allocationIds }) {
+  const externalRef = prompt(`External payment reference for ${codename}? (PayPal transaction ID or a note)`);
+  if (!externalRef) return;
+
+  const reference = `PAYOUT-${codename}-${Date.now().toString(36).toUpperCase()}`;
+  const now = new Date().toISOString();
+
+  const { data: ledger, error: lErr } = await sb.from('ledger').insert({
+    project_id:   null,
+    direction:    'out',
+    party_id:     partyId,
+    amount_pence: amountPence,
+    method:       'paypal',
+    reference,
+    status:       'confirmed',
+    notes:        `Payout to ${codename}. External ref: ${externalRef}. Marked via dashboard.`,
+    confirmed_at: now,
+    confirmed_by: currentUser?.user_metadata?.full_name ?? 'Dashboard',
+  }).select().single();
+  if (lErr) return alert(`Ledger insert failed: ${lErr.message}`);
+
+  const { error: aErr } = await sb.from('allocations')
+    .update({ payout_ledger_id: ledger.id })
+    .in('id', allocationIds);
+  if (aErr) return alert(`Ledger row created but allocation update failed: ${aErr.message}`);
+
+  renderPayouts();
+}
+
+// ── Roster ──────────────────────────────────────────────────
+async function renderRoster() {
+  $('main').innerHTML = `<h2>Roster</h2><div id="roster-body">Loading…</div>`;
+
+  const { data: rows, error } = await sb
+    .from('people')
+    .select('id, codename, display_name, email, age_status, paypal_handle, notes, created_at')
+    .eq('kind', 'developer')
+    .order('codename', { ascending: true });
+
+  if (error) return $('roster-body').innerHTML = `<div class="empty">Error: ${escape(error.message)}</div>`;
+  if (!rows?.length) return $('roster-body').innerHTML = `<div class="empty">No developers on the roster.</div>`;
+
+  $('roster-body').innerHTML = `
+    <table>
+      <thead><tr><th>Codename</th><th>Name</th><th>Email</th><th>Age</th><th>PayPal</th><th></th></tr></thead>
+      <tbody>
+        ${rows.map(r => `<tr>
+          <td><code>${escape(r.codename ?? '')}</code></td>
+          <td>${escape(r.display_name ?? '')}</td>
+          <td>${escape(r.email ?? '')}</td>
+          <td>${escape(r.age_status ?? '')}</td>
+          <td>${r.paypal_handle ? `<code>${escape(r.paypal_handle)}</code>` : '<span class="pill">not set</span>'}</td>
+          <td><button class="btn ghost" data-editpp="${escape(r.id)}" data-cur="${escape(r.paypal_handle ?? '')}">Edit PayPal</button></td>
+        </tr>`).join('')}
+      </tbody>
+    </table>`;
+
+  document.querySelectorAll('[data-editpp]').forEach(b => {
+    b.onclick = async () => {
+      const cur = b.dataset.cur;
+      const next = prompt('PayPal handle (leave blank to clear):', cur);
+      if (next === null) return;
+      const { error } = await sb.from('people').update({ paypal_handle: next || null }).eq('id', b.dataset.editpp);
+      if (error) alert(`Failed: ${error.message}`);
+      renderRoster();
+    };
+  });
+}
+
+// Kick things off.
+renderAuth();
+sb.auth.onAuthStateChange(() => renderAuth());
+</script>
+
+</body>
+</html>

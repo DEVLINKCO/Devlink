@@ -106,6 +106,20 @@
       <input type="url" id="portfolio" name="portfolio_link" placeholder="https://... link to your portfolio or past work" maxlength="300"/>
       <div class="err-msg">Please enter a valid URL</div>
     </div>
+    <div class="form-group" id="g-age">
+      <label>Age <span class="req">*</span></label>
+      <div class="contact-method-toggle">
+        <label class="method-option">
+          <input type="radio" name="age_status" value="18_plus" required/>
+          <span>I am 18 or over</span>
+        </label>
+        <label class="method-option">
+          <input type="radio" name="age_status" value="under_18_guardian"/>
+          <span>I am under 18 (guardian consenting)</span>
+        </label>
+      </div>
+      <div class="err-msg">Please select an option</div>
+    </div>
 
     <hr class="section-divider"/>
 
@@ -226,8 +240,8 @@
 <script data-cfasync="false">
 window.onload = function() {
   var APPS_SCRIPT_URL = 'https://script.google.com/macros/s/PASTE_URL_HERE/exec';
+  var INTAKE_URL = 'https://qgqpwxitbdjoggiwtjra.supabase.co/functions/v1/intake';
   var PUBLIC_KEY = 'iCCi3WGf2aQ8yeT1q';
-  var TEMPLATE_TO_YOU = 'template_2jg1lt4';
   var TEMPLATE_AUTOREPLY = 'template_5jyjxy9';
   var SERVICE_ID = 'service_b2nnw1e';
   if (window.emailjs) { emailjs.init(PUBLIC_KEY); }
@@ -328,6 +342,16 @@ window.onload = function() {
   document.getElementById('portfolio').addEventListener('input', function() { if (isValidUrl(this.value)) { clrErr('g-portfolio'); } });
   document.getElementById('experience').addEventListener('change', function() { if (this.value) { clrErr('g-exp'); } });
   document.getElementById('availability').addEventListener('change', function() { if (this.value) { clrErr('g-avail'); } });
+  var ageRadios = document.querySelectorAll('[name="age_status"]');
+  for (var ar = 0; ar < ageRadios.length; ar++) {
+    ageRadios[ar].addEventListener('change', function() { clrErr('g-age'); });
+  }
+
+  function getAgeStatus() {
+    var radios = document.querySelectorAll('[name="age_status"]');
+    for (var i = 0; i < radios.length; i++) { if (radios[i].checked) { return radios[i].value; } }
+    return '';
+  }
 
   function getContactMethod() {
     var radios = document.querySelectorAll('[name="contact_method"]');
@@ -348,6 +372,7 @@ window.onload = function() {
     if (!document.getElementById('experience').value) { setErr('g-exp'); ok = false; }
     if (!document.getElementById('aboutYou').value.trim()) { setErr('g-about'); ok = false; }
     if (!document.getElementById('availability').value) { setErr('g-avail'); ok = false; }
+    if (!getAgeStatus()) { setErr('g-age'); ok = false; }
     return ok;
   }
 
@@ -396,15 +421,45 @@ window.onload = function() {
       skills: sanitize(selectedSkills.join(', ')) || '',
       experience: sanitize(document.getElementById('experience').value),
       availability: sanitize(document.getElementById('availability').value),
+      rate_type: sanitize(document.getElementById('rateType').value),
       rate_project: sanitize(document.getElementById('rateProject').value) || '',
       rate_hourly: sanitize(document.getElementById('rateHourly').value) || '',
+      age_status: getAgeStatus(),
       about: sanitize(document.getElementById('aboutYou').value)
+    };
+    var payload = {
+      kind: 'apply',
+      hp: document.querySelector('[name="website"]').value,
+      renderedAt: formLoadTime,
+      referrer: document.referrer || null,
+      displayName: sheetData.name,
+      email: sheetData.email,
+      contactMethod: sheetData.contact_method,
+      discord: sheetData.discord,
+      robloxUsername: sheetData.roblox_username,
+      portfolio: sheetData.portfolio,
+      skills: sheetData.skills,
+      experience: sheetData.experience,
+      availability: sheetData.availability,
+      rateType: sheetData.rate_type,
+      rateProject: sheetData.rate_project,
+      rateHourly: sheetData.rate_hourly,
+      bio: sheetData.about,
+      ageStatus: sheetData.age_status
     };
     submitBtn.disabled = true;
     submitBtn.classList.add('loading');
     btnLabel.textContent = 'Sending...';
     successMsg.classList.remove('show');
-    emailjs.sendForm(SERVICE_ID, TEMPLATE_TO_YOU, form).then(function() {
+    fetch(INTAKE_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    }).then(function(res) {
+      return res.json().then(function(data) {
+        if (!res.ok || !data.success) { throw new Error((data && data.error) || 'Submission failed'); }
+      });
+    }).then(function() {
       return emailjs.sendForm(SERVICE_ID, TEMPLATE_AUTOREPLY, form);
     }).then(function() {
       fetch(APPS_SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(sheetData) }).catch(function(err) { console.error(err); });
