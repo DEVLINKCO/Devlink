@@ -201,7 +201,6 @@
 
 <script data-cfasync="false">
 window.onload = function() {
-  var APPS_SCRIPT_URL = 'https://script.google.com/macros/s/PASTE_URL_HERE/exec';
   var INTAKE_URL = 'https://qgqpwxitbdjoggiwtjra.supabase.co/functions/v1/intake';
   var SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFncXB3eGl0YmRqb2dnaXd0anJhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUzNTM2NDYsImV4cCI6MjA5MDkyOTY0Nn0.7vXKc33-Ok-V7nOIoxw2gZ0LxjdrR0ZEp59Y1Cgej4w';
   var PUBLIC_KEY = 'iCCi3WGf2aQ8yeT1q';
@@ -297,6 +296,32 @@ window.onload = function() {
     return ok;
   }
 
+  // Render the on-page success state, including the claim code, so it is
+  // never lost if the confirmation email fails. Built with textContent so a
+  // code value can never inject markup.
+  function showEnquirySuccess(code) {
+    while (successMsg.firstChild) { successMsg.removeChild(successMsg.firstChild); }
+    var intro = document.createElement('div');
+    intro.textContent = 'Your enquiry has been received. We will review your brief and get back to you within 24 hours.';
+    successMsg.appendChild(intro);
+    if (code) {
+      var box = document.createElement('div');
+      box.style.cssText = 'margin-top:14px;padding:14px 16px;border:1px solid rgba(128,128,128,0.28);border-radius:10px;';
+      var lbl = document.createElement('div');
+      lbl.style.cssText = 'font-size:11px;letter-spacing:0.12em;text-transform:uppercase;opacity:0.7;margin-bottom:6px;';
+      lbl.textContent = 'Your claim code';
+      var val = document.createElement('div');
+      val.style.cssText = 'font-family:ui-monospace,Menlo,monospace;font-size:20px;font-weight:700;letter-spacing:0.04em;';
+      val.textContent = code;
+      var hint = document.createElement('div');
+      hint.style.cssText = 'margin-top:8px;font-size:13px;opacity:0.85;';
+      hint.textContent = 'Save this. Join our Discord and type /claim ' + code + ' to open your project. We have also emailed it to you.';
+      box.appendChild(lbl); box.appendChild(val); box.appendChild(hint);
+      successMsg.appendChild(box);
+    }
+    successMsg.classList.add('show');
+  }
+
   form.addEventListener('submit', function(e) {
     e.preventDefault();
     if (Date.now() - formLoadTime < 3000) { toast('Enquiry submitted successfully.'); return; }
@@ -371,19 +396,24 @@ window.onload = function() {
         return data;
       });
     }).then(function(data) {
-      // Carry the claim code into the auto-reply. sendForm sends every field
-      // in the form, so filling the hidden input is enough.
+      // The claim code is the client's key to turning this enquiry into a
+      // project. Fill the hidden fields the email template reads and fire the
+      // confirmation email as a best-effort side effect, then show the code
+      // ON-PAGE. The enquiry is already recorded server-side at this point, so
+      // if the email fails to send the client must still walk away with the
+      // code — otherwise their enquiry can never be claimed.
       var code = (data && data.claimCode) ? data.claimCode : '';
       var codeField = document.getElementById('claimCode');
       var lineField = document.getElementById('claimLine');
       if (codeField) { codeField.value = code; }
       if (lineField) { lineField.value = code ? ('Once you are in, type: /claim ' + code) : ''; }
-      return emailjs.sendForm(SERVICE_ID, TEMPLATE_AUTOREPLY, form);
-    }).then(function() {
-      fetch(APPS_SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(sheetData) }).catch(function(err) { console.error(err); });
+      if (window.emailjs) {
+        emailjs.sendForm(SERVICE_ID, TEMPLATE_AUTOREPLY, form)
+          .catch(function(err) { console.error('Auto-reply email failed (non-fatal):', err); });
+      }
+      showEnquirySuccess(code);
       lastSubmit = Date.now();
       submitCount++;
-      successMsg.classList.add('show');
       successMsg.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
       toast('Enquiry received. We will be in touch within 24 hours.');
       form.reset();
