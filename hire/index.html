@@ -56,6 +56,10 @@
          client receives their claim code in the "we've got your enquiry" email.
          They quote it in Discord with /claim to link their account. -->
     <input type="hidden" name="claim_code" id="claimCode"/>
+    <!-- The whole sentence, or empty. EmailJS has no conditionals, so putting
+         {{claim_line}} in the template makes the instruction vanish entirely
+         when there is no code rather than printing a dangling "/claim". -->
+    <input type="hidden" name="claim_line" id="claimLine"/>
 
     <div class="form-section-header">
       <div class="form-section-num">1</div>
@@ -369,8 +373,11 @@ window.onload = function() {
     }).then(function(data) {
       // Carry the claim code into the auto-reply. sendForm sends every field
       // in the form, so filling the hidden input is enough.
+      var code = (data && data.claimCode) ? data.claimCode : '';
       var codeField = document.getElementById('claimCode');
-      if (codeField) { codeField.value = (data && data.claimCode) ? data.claimCode : ''; }
+      var lineField = document.getElementById('claimLine');
+      if (codeField) { codeField.value = code; }
+      if (lineField) { lineField.value = code ? ('Once you are in, type: /claim ' + code) : ''; }
       return emailjs.sendForm(SERVICE_ID, TEMPLATE_AUTOREPLY, form);
     }).then(function() {
       fetch(APPS_SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(sheetData) }).catch(function(err) { console.error(err); });
