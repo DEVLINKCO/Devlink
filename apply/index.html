@@ -102,9 +102,9 @@
       <div class="err-msg">Please enter your Roblox username</div>
     </div>
     <div class="form-group" id="g-portfolio">
-      <label for="portfolio">Portfolio / Work Examples</label>
+      <label for="portfolio">Portfolio / Work Examples <span class="req">*</span></label>
       <input type="url" id="portfolio" name="portfolio_link" placeholder="https://... link to your portfolio or past work" maxlength="300"/>
-      <div class="err-msg">Please enter a valid URL</div>
+      <div class="err-msg">Please enter a link to your portfolio or work examples</div>
     </div>
     <div class="form-group" id="g-age">
       <label>Age <span class="req">*</span></label>
@@ -340,7 +340,7 @@ window.onload = function() {
   document.getElementById('devEmail').addEventListener('input', function() { if (isValidEmail(this.value)) { clrErr('g-email'); } });
   document.getElementById('discordUser').addEventListener('input', function() { if (this.value.trim()) { clrErr('g-discord'); } });
   document.getElementById('robloxUser').addEventListener('input', function() { if (this.value.trim()) { clrErr('g-roblox'); } });
-  document.getElementById('portfolio').addEventListener('input', function() { if (isValidUrl(this.value)) { clrErr('g-portfolio'); } });
+  document.getElementById('portfolio').addEventListener('input', function() { if (this.value.trim() && isValidUrl(this.value)) { clrErr('g-portfolio'); } });
   document.getElementById('experience').addEventListener('change', function() { if (this.value) { clrErr('g-exp'); } });
   document.getElementById('availability').addEventListener('change', function() { if (this.value) { clrErr('g-avail'); } });
   var ageRadios = document.querySelectorAll('[name="age_status"]');
@@ -368,7 +368,8 @@ window.onload = function() {
     if (!isValidEmail(document.getElementById('devEmail').value)) { setErr('g-email'); ok = false; }
     if (getContactMethod() === 'Discord' && !document.getElementById('discordUser').value.trim()) { setErr('g-discord'); ok = false; }
     if (!document.getElementById('robloxUser').value.trim()) { setErr('g-roblox'); ok = false; }
-    if (!isValidUrl(document.getElementById('portfolio').value)) { setErr('g-portfolio'); ok = false; }
+    var portfolioVal = document.getElementById('portfolio').value;
+    if (!portfolioVal.trim() || !isValidUrl(portfolioVal)) { setErr('g-portfolio'); ok = false; }
     if (!selectedSkills.length) { document.getElementById('skillsSection').classList.add('has-error'); ok = false; }
     if (!document.getElementById('experience').value) { setErr('g-exp'); ok = false; }
     if (!document.getElementById('aboutYou').value.trim()) { setErr('g-about'); ok = false; }
@@ -439,7 +440,7 @@ window.onload = function() {
       discord: sheetData.discord,
       robloxUsername: sheetData.roblox_username,
       portfolio: sheetData.portfolio,
-      skills: sheetData.skills,
+      skills: selectedSkills,
       experience: sheetData.experience,
       availability: sheetData.availability,
       rateType: sheetData.rate_type,
