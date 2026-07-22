@@ -22,7 +22,7 @@ const ALLOWED_ORIGIN = 'https://devlinkco.online';
 const CORS = {
   'Access-Control-Allow-Origin':  ALLOWED_ORIGIN,
   'Access-Control-Allow-Methods': 'POST, OPTIONS',
-  'Access-Control-Allow-Headers': 'Content-Type',
+  'Access-Control-Allow-Headers': 'Content-Type, Authorization, apikey, x-client-info',
 };
 
 function json(body: unknown, status = 200) {
