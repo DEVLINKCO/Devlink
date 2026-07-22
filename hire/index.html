@@ -52,6 +52,10 @@
     <input type="hidden" name="sender_name" id="senderName"/>
     <input type="hidden" name="reply_email" id="replyEmail"/>
     <input type="hidden" name="form_details" id="formDetails"/>
+    <!-- Filled from the intake response before the auto-reply is sent, so the
+         client receives their claim code in the "we've got your enquiry" email.
+         They quote it in Discord with /claim to link their account. -->
+    <input type="hidden" name="claim_code" id="claimCode"/>
 
     <div class="form-section-header">
       <div class="form-section-num">1</div>
@@ -360,8 +364,13 @@ window.onload = function() {
     }).then(function(res) {
       return res.json().then(function(data) {
         if (!res.ok || !data.success) { throw new Error((data && data.error) || 'Submission failed'); }
+        return data;
       });
-    }).then(function() {
+    }).then(function(data) {
+      // Carry the claim code into the auto-reply. sendForm sends every field
+      // in the form, so filling the hidden input is enough.
+      var codeField = document.getElementById('claimCode');
+      if (codeField) { codeField.value = (data && data.claimCode) ? data.claimCode : ''; }
       return emailjs.sendForm(SERVICE_ID, TEMPLATE_AUTOREPLY, form);
     }).then(function() {
       fetch(APPS_SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(sheetData) }).catch(function(err) { console.error(err); });
