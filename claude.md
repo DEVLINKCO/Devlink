@@ -52,6 +52,24 @@ Both forms send two emails per submission using `.then().then()` chaining.
 
 These rules exist because **Cloudflare proxies the live domain and actively interferes with JavaScript** if they are not followed. Breaking any of these will cause silent failures on the live site.
 
+> **Update (2026-07-22): Cloudflare Rocket Loader has been turned off and the live site
+> verified working without it.** Rocket Loader was the actual cause of the mangled scripts
+> these rules were written against.
+>
+> What that means in practice:
+>
+> - **The existing pages stay ES5.** `index.html`, `/hire`, `/apply`, `/legal` and the rest
+>   work as they are. There is no reason to rewrite working code, and every rewrite is a
+>   chance to break a live form.
+> - **New code may use modern JavaScript.** `/dashboard` already does — it imports
+>   `supabase-js` as an ES module and has run in production since. That is the proof.
+> - **Keep `data-cfasync="false"` on script tags anyway.** It costs nothing and protects
+>   against Rocket Loader being switched back on by accident.
+>
+> The rules below are kept because they are still correct for the pages they describe, and
+> because the bugs behind them were real. Treat them as "how the existing forms are built",
+> not "the only way anything here can ever be built".
+
 ### 1. ES5 JavaScript Only
 ```js
 // CORRECT
