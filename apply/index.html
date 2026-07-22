@@ -241,6 +241,7 @@
 window.onload = function() {
   var APPS_SCRIPT_URL = 'https://script.google.com/macros/s/PASTE_URL_HERE/exec';
   var INTAKE_URL = 'https://qgqpwxitbdjoggiwtjra.supabase.co/functions/v1/intake';
+  var SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFncXB3eGl0YmRqb2dnaXd0anJhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUzNTM2NDYsImV4cCI6MjA5MDkyOTY0Nn0.7vXKc33-Ok-V7nOIoxw2gZ0LxjdrR0ZEp59Y1Cgej4w';
   var PUBLIC_KEY = 'iCCi3WGf2aQ8yeT1q';
   var TEMPLATE_AUTOREPLY = 'template_5jyjxy9';
   var SERVICE_ID = 'service_b2nnw1e';
@@ -453,7 +454,7 @@ window.onload = function() {
     successMsg.classList.remove('show');
     fetch(INTAKE_URL, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + SUPABASE_ANON_KEY, 'apikey': SUPABASE_ANON_KEY },
       body: JSON.stringify(payload)
     }).then(function(res) {
       return res.json().then(function(data) {
