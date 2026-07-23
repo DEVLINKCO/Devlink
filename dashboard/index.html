@@ -506,6 +506,10 @@ document.getElementById('themeToggle').onclick = () => {
 const $ = id => document.getElementById(id);
 let currentUser = null;
 let isStaff     = false;
+let isFinance   = false;
+// Access levels allowed to see money + hiring, and the tabs gated behind them.
+const FINANCE_LEVELS    = ['director', 'devlink'];
+const FINANCE_ONLY_TABS = ['payouts', 'ledger', 'applications', 'roster'];
 
 async function renderAuth() {
   const { data: { session } } = await sb.auth.getSession();
@@ -527,6 +531,14 @@ async function renderAuth() {
 
   $('who').textContent = `${staffRow.display_name ?? 'Staff'} (${staffRow.access_level})`;
   $('signout').style.display = 'inline-block';
+
+  // Money and hiring tabs are Director/owner only. RLS enforces this on the
+  // server (schema_phase8a_finance_tier.sql); hiding the tabs just keeps PMs
+  // from opening ones that would come back empty.
+  isFinance = FINANCE_LEVELS.includes(staffRow.access_level);
+  document.querySelectorAll('nav button').forEach(b => {
+    if (FINANCE_ONLY_TABS.includes(b.dataset.tab)) b.style.display = isFinance ? '' : 'none';
+  });
 
   $('nav').style.display = 'flex';
   switchTab('projects');
@@ -584,6 +596,8 @@ document.querySelectorAll('nav button').forEach(b => {
 });
 
 function switchTab(name) {
+  // Never open a Director-only tab for a PM, even if the button is reached.
+  if (FINANCE_ONLY_TABS.includes(name) && !isFinance) name = 'projects';
   document.querySelectorAll('nav button').forEach(b => b.classList.toggle('active', b.dataset.tab === name));
   ({ projects: renderProjects, enquiries: renderEnquiries, applications: renderApplications, payouts: renderPayouts, ledger: renderLedger, roster: renderRoster }[name]?.());
 }
