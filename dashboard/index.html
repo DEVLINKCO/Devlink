@@ -768,6 +768,14 @@ async function loadProjects() {
 const payChip = pay => pay === 'paid' ? '<span class="chip paid dot">Paid</span>'
   : pay === 'partial' ? '<span class="chip partial dot">Part-paid</span>'
   : pay === 'unpaid' ? '<span class="chip unpaid dot">Unpaid</span>' : '';
+
+// Colour a dev availability status: green = accepting, amber = limited, red = not.
+function availChip(status) {
+  const s = (status || 'accepting').toLowerCase();
+  const cls = (s.includes('not') || s.includes('un') || s.includes('closed')) ? 'unpaid'
+            : (s.includes('limit') || s.includes('busy') || s.includes('partial')) ? 'partial' : 'paid';
+  return `<span class="chip ${cls} dot">${escape(status || 'accepting')}</span>`;
+}
 function deadlineChip(p) {
   if (p.daysLeft == null) return '';
   if (p.overdue) return `<span class="chip overdue">Overdue ${Math.abs(p.daysLeft)}d</span>`;
@@ -820,10 +828,31 @@ async function renderHome() {
       <span class="spacer"></span>${flags}</div>`;
   };
 
+  // Team availability — PM workload and developer availability (both staff-visible).
+  const [{ data: staffLoad }, { data: devs }] = await Promise.all([
+    sb.rpc('staff_workload'), sb.rpc('dev_availability'),
+  ]);
+  const teamRow = (title, sub, right) =>
+    `<div class="attn-row"><div><div class="ar-title">${title}</div><div class="ar-id">${sub}</div></div>
+      <span class="spacer"></span>${right}</div>`;
+  const pmList = (staffLoad ?? []).length
+    ? (staffLoad ?? []).map(s => teamRow(escape(s.display_name ?? s.discord_id), escape(s.access_level),
+        `<span class="chip">${s.active_projects} active</span>`)).join('')
+    : '<div class="empty">No staff.</div>';
+  const devList = (devs ?? []).length
+    ? (devs ?? []).map(d => teamRow(escape(d.name ?? d.discord_id), 'developer',
+        `${availChip(d.availability_status)}<span class="chip">${d.active_projects} active</span>`)).join('')
+    : '<div class="empty">No developers.</div>';
+
   $('home-body').innerHTML = `
     <div class="stat-grid">${tiles}</div>
     <h2>Needs attention</h2>
-    ${attn.length ? attn.map(attnRow).join('') : `<div class="empty">Nothing needs attention. Nice.</div>`}`;
+    ${attn.length ? attn.map(attnRow).join('') : `<div class="empty">Nothing needs attention. Nice.</div>`}
+    <h2>Team availability</h2>
+    <div class="card-grid">
+      <div><h2 style="margin-bottom:10px;">PMs &amp; staff</h2>${pmList}</div>
+      <div><h2 style="margin-bottom:10px;">Developers</h2>${devList}</div>
+    </div>`;
   document.querySelectorAll('#home-body [data-go]').forEach(t => t.onclick = () => switchTab(t.dataset.go));
 }
 
@@ -832,9 +861,8 @@ let projectsScope = 'mine';
 
 function projectCard(p) {
   const devLabel = p.devs.length ? p.devs.map(codenameOf).join(', ') : '—';
-  const assignBtn = p.mine
-    ? `<button class="linkbtn" data-release="${escape(p.id)}">Release</button>`
-    : `<button class="btn ghost" data-claim="${escape(p.id)}">Assign to me</button>`;
+  const actions = `<button class="btn ghost" data-assign="${escape(p.id)}">Assign PM</button>`
+    + (p.mine ? `<button class="linkbtn" data-release="${escape(p.id)}">Release</button>` : '');
   return `<div class="proj-card ${p.mine ? 'mine' : ''}">
     <div class="pc-top"><span class="pc-id">${escape(p.id)}</span><span class="pill">${escape(p.status)}</span></div>
     <div class="pc-title">${escape(p.title)}</div>
@@ -849,7 +877,7 @@ function projectCard(p) {
       ${payChip(p.pay)}${deadlineChip(p)}
       ${p.stale ? `<span class="chip stale">Stalled ${p.staleDays}d</span>` : ''}
     </div>
-    <div class="pc-foot"><span class="spacer"></span>${assignBtn}</div>
+    <div class="pc-foot"><span class="spacer"></span>${actions}</div>
   </div>`;
 }
 
@@ -876,18 +904,51 @@ async function renderProjects() {
             ? 'No projects assigned to you yet. Switch to All and use “Assign to me”.'
             : 'No projects yet.'}</div>`}`;
     document.querySelectorAll('#projects-body [data-scope]').forEach(b => b.onclick = () => { projectsScope = b.dataset.scope; paint(); });
-    document.querySelectorAll('#projects-body [data-claim]').forEach(b => b.onclick = () => claimProject(b.dataset.claim));
+    document.querySelectorAll('#projects-body [data-assign]').forEach(b => b.onclick = () => openAssignModal(b.dataset.assign));
     document.querySelectorAll('#projects-body [data-release]').forEach(b => b.onclick = () => releaseProject(b.dataset.release));
   };
   paint();
 }
 
-async function claimProject(id) {
-  const { error } = await sb.rpc('claim_project_as_pm', { p_project_id: id });
+// targetDiscord null = assign myself (any staff); a discord id = assign that
+// person (Director/owner only — enforced by the assign_pm RPC).
+async function assignPm(projectId, targetDiscord) {
+  const { error } = await sb.rpc('assign_pm', { p_project_id: projectId, p_target_discord_id: targetDiscord ?? null });
   if (error) return alert(`Could not assign: ${error.message}`);
   myPersonIdLoaded = false;   // a people row may have just been created for us
+  document.querySelector('.modal-overlay')?.remove();
   renderProjects();
 }
+
+async function openAssignModal(projectId) {
+  // PMs can only assign themselves — no picker needed.
+  if (!isFinance) return assignPm(projectId, null);
+
+  const { data: staff } = await sb.rpc('staff_workload');
+  const overlay = document.createElement('div');
+  overlay.className = 'modal-overlay';
+  overlay.innerHTML = `
+    <div class="modal-card">
+      <h3>Assign PM</h3>
+      <div class="modal-actions" style="justify-content:flex-start;margin:0 0 14px;">
+        <button class="btn" id="assign-self">Assign to me</button>
+      </div>
+      <div id="assign-list">${(staff ?? []).length ? (staff ?? []).map(s => `
+        <div class="attn-row">
+          <div><div class="ar-title">${escape(s.display_name ?? s.discord_id)}</div>
+            <div class="ar-id">${escape(s.access_level)} · ${s.active_projects} active</div></div>
+          <span class="spacer"></span>
+          <button class="btn ghost" data-assignto="${escape(s.discord_id)}">Assign</button>
+        </div>`).join('') : '<div class="empty">No staff found.</div>'}</div>
+      <div class="modal-actions"><button class="btn ghost" id="assign-cancel">Close</button></div>
+    </div>`;
+  document.body.appendChild(overlay);
+  overlay.addEventListener('click', e => { if (e.target === overlay) overlay.remove(); });
+  overlay.querySelector('#assign-cancel').onclick = () => overlay.remove();
+  overlay.querySelector('#assign-self').onclick = () => assignPm(projectId, null);
+  overlay.querySelectorAll('[data-assignto]').forEach(b => b.onclick = () => assignPm(projectId, b.dataset.assignto));
+}
+
 async function releaseProject(id) {
   if (!confirm('Release this project (clear its PM)?')) return;
   const { error } = await sb.rpc('release_project_pm', { p_project_id: id });
