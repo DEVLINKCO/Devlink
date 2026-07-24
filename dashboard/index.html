@@ -861,7 +861,9 @@ let projectsScope = 'mine';
 
 function projectCard(p) {
   const devLabel = p.devs.length ? p.devs.map(codenameOf).join(', ') : '—';
-  const actions = `<button class="btn ghost" data-assign="${escape(p.id)}">Assign PM</button>`
+  const assigned = !!p.pm;
+  const actions =
+    `<button class="btn ${assigned ? 'success' : 'ghost'}" data-assign="${escape(p.id)}">${assigned ? 'Reassign PM' : 'Assign PM'}</button>`
     + (p.mine ? `<button class="linkbtn" data-release="${escape(p.id)}">Release</button>` : '');
   return `<div class="proj-card ${p.mine ? 'mine' : ''}">
     <div class="pc-top"><span class="pc-id">${escape(p.id)}</span><span class="pill">${escape(p.status)}</span></div>
