@@ -343,6 +343,93 @@
     .detail-grid dd a { color: var(--link); }
     .detail-grid .wide { grid-column: 1 / -1; }
 
+    /* ── Phase 8b: overview + project cards ── */
+    .toolbar { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin: 0 0 18px; }
+    .toolbar .spacer { flex: 1; }
+    .seg { display: inline-flex; border: 1px solid var(--border); border-radius: 100px; overflow: hidden; }
+    .seg button {
+      background: transparent; border: 0; color: var(--muted); font: inherit; font-size: 12px; font-weight: 600;
+      padding: 7px 15px; cursor: pointer; transition: background .2s, color .2s;
+    }
+    .seg button.on { background: var(--accent); color: var(--bg); }
+    .seg button:not(.on):hover { color: var(--text); background: var(--card-hover); }
+
+    .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 14px; margin: 0 0 30px; }
+    .stat-tile {
+      position: relative; padding: 18px 18px 16px; border-radius: 14px;
+      background: var(--glass-bg); border: 1px solid var(--glass-border);
+      backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+      box-shadow: 0 8px 40px rgba(0,0,0,0.08);
+    }
+    .stat-tile .stat-value { font-family: 'Syne', sans-serif; font-size: 2rem; font-weight: 800; line-height: 1; letter-spacing: -0.02em; }
+    .stat-tile .stat-label { margin-top: 8px; font-size: 10px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+    .stat-tile.warn  .stat-value { color: var(--warning); }
+    .stat-tile.rose  .stat-value { color: var(--danger); }
+    .stat-tile.green .stat-value { color: var(--success); }
+    .stat-tile.click { cursor: pointer; transition: border-color .2s, box-shadow .3s, transform .2s; }
+    .stat-tile.click:hover { border-color: var(--muted); box-shadow: 0 10px 44px rgba(0,0,0,0.14); transform: translateY(-1px); }
+
+    .card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; }
+    .proj-card {
+      display: flex; flex-direction: column; gap: 12px; padding: 18px;
+      border-radius: 16px; background: var(--glass-bg); border: 1px solid var(--glass-border);
+      backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+      box-shadow: 0 8px 40px rgba(0,0,0,0.08); transition: border-color .2s, box-shadow .3s;
+    }
+    .proj-card:hover { border-color: var(--muted); box-shadow: 0 12px 48px rgba(0,0,0,0.14); }
+    .proj-card.mine { border-color: var(--accent-strong); }
+    .proj-card .pc-top { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; }
+    .proj-card .pc-id { font-family: ui-monospace, Menlo, monospace; font-size: 11px; color: var(--muted); }
+    .proj-card .pc-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1.05rem; letter-spacing: -0.01em; margin: 2px 0 0; }
+    .proj-card .pc-meta { display: flex; flex-direction: column; gap: 5px; font-size: 12.5px; color: var(--muted); }
+    .proj-card .pc-meta b { color: var(--text); font-weight: 600; }
+    .proj-card .pc-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+    .proj-card .pc-foot { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 2px; }
+    .proj-card .pc-foot .spacer { flex: 1; }
+
+    .chip {
+      display: inline-flex; align-items: center; gap: 5px; padding: 3px 9px; border-radius: 999px;
+      font-size: 10.5px; font-weight: 600; letter-spacing: 0.03em;
+      background: var(--bg3); color: var(--muted); border: 1px solid var(--border); white-space: nowrap;
+    }
+    .chip.paid    { background: rgba(52,211,153,0.10); color: var(--success); border-color: rgba(52,211,153,0.30); }
+    .chip.partial { background: rgba(251,192,45,0.10); color: var(--warning); border-color: rgba(251,192,45,0.30); }
+    .chip.unpaid  { background: rgba(239,83,80,0.10);  color: var(--danger);  border-color: rgba(239,83,80,0.30); }
+    .chip.due     { background: rgba(251,192,45,0.10); color: var(--warning); border-color: rgba(251,192,45,0.30); }
+    .chip.overdue { background: rgba(239,83,80,0.10);  color: var(--danger);  border-color: rgba(239,83,80,0.30); }
+    .chip.stale   { background: rgba(239,83,80,0.08);  color: var(--danger);  border-color: rgba(239,83,80,0.25); }
+    .chip.mine    { background: var(--accent-dim); color: var(--text); border-color: var(--accent-strong); }
+    .chip.dot::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: currentColor; display: inline-block; }
+
+    .attn-row {
+      display: flex; align-items: center; gap: 10px; padding: 12px 14px; border-radius: 12px;
+      background: var(--glass-bg); border: 1px solid var(--glass-border); margin-bottom: 8px;
+    }
+    .attn-row .ar-title { font-weight: 600; color: var(--text); }
+    .attn-row .ar-id { font-family: ui-monospace, Menlo, monospace; font-size: 11px; color: var(--muted); }
+    .attn-row .spacer { flex: 1; }
+
+    /* Modal (create / edit enquiry) */
+    .modal-overlay {
+      position: fixed; inset: 0; z-index: 200; display: flex; align-items: center; justify-content: center;
+      padding: 20px; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
+    }
+    .modal-card {
+      width: 100%; max-width: 520px; max-height: 90vh; overflow-y: auto;
+      background: var(--bg2); border: 1px solid var(--glass-border); border-radius: 16px;
+      padding: 24px; box-shadow: 0 24px 60px -24px rgba(0,0,0,0.6);
+    }
+    .modal-card h3 { margin: 0 0 18px; font-family: 'Syne', sans-serif; font-size: 1.2rem; font-weight: 800; }
+    .modal-field { margin-bottom: 14px; }
+    .modal-field label { display: block; font-size: 10px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
+    .modal-field input, .modal-field textarea {
+      width: 100%; background: var(--input-bg); border: 1px solid var(--border); border-radius: 8px;
+      padding: 9px 11px; color: var(--text); font: inherit; font-size: 13px;
+    }
+    .modal-field input:focus, .modal-field textarea:focus { outline: none; border-color: var(--accent); }
+    .modal-field textarea { min-height: 120px; resize: vertical; }
+    .modal-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 6px; }
+
     /* ── Responsive ── */
     @media (max-width: 768px) {
       header { padding: 12px 16px; }
@@ -378,7 +465,8 @@
 </header>
 
 <nav id="nav" style="display:none">
-  <button data-tab="projects"  class="active">Projects</button>
+  <button data-tab="home"      class="active">Home</button>
+  <button data-tab="projects">Projects</button>
   <button data-tab="enquiries">Enquiries</button>
   <button data-tab="applications">Applications</button>
   <button data-tab="payouts">Payouts</button>
@@ -541,7 +629,7 @@ async function renderAuth() {
   });
 
   $('nav').style.display = 'flex';
-  switchTab('projects');
+  switchTab('home');
 }
 
 function renderLogin() {
@@ -597,46 +685,214 @@ document.querySelectorAll('nav button').forEach(b => {
 
 function switchTab(name) {
   // Never open a Director-only tab for a PM, even if the button is reached.
-  if (FINANCE_ONLY_TABS.includes(name) && !isFinance) name = 'projects';
+  if (FINANCE_ONLY_TABS.includes(name) && !isFinance) name = 'home';
   document.querySelectorAll('nav button').forEach(b => b.classList.toggle('active', b.dataset.tab === name));
-  ({ projects: renderProjects, enquiries: renderEnquiries, applications: renderApplications, payouts: renderPayouts, ledger: renderLedger, roster: renderRoster }[name]?.());
+  ({ home: renderHome, projects: renderProjects, enquiries: renderEnquiries, applications: renderApplications, payouts: renderPayouts, ledger: renderLedger, roster: renderRoster }[name]?.());
 }
 
-// ── Projects ────────────────────────────────────────────────
+// ── Phase 8b: shared project model + helpers ────────────────
+const DAY_MS = 86400000;
+const ACTIVE_PROJECT_STATUSES = ['enquiry','scoped','quoted','awaiting_payment','active','delivered'];
+let myPersonId = null;
+let myPersonIdLoaded = false;
+
+async function ensureMyPersonId() {
+  if (myPersonIdLoaded) return myPersonId;
+  const { data } = await sb.rpc('my_person_id');
+  myPersonId = data ?? null;
+  myPersonIdLoaded = true;
+  return myPersonId;
+}
+
+const codenameOf = p => p?.dev_codename ?? p?.client_codename ?? p?.codename ?? '—';
+
+function whoseTurn(status, pay, devCount) {
+  if (status === 'closed' || status === 'cancelled') return null;
+  if (status === 'delivered') return 'Awaiting sign-off';
+  if (pay === 'unpaid') return 'Awaiting payment';
+  if (devCount === 0)   return 'Needs a developer';
+  return 'With developer';
+}
+
+// Build enriched project rows once; shared by Home and Projects. Degrades
+// gracefully if the Phase 8b RPCs aren't deployed yet (no badges / no "mine").
+async function loadProjects() {
+  await ensureMyPersonId();
+  const { data: rows, error } = await sb.from('dl_projects')
+    .select('id, title, client_id, pm_id, status, budget_pence, timeline_start, timeline_days, last_activity_at, created_at, closed_at')
+    .order('created_at', { ascending: false });
+  if (error) throw error;
+  const list = rows ?? [];
+
+  const devLinks = list.length ? ((await sb.from('project_devs').select('project_id, person_id')).data ?? []) : [];
+  const personIds = [...new Set([
+    ...list.map(r => r.client_id), ...list.map(r => r.pm_id), ...devLinks.map(d => d.person_id),
+  ].filter(Boolean))];
+  const { data: people } = personIds.length
+    ? await sb.from('people').select('id, codename, client_codename, dev_codename, display_name').in('id', personIds)
+    : { data: [] };
+  const pById = new Map((people ?? []).map(p => [p.id, p]));
+  const devsByProject = new Map();
+  for (const d of devLinks) {
+    if (!devsByProject.has(d.project_id)) devsByProject.set(d.project_id, []);
+    devsByProject.get(d.project_id).push(pById.get(d.person_id));
+  }
+
+  const { data: payRows } = await sb.rpc('project_payment_statuses');
+  const payById = new Map((payRows ?? []).map(p => [p.project_id, p.status]));
+
+  const now = Date.now();
+  return list.map(r => {
+    const active = ACTIVE_PROJECT_STATUSES.includes(r.status);
+    const devs = (devsByProject.get(r.id) ?? []).filter(Boolean);
+    const pay = payById.get(r.id) ?? 'unknown';
+    let due = null, daysLeft = null;
+    if (r.timeline_start && r.timeline_days != null) {
+      due = new Date(r.timeline_start).getTime() + r.timeline_days * DAY_MS;
+      daysLeft = Math.ceil((due - now) / DAY_MS);
+    }
+    const overdue = active && daysLeft != null && daysLeft < 0;
+    const dueSoon = active && daysLeft != null && daysLeft >= 0 && daysLeft <= 7;
+    const lastAct = r.last_activity_at ? new Date(r.last_activity_at).getTime() : null;
+    const staleDays = lastAct != null ? Math.floor((now - lastAct) / DAY_MS) : null;
+    const stale = active && staleDays != null && staleDays >= 7;
+    return {
+      ...r, active, client: pById.get(r.client_id), pm: pById.get(r.pm_id), devs, pay,
+      due, daysLeft, overdue, dueSoon, staleDays, stale,
+      mine: !!(myPersonId && r.pm_id === myPersonId),
+      turn: whoseTurn(r.status, pay, devs.length),
+    };
+  });
+}
+
+const payChip = pay => pay === 'paid' ? '<span class="chip paid dot">Paid</span>'
+  : pay === 'partial' ? '<span class="chip partial dot">Part-paid</span>'
+  : pay === 'unpaid' ? '<span class="chip unpaid dot">Unpaid</span>' : '';
+function deadlineChip(p) {
+  if (p.daysLeft == null) return '';
+  if (p.overdue) return `<span class="chip overdue">Overdue ${Math.abs(p.daysLeft)}d</span>`;
+  if (p.dueSoon) return `<span class="chip due">Due ${p.daysLeft}d</span>`;
+  return `<span class="chip">Due ${p.daysLeft}d</span>`;
+}
+
+// ── Home / overview ─────────────────────────────────────────
+async function renderHome() {
+  $('main').innerHTML = `<h2>Overview</h2><div id="home-body">Loading…</div>`;
+  let model;
+  try { model = await loadProjects(); }
+  catch (e) { return $('home-body').innerHTML = `<div class="empty">Error: ${escape(e.message)}</div>`; }
+
+  const mine       = model.filter(p => p.mine && p.active);
+  const dueSoon    = mine.filter(p => p.dueSoon || p.overdue);
+  const stalled    = mine.filter(p => p.stale);
+  const unassigned = model.filter(p => p.active && !p.pm_id);
+
+  const tile = (val, label, cls, go) =>
+    `<div class="stat-tile ${cls} click" data-go="${go}"><div class="stat-value">${val}</div><div class="stat-label">${label}</div></div>`;
+  let tiles =
+    tile(mine.length, 'My active projects', '', 'projects') +
+    tile(dueSoon.length, 'Due / overdue', dueSoon.length ? 'warn' : '', 'projects') +
+    tile(stalled.length, 'Stalled 7d+', stalled.length ? 'rose' : '', 'projects') +
+    tile(unassigned.length, 'Unassigned', '', 'projects');
+
+  if (isFinance) {
+    const [{ count: pendingPays }, { data: unpaidAllocs }] = await Promise.all([
+      sb.from('ledger').select('id', { count: 'exact', head: true }).eq('direction','in').eq('status','pending'),
+      sb.from('allocations').select('id').is('payout_ledger_id', null).not('party_id','is',null),
+    ]);
+    tiles += tile(pendingPays ?? 0, 'Unconfirmed payments', (pendingPays ? 'warn' : ''), 'ledger') +
+             tile((unpaidAllocs ?? []).length, 'Outstanding payouts', '', 'payouts');
+  }
+
+  const attn = model
+    .filter(p => p.active && (p.overdue || p.stale || p.pay === 'unpaid'))
+    .sort((a,b) => (b.mine - a.mine) || (((b.overdue?2:0)+(b.stale?1:0)) - ((a.overdue?2:0)+(a.stale?1:0))))
+    .slice(0, 8);
+  const attnRow = p => {
+    const flags = [
+      p.overdue ? `<span class="chip overdue">Overdue ${Math.abs(p.daysLeft)}d</span>` : '',
+      p.stale ? `<span class="chip stale">Stalled ${p.staleDays}d</span>` : '',
+      p.pay === 'unpaid' ? '<span class="chip unpaid dot">Unpaid</span>' : '',
+      p.mine ? '<span class="chip mine">Mine</span>' : '',
+    ].filter(Boolean).join(' ');
+    return `<div class="attn-row"><div><div class="ar-title">${escape(p.title)}</div>
+      <div class="ar-id">${escape(p.id)} · ${escape(codenameOf(p.client))}</div></div>
+      <span class="spacer"></span>${flags}</div>`;
+  };
+
+  $('home-body').innerHTML = `
+    <div class="stat-grid">${tiles}</div>
+    <h2>Needs attention</h2>
+    ${attn.length ? attn.map(attnRow).join('') : `<div class="empty">Nothing needs attention. Nice.</div>`}`;
+  document.querySelectorAll('#home-body [data-go]').forEach(t => t.onclick = () => switchTab(t.dataset.go));
+}
+
+// ── Projects (cards) ────────────────────────────────────────
+let projectsScope = 'mine';
+
+function projectCard(p) {
+  const devLabel = p.devs.length ? p.devs.map(codenameOf).join(', ') : '—';
+  const assignBtn = p.mine
+    ? `<button class="linkbtn" data-release="${escape(p.id)}">Release</button>`
+    : `<button class="btn ghost" data-claim="${escape(p.id)}">Assign to me</button>`;
+  return `<div class="proj-card ${p.mine ? 'mine' : ''}">
+    <div class="pc-top"><span class="pc-id">${escape(p.id)}</span><span class="pill">${escape(p.status)}</span></div>
+    <div class="pc-title">${escape(p.title)}</div>
+    <div class="pc-meta">
+      <span>Client <b>${escape(codenameOf(p.client))}</b>${p.client?.display_name ? ` · ${escape(p.client.display_name)}` : ''}</span>
+      <span>Dev <b>${escape(devLabel)}</b></span>
+      <span>PM <b>${p.pm ? escape(p.pm.display_name ?? codenameOf(p.pm)) : 'Unassigned'}</b></span>
+      <span>${p.staleDays != null ? `Last activity ${p.staleDays === 0 ? 'today' : p.staleDays + 'd ago'}` : 'No activity yet'}</span>
+    </div>
+    <div class="pc-chips">
+      ${p.turn ? `<span class="chip mine">${escape(p.turn)}</span>` : ''}
+      ${payChip(p.pay)}${deadlineChip(p)}
+      ${p.stale ? `<span class="chip stale">Stalled ${p.staleDays}d</span>` : ''}
+    </div>
+    <div class="pc-foot"><span class="spacer"></span>${assignBtn}</div>
+  </div>`;
+}
+
 async function renderProjects() {
   $('main').innerHTML = `<h2>Projects</h2><div id="projects-body">Loading…</div>`;
+  let model;
+  try { model = await loadProjects(); }
+  catch (e) { return $('projects-body').innerHTML = `<div class="empty">Error: ${escape(e.message)}</div>`; }
 
-  const { data: rows, error } = await sb
-    .from('dl_projects')
-    .select('id, title, client_id, status, budget_pence, created_at, closed_at')
-    .order('created_at', { ascending: false });
+  const paint = () => {
+    const scoped = projectsScope === 'mine' ? model.filter(p => p.mine) : model;
+    $('projects-body').innerHTML = `
+      <div class="toolbar">
+        <div class="seg">
+          <button data-scope="mine" class="${projectsScope==='mine'?'on':''}">My projects</button>
+          <button data-scope="all"  class="${projectsScope==='all'?'on':''}">All</button>
+        </div>
+        <span class="spacer"></span>
+        <span style="color:var(--muted);font-size:12px;">${scoped.length} shown</span>
+      </div>
+      ${scoped.length
+        ? `<div class="card-grid">${scoped.map(projectCard).join('')}</div>`
+        : `<div class="empty">${projectsScope==='mine'
+            ? 'No projects assigned to you yet. Switch to All and use “Assign to me”.'
+            : 'No projects yet.'}</div>`}`;
+    document.querySelectorAll('#projects-body [data-scope]').forEach(b => b.onclick = () => { projectsScope = b.dataset.scope; paint(); });
+    document.querySelectorAll('#projects-body [data-claim]').forEach(b => b.onclick = () => claimProject(b.dataset.claim));
+    document.querySelectorAll('#projects-body [data-release]').forEach(b => b.onclick = () => releaseProject(b.dataset.release));
+  };
+  paint();
+}
 
-  if (error) return $('projects-body').innerHTML = `<div class="empty">Error: ${escape(error.message)}</div>`;
-  if (!rows?.length) return $('projects-body').innerHTML = `<div class="empty">No projects yet.</div>`;
-
-  const clientIds = [...new Set(rows.map(r => r.client_id).filter(Boolean))];
-  const { data: people } = await sb.from('people').select('id, codename, client_codename, display_name').in('id', clientIds);
-  const byId = new Map((people ?? []).map(p => [p.id, p]));
-
-  $('projects-body').innerHTML = `
-    <div class="table-scroll"><table>
-      <thead>
-        <tr><th>ID</th><th>Title</th><th>Client</th><th>Budget</th><th>Status</th><th>Created</th></tr>
-      </thead>
-      <tbody>
-        ${rows.map(r => {
-          const c = byId.get(r.client_id);
-          return `<tr>
-            <td><code>${escape(r.id)}</code></td>
-            <td>${escape(r.title)}</td>
-            <td>${escape(c?.client_codename ?? c?.codename ?? '—')} <span class="pill">${escape(c?.display_name ?? '')}</span></td>
-            <td>${r.budget_pence != null ? pounds(r.budget_pence) : '—'}</td>
-            <td><span class="pill">${escape(r.status)}</span></td>
-            <td>${fmt(r.created_at)}</td>
-          </tr>`;
-        }).join('')}
-      </tbody>
-    </table></div>`;
+async function claimProject(id) {
+  const { error } = await sb.rpc('claim_project_as_pm', { p_project_id: id });
+  if (error) return alert(`Could not assign: ${error.message}`);
+  myPersonIdLoaded = false;   // a people row may have just been created for us
+  renderProjects();
+}
+async function releaseProject(id) {
+  if (!confirm('Release this project (clear its PM)?')) return;
+  const { error } = await sb.rpc('release_project_pm', { p_project_id: id });
+  if (error) return alert(`Could not release: ${error.message}`);
+  renderProjects();
 }
 
 // ── Enquiries ───────────────────────────────────────────────
@@ -656,6 +912,60 @@ const STAGE_TONE = {
   in_progress: 's-amber', completed: 's-green', declined: 's-rose',
 };
 
+// Cache of the last-loaded enquiries, so the Edit button can find its row.
+let enquiryCache = new Map();
+
+// Create / edit an enquiry. `existing` null = create (staff-only RPC),
+// otherwise edit (allowed by the existing staff update policy). Values are
+// set via .value, never interpolated, so no field can inject markup.
+function openEnquiryModal(existing) {
+  const isEdit = !!existing;
+  const overlay = document.createElement('div');
+  overlay.className = 'modal-overlay';
+  overlay.innerHTML = `
+    <div class="modal-card">
+      <h3>${isEdit ? 'Edit enquiry' : 'New enquiry'}</h3>
+      <div class="modal-field"><label>Project / type</label><input id="mf-name"></div>
+      <div class="modal-field"><label>Budget</label><input id="mf-budget" placeholder="e.g. £250 – £500"></div>
+      <div class="modal-field"><label>Timeline</label><input id="mf-timeline"></div>
+      <div class="modal-field"><label>Description / brief</label><textarea id="mf-desc"></textarea></div>
+      <div class="modal-actions">
+        <button class="btn ghost" id="mf-cancel">Cancel</button>
+        <button class="btn" id="mf-save">${isEdit ? 'Save changes' : 'Create enquiry'}</button>
+      </div>
+    </div>`;
+  document.body.appendChild(overlay);
+  const q = sel => overlay.querySelector(sel);
+  const close = () => overlay.remove();
+  overlay.addEventListener('click', e => { if (e.target === overlay) close(); });
+  q('#mf-cancel').onclick = close;
+  if (isEdit) {
+    q('#mf-name').value     = existing.project_name  ?? '';
+    q('#mf-budget').value   = existing.budget_text   ?? '';
+    q('#mf-timeline').value = existing.timeline_text ?? '';
+    q('#mf-desc').value     = existing.description   ?? '';
+  }
+  q('#mf-save').onclick = async () => {
+    const name = q('#mf-name').value.trim(), budget = q('#mf-budget').value.trim();
+    const timeline = q('#mf-timeline').value.trim(), desc = q('#mf-desc').value.trim();
+    const btn = q('#mf-save'); btn.disabled = true;
+    let error;
+    if (isEdit) {
+      ({ error } = await sb.from('enquiries').update({
+        project_name: name || null, budget_text: budget || null,
+        timeline_text: timeline || null, description: desc || null,
+      }).eq('id', existing.id));
+    } else {
+      ({ error } = await sb.rpc('create_manual_enquiry', {
+        p_project_name: name, p_description: desc, p_budget_text: budget, p_timeline_text: timeline,
+      }));
+    }
+    if (error) { btn.disabled = false; return alert(`Failed: ${error.message}`); }
+    close();
+    renderEnquiries();
+  };
+}
+
 async function renderEnquiries() {
   $('main').innerHTML = `<div id="enquiries-body">Loading…</div>`;
 
@@ -665,9 +975,9 @@ async function renderEnquiries() {
     .order('created_at', { ascending: false });
 
   if (error) return $('enquiries-body').innerHTML = `<div class="empty">Error: ${escape(error.message)}</div>`;
-  if (!rows?.length) return $('enquiries-body').innerHTML = `<h2>Enquiries</h2><div class="empty">No enquiries yet.</div>`;
 
-  const clientIds = [...new Set(rows.map(r => r.client_id).filter(Boolean))];
+  enquiryCache = new Map((rows ?? []).map(r => [r.id, r]));
+  const clientIds = [...new Set((rows ?? []).map(r => r.client_id).filter(Boolean))];
   const { data: people } = await sb.from('people').select('id, codename, client_codename, display_name, email').in('id', clientIds);
   const byId = new Map((people ?? []).map(p => [p.id, p]));
 
@@ -705,7 +1015,7 @@ async function renderEnquiries() {
       <td>${budgetDisplay(r)}</td>
       <td>${stageSelect(r)}</td>
       <td>${fmt(r.created_at)}</td>
-      <td><div class="row-actions"><button class="linkbtn" data-toggle="enq-${escape(r.id)}">See more</button></div></td>
+      <td><div class="row-actions"><button class="linkbtn" data-editenq="${escape(r.id)}">Edit</button><button class="linkbtn" data-toggle="enq-${escape(r.id)}">See more</button></div></td>
     </tr>
     ${detailRow(`enq-${escape(r.id)}`, 8, detail)}`;
   };
@@ -716,15 +1026,18 @@ async function renderEnquiries() {
       <tbody>${list.map(rowHtml).join('')}</tbody>
     </table></div>` : `<div class="empty">${emptyMsg}</div>`;
 
-  const enquiryList = rows.filter(r => !ACTIVE_STAGES.includes(r.pipeline_stage));
-  const projectList = rows.filter(r => ACTIVE_STAGES.includes(r.pipeline_stage));
+  const enquiryList = (rows ?? []).filter(r => !ACTIVE_STAGES.includes(r.pipeline_stage));
+  const projectList = (rows ?? []).filter(r => ACTIVE_STAGES.includes(r.pipeline_stage));
 
   $('main').innerHTML = `
+    <div class="toolbar"><span class="spacer"></span><button class="btn" id="new-enquiry">New enquiry</button></div>
     <h2>Incoming Enquiries (${enquiryList.length})</h2>
     ${tableFor(enquiryList, 'No incoming enquiries. Accepted work in progress shows under Active Projects.')}
     <h2>Active Projects (${projectList.length})</h2>
     ${tableFor(projectList, 'No active projects yet. Set an accepted enquiry to “In Progress” to move it here.')}`;
 
+  $('new-enquiry').onclick = () => openEnquiryModal(null);
+  document.querySelectorAll('[data-editenq]').forEach(b => b.onclick = () => openEnquiryModal(enquiryCache.get(b.dataset.editenq)));
   wireToggles();
   document.querySelectorAll('[data-stage]').forEach(sel => {
     sel.onchange = async () => {
