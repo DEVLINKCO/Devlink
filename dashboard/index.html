@@ -378,6 +378,7 @@
     }
     .proj-card:hover { border-color: var(--muted); box-shadow: 0 12px 48px rgba(0,0,0,0.14); }
     .proj-card.mine { border-color: var(--accent-strong); }
+    .proj-card.declined { border-color: rgba(239, 83, 80, 0.45); }
     .proj-card .pc-top { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; }
     .proj-card .pc-id { font-family: ui-monospace, Menlo, monospace; font-size: 11px; color: var(--muted); }
     .proj-card .pc-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1.05rem; letter-spacing: -0.01em; margin: 2px 0 0; }
@@ -719,14 +720,14 @@ function whoseTurn(status, pay, devCount) {
 async function loadProjects() {
   await ensureMyPersonId();
   const { data: rows, error } = await sb.from('dl_projects')
-    .select('id, title, client_id, pm_id, status, budget_pence, timeline_start, timeline_days, last_activity_at, created_at, closed_at')
+    .select('id, title, client_id, pm_id, status, budget_pence, timeline_start, timeline_days, last_activity_at, created_at, closed_at, pm_assignment_status, pm_decline_reason, pm_declined_by, pm_responded_at')
     .order('created_at', { ascending: false });
   if (error) throw error;
   const list = rows ?? [];
 
   const devLinks = list.length ? ((await sb.from('project_devs').select('project_id, person_id')).data ?? []) : [];
   const personIds = [...new Set([
-    ...list.map(r => r.client_id), ...list.map(r => r.pm_id), ...devLinks.map(d => d.person_id),
+    ...list.map(r => r.client_id), ...list.map(r => r.pm_id), ...list.map(r => r.pm_declined_by), ...devLinks.map(d => d.person_id),
   ].filter(Boolean))];
   const { data: people } = personIds.length
     ? await sb.from('people').select('id, codename, client_codename, dev_codename, display_name').in('id', personIds)
@@ -756,11 +757,17 @@ async function loadProjects() {
     const lastAct = r.last_activity_at ? new Date(r.last_activity_at).getTime() : null;
     const staleDays = lastAct != null ? Math.floor((now - lastAct) / DAY_MS) : null;
     const stale = active && staleDays != null && staleDays >= 7;
+    const assignStatus = r.pm_assignment_status ?? null;
     return {
       ...r, active, client: pById.get(r.client_id), pm: pById.get(r.pm_id), devs, pay,
       due, daysLeft, overdue, dueSoon, staleDays, stale,
       mine: !!(myPersonId && r.pm_id === myPersonId),
       turn: whoseTurn(r.status, pay, devs.length),
+      assignStatus,
+      declinedBy: pById.get(r.pm_declined_by),
+      declineReason: r.pm_decline_reason ?? null,
+      awaitingAcceptance: active && !!r.pm_id && assignStatus === 'pending',
+      declined: active && assignStatus === 'declined' && !r.pm_id,
     };
   });
 }
@@ -790,10 +797,12 @@ async function renderHome() {
   try { model = await loadProjects(); }
   catch (e) { return $('home-body').innerHTML = `<div class="empty">Error: ${escape(e.message)}</div>`; }
 
-  const mine       = model.filter(p => p.mine && p.active);
-  const dueSoon    = mine.filter(p => p.dueSoon || p.overdue);
-  const stalled    = mine.filter(p => p.stale);
-  const unassigned = model.filter(p => p.active && !p.pm_id);
+  const mine        = model.filter(p => p.mine && p.active);
+  const dueSoon     = mine.filter(p => p.dueSoon || p.overdue);
+  const stalled     = mine.filter(p => p.stale);
+  const unassigned  = model.filter(p => p.active && !p.pm_id);
+  const awaiting    = model.filter(p => p.awaitingAcceptance);
+  const declinedLst = model.filter(p => p.declined);
 
   const tile = (val, label, cls, go) =>
     `<div class="stat-tile ${cls} click" data-go="${go}"><div class="stat-value">${val}</div><div class="stat-label">${label}</div></div>`;
@@ -801,6 +810,8 @@ async function renderHome() {
     tile(mine.length, 'My active projects', '', 'projects') +
     tile(dueSoon.length, 'Due / overdue', dueSoon.length ? 'warn' : '', 'projects') +
     tile(stalled.length, 'Stalled 7d+', stalled.length ? 'rose' : '', 'projects') +
+    tile(awaiting.length, 'Awaiting acceptance', awaiting.length ? 'warn' : '', 'projects') +
+    tile(declinedLst.length, 'Declined', declinedLst.length ? 'rose' : '', 'projects') +
     tile(unassigned.length, 'Unassigned', '', 'projects');
 
   if (isFinance) {
@@ -813,11 +824,14 @@ async function renderHome() {
   }
 
   const attn = model
-    .filter(p => p.active && (p.overdue || p.stale || p.pay === 'unpaid'))
-    .sort((a,b) => (b.mine - a.mine) || (((b.overdue?2:0)+(b.stale?1:0)) - ((a.overdue?2:0)+(a.stale?1:0))))
-    .slice(0, 8);
+    .filter(p => p.active && (p.overdue || p.stale || p.pay === 'unpaid' || p.awaitingAcceptance || p.declined))
+    .sort((a,b) => (b.mine - a.mine)
+      || (((b.declined?3:0)+(b.overdue?2:0)+(b.stale?1:0)) - ((a.declined?3:0)+(a.overdue?2:0)+(a.stale?1:0))))
+    .slice(0, 10);
   const attnRow = p => {
     const flags = [
+      p.declined ? '<span class="chip stale">Declined</span>' : '',
+      p.awaitingAcceptance ? '<span class="chip due">Awaiting acceptance</span>' : '',
       p.overdue ? `<span class="chip overdue">Overdue ${Math.abs(p.daysLeft)}d</span>` : '',
       p.stale ? `<span class="chip stale">Stalled ${p.staleDays}d</span>` : '',
       p.pay === 'unpaid' ? '<span class="chip unpaid dot">Unpaid</span>' : '',
@@ -862,19 +876,39 @@ let projectsScope = 'mine';
 function projectCard(p) {
   const devLabel = p.devs.length ? p.devs.map(codenameOf).join(', ') : '—';
   const assigned = !!p.pm;
-  const actions =
-    `<button class="btn ${assigned ? 'success' : 'ghost'}" data-assign="${escape(p.id)}">${assigned ? 'Reassign PM' : 'Assign PM'}</button>`
-    + (p.mine ? `<button class="linkbtn" data-release="${escape(p.id)}">Release</button>` : '');
-  return `<div class="proj-card ${p.mine ? 'mine' : ''}">
+  const pending = p.assignStatus === 'pending';
+
+  const statusChip = !p.active ? ''
+    : pending ? '<span class="chip due">Awaiting acceptance</span>'
+    : p.assignStatus === 'accepted' ? '<span class="chip paid dot">Accepted</span>'
+    : '';
+
+  let actions;
+  if (p.mine && pending) {
+    // The assigned PM responds to their own handoff.
+    actions = `<button class="btn success" data-accept="${escape(p.id)}">Accept</button>`
+            + `<button class="btn danger" data-decline="${escape(p.id)}">Decline</button>`;
+  } else {
+    actions = `<button class="btn ${assigned ? 'success' : 'ghost'}" data-assign="${escape(p.id)}">${assigned ? 'Reassign PM' : 'Assign PM'}</button>`
+            + (p.mine ? `<button class="linkbtn" data-release="${escape(p.id)}">Release</button>` : '');
+  }
+
+  const declinedNote = p.declined
+    ? `<span style="color:var(--danger)">Declined${p.declinedBy ? ` by ${escape(p.declinedBy.display_name ?? codenameOf(p.declinedBy))}` : ''}: <b>${escape(p.declineReason ?? 'no reason given')}</b></span>`
+    : '';
+
+  return `<div class="proj-card ${p.mine ? 'mine' : ''} ${p.declined ? 'declined' : ''}">
     <div class="pc-top"><span class="pc-id">${escape(p.id)}</span><span class="pill">${escape(p.status)}</span></div>
     <div class="pc-title">${escape(p.title)}</div>
     <div class="pc-meta">
       <span>Client <b>${escape(codenameOf(p.client))}</b>${p.client?.display_name ? ` · ${escape(p.client.display_name)}` : ''}</span>
       <span>Dev <b>${escape(devLabel)}</b></span>
       <span>PM <b>${p.pm ? escape(p.pm.display_name ?? codenameOf(p.pm)) : 'Unassigned'}</b></span>
+      ${declinedNote}
       <span>${p.staleDays != null ? `Last activity ${p.staleDays === 0 ? 'today' : p.staleDays + 'd ago'}` : 'No activity yet'}</span>
     </div>
     <div class="pc-chips">
+      ${statusChip}
       ${p.turn ? `<span class="chip mine">${escape(p.turn)}</span>` : ''}
       ${payChip(p.pay)}${deadlineChip(p)}
       ${p.stale ? `<span class="chip stale">Stalled ${p.staleDays}d</span>` : ''}
@@ -908,6 +942,8 @@ async function renderProjects() {
     document.querySelectorAll('#projects-body [data-scope]').forEach(b => b.onclick = () => { projectsScope = b.dataset.scope; paint(); });
     document.querySelectorAll('#projects-body [data-assign]').forEach(b => b.onclick = () => openAssignModal(b.dataset.assign));
     document.querySelectorAll('#projects-body [data-release]').forEach(b => b.onclick = () => releaseProject(b.dataset.release));
+    document.querySelectorAll('#projects-body [data-accept]').forEach(b => b.onclick = () => acceptAssignment(b.dataset.accept));
+    document.querySelectorAll('#projects-body [data-decline]').forEach(b => b.onclick = () => declineAssignment(b.dataset.decline));
   };
   paint();
 }
@@ -955,6 +991,21 @@ async function releaseProject(id) {
   if (!confirm('Release this project (clear its PM)?')) return;
   const { error } = await sb.rpc('release_project_pm', { p_project_id: id });
   if (error) return alert(`Could not release: ${error.message}`);
+  renderProjects();
+}
+
+// The assigned PM responds to their own handoff.
+async function acceptAssignment(id) {
+  const { error } = await sb.rpc('accept_assignment', { p_project_id: id });
+  if (error) return alert(`Could not accept: ${error.message}`);
+  renderProjects();
+}
+async function declineAssignment(id) {
+  const reason = prompt('Reason for declining (the Director will see this):');
+  if (reason === null) return;                       // cancelled
+  if (!reason.trim()) return alert('Please give a reason so it can be reassigned.');
+  const { error } = await sb.rpc('decline_assignment', { p_project_id: id, p_reason: reason.trim() });
+  if (error) return alert(`Could not decline: ${error.message}`);
   renderProjects();
 }
 
