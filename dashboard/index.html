@@ -1157,10 +1157,17 @@ async function renderEnquiries() {
     sel.onchange = async () => {
       const id = sel.dataset.stage;
       const stage = sel.value;
-      sel.disabled = true;
       const patch = { pipeline_stage: stage };
-      // Mirror a decline onto the bot-facing status column for compatibility.
-      if (stage === 'declined') patch.status = 'declined';
+      // Declining from here is a real action: the bot picks it up within a
+      // minute, DMs the client the reason, archives their ticket channel,
+      // and updates the Discord embeds. So confirm, and ask for the reason.
+      if (stage === 'declined') {
+        const reason = prompt('Decline this enquiry?\n\nReason to send the client (leave blank for none). The bot will DM them and archive their Discord ticket.');
+        if (reason === null) { renderEnquiries(); return; }   // cancelled
+        patch.status = 'declined';
+        patch.decline_reason = reason.trim() || null;
+      }
+      sel.disabled = true;
       const { error } = await sb.from('enquiries').update(patch).eq('id', id);
       if (error) alert(`Failed: ${error.message}`);
       renderEnquiries(); // re-render so the row moves to the correct section
